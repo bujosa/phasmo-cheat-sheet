@@ -25,12 +25,14 @@ async function get_session(){
         $('#room_id').prop('disabled',false)
         $('#room_id_create').show()
         $('#room_id_link').show()
+        $('#link_id_create').show()
     })
     .catch(response => {
         console.log(response)
         console.warn("Possible latency issues!")
         setCookie("znid","no-connection-to-server",1)
         $('#room_id').val("Can't Connect!")
+        $('#link_id').val("Can't Connect!")
         $("#session").text("no-connection-to-server")
     })
     
@@ -68,9 +70,11 @@ if(znid){
         $('#room_id').prop('disabled',false)
         $('#room_id_create').show()
         $('#room_id_link').show()
+        $('#link_id_create').show()
     }
     else{
         $('#room_id').val("Can't Connect!")
+        $('#link_id').val("Can't Connect!")
     }
 }
 else{

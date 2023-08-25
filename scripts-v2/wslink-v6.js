@@ -1,10 +1,16 @@
 let ws = null
+let dlws = null
 
 function auto_link(){
     var room_id = getCookie("room_id")
+    var link_id = getCookie("link_id")
     if(room_id){
         document.getElementById("room_id").value = room_id
         link_room()
+    }
+    if(link_id){
+        document.getElementById("link_id").value = link_id
+        link_link()
     }
 }
 
@@ -25,6 +31,20 @@ function create_room(){
         var room_id = data['room_id']
         document.getElementById("room_id").value = room_id
         link_room()
+    })
+    .catch(response => {
+        console.error(response)
+    });
+}
+
+function create_link(){
+    var uuid = getCookie("znid")
+    fetch(`https://zero-network.net/phasmophobia/create-link/${uuid}`,{method:"POST",Accept:"application/json",signal: AbortSignal.timeout(6000)})
+    .then(response => response.json())
+    .then(data => {
+        var link_id = data['link_id']
+        document.getElementById("link_id").value = link_id
+        link_link()
     })
     .catch(response => {
         console.error(response)
@@ -123,6 +143,64 @@ function link_room(){
     }
 }
 
+function link_link(){
+    var link_id = document.getElementById("link_id").value
+
+    dlws = new WebSocket(`wss://zero-network.net/phasmolink/link/${link_id}`);
+    setCookie("link_id",link_id,1)
+
+    dlws.onopen = function(event){
+        hasDLLink = true;
+        $("#link_id_create").hide()
+        $("#link_id_disconnect").show()
+        document.getElementById("link_id_note").innerText = "STATUS: Awaiting Desktop Link"
+        document.getElementById("dllink_status").className = "pending"
+    }
+    dlws.onerror = function(event){
+        document.getElementById("link_id_note").innerText = "ERROR: Could not connect!"
+        document.getElementById("dllink_status").className = "error"
+        setCookie("link_id","",-1)
+    }
+    dlws.onmessage = function(event) {
+        try {
+            var incoming_state = JSON.parse(event.data)
+
+            if (incoming_state.hasOwnProperty("action")){
+                if (incoming_state['action'].toUpperCase() == "TIMER"){
+                    toggle_timer()
+                }
+                if (incoming_state['action'].toUpperCase() == "LINKED"){
+                    document.getElementById("link_id_note").innerText = `STATUS: Linked`
+                    document.getElementById("dllink_status").className = "connected"
+                }
+                if (incoming_state['action'].toUpperCase() == "UNLINKED"){
+                    disconnect_link()
+                }
+                if (incoming_state['action'].toUpperCase() == "DL_STEP"){
+                    bpm_tap()
+                }
+                if (incoming_state['action'].toUpperCase() == "DL_RESET"){
+                    bpm_clear()
+                    saveSettings()
+                }
+                return
+            }
+
+            if (incoming_state.hasOwnProperty("error")){
+                document.getElementById("link_id_note").innerText = `ERROR: ${incoming_state['error']}!`
+                document.getElementById("dllink_status").className = "error"
+            }
+
+            if (incoming_state.hasOwnProperty("disconnect") && incoming_state['disconnect']){
+                disconnect_link(false,true)
+            }
+
+        } catch (error){
+            console.log(event.data)
+        }
+    }
+}
+
 function continue_session(){
     if(hasLink){
         ws.send('{"action":"RESET"}')
@@ -142,6 +220,23 @@ function disconnect_room(reset=false,has_status=false){
         setCookie("room_id","",-1)
         hasLink=false
     }
+}
+
+function disconnect_link(reset=false,has_status=false){
+    if(!reset){
+        if(hasDLLink){
+            dlws.send('{"action":"KILL"}')
+        }
+        $("#link_id_create").show()
+        $("#link_id_disconnect").hide()
+        if(!has_status){
+            document.getElementById("link_id_note").innerText = "STATUS: Not linked"
+            document.getElementById("dllink_status").className = null
+        }
+        setCookie("link_id","",-1)
+        hasDLLink=false
+    }
+    dlws.close()
 }
 
 function send_timer(){

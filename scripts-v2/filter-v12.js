@@ -10,6 +10,7 @@ var user_settings = {"num_evidences":3,"ghost_modifier":2,"volume":50,"offset":0
 
 
 let hasLink = false;
+let hasDLLink = false;
 
 function loadData(){
     fetch("https://zero-network.net/phasmophobia/data/ghosts.json", {signal: AbortSignal.timeout(6000)})

@@ -73,7 +73,7 @@ function parse_speech(vtext){
         if(["ride you","rise you"].includes(vtext)){vtext = "raiju"}
         if(["on to","onto","on 2"].includes(vtext)){vtext = "hantu"}
         if(["awake","oh bake","oh backy"].includes(vtext)){vtext = "obake"}
-        if(["say","they","fe"].includes(vtext)){vtext = "thaye"}
+        if(["say","they","fe","fae","faye"].includes(vtext)){vtext = "thaye"}
         if(vtext.startsWith("twins")){vtext = "the twins"}
         if(vtext.startsWith("mimic")){vtext = "the mimic"}
 
