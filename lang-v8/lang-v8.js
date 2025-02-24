@@ -35,6 +35,15 @@ const lang_menu_widths = {
         "menu_height":"620px",
         "menu_height_custom":"675px"
     },
+    "ko":{
+        "left":"221px",
+        "width":"193px",
+        "maps":"calc(100% - 290px)",
+        "menu_bottom":"-635px",
+        "menu_bottom_custom":"-690px",
+        "menu_height":"670px",
+        "menu_height_custom":"725px"
+    },
     "pt-br":{
         "left":"196px",
         "width":"168px",
@@ -134,6 +143,7 @@ function load_translation(){
             resolve("Translation loaded")
         })
         .catch(err => {
+            console.error(err)
             console.log(`${lang} is not yet supported!`)
             fetch(`lang-v8/en/data.json`)
             .then(data => data.json())
