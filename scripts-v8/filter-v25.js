@@ -1704,7 +1704,7 @@ function showLanguage(){
         document.getElementById("language_box").style.boxShadow = "-5px 0px 10px 0px #000"
         document.getElementById("language_tab").style.boxShadow = "-5px 6px 5px -2px #000"
         document.getElementById("language_box").style.right = "0px"
-        document.getElementById("language_box").style.width = "160px"
+        document.getElementById("language_box").style.width = "220px"
         document.getElementById("lang_blockout").style.zIndex = "10"
         $("#lang_blockout").fadeIn(500)
     }

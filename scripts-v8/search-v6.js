@@ -14,7 +14,7 @@ function search() {
     let results = "";
     let matched = new Set()
 
-    if (search_query.length > 1) {
+    if (search_query.length > 1 || (search_query.length > 0 && ['ko','zh-cn'].includes(lang))) {
         let query_parts = search_query.split(/\s+/);
         const relatedTerms = get_terms(query_parts, RELATED);
 
@@ -296,18 +296,24 @@ function parse_card(elem,queries,is_title=false){
 
     if(!is_title){
         let title = elem.getElementsByClassName("ghost_name")[0].innerText
-        let preview = null
-        let results = `<div class="search_result" onclick="show_card('${card_id}')"><div class="result_title">${title}<span class="result_location_card"> (Ghost Card)</span></div><div class="result_preview">`
+        let results = `<div class="search_result" onclick="show_card('${card_id}')"><div class="result_title">${title}<span class="result_location_card"> (${lang_data["{{ghost_card}}"]})</span></div><div class="result_preview">`
 
         let list_items = elem.getElementsByClassName("ghost_behavior")[0].querySelectorAll('li');
         let num_items = 0
+        let parts = ""
         list_items.forEach(item => {
             if (num_items < 5 && all_match(item.innerText.toLowerCase(),queries)) {
-                results += `<div class="result_part">${shrink_text(item.innerText,queries)}</div>`
+                let shtxt = shrink_text(item.innerText,queries).trim()
+                if(!shtxt)
+                    return
+                parts += `<div class="result_part">${shtxt}</div>`
                 num_items += 1
             }
         });
-        results += `</div><div class="click_more">Click to see more >></div></div><hr>`
+        if (!parts)
+            return ''
+
+        results += parts + `</div><div class="click_more">${lang_data["{{see_more}}"]}</div></div><hr>`
         
         return results
     }
@@ -373,7 +379,7 @@ function cleanMis(html, searchTerms) {
 
     // Highlight one instance of each term
     for (const term of lowerTerms) {
-        const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
+        const regex = new RegExp(`(${escapeRegExp(term)})`, 'i');
         html = html.replace(regex, `<span class="result_highlight">$1</span>`);
     }
 
@@ -383,19 +389,17 @@ function cleanMis(html, searchTerms) {
 function parse_wiki(elem, queries){
 
     let prev_elem = elem.previousElementSibling
-    let title = prev_elem.innerText.replace(/[^a-z0-9\s()\[\]{}\-\+]/gi, '').trim();
+    let title = prev_elem.innerText.replace(/[^\p{L}\p{N}\s()\[\]{}\-\+]/gu, '').trim();
     let wiki_path = prev_elem.id.replace("wiki-","")
     
     while (prev_elem.innerText.includes("└") || prev_elem.innerText.includes("├")){
         prev_elem = prev_elem.parentElement.previousElementSibling
-        title = prev_elem.innerText.replace(/[^a-z0-9\s()\[\]{}\-\+]/gi, '') + " >> " + title
+        title = prev_elem.innerText.replace(/[^\p{L}\p{N}\s()\[\]{}\-\+]/gu, '') + " >> " + title
         wiki_path = prev_elem.id.replace("wiki-","") + "." + wiki_path
     }
 
     let results
-    if (title.includes(lang_data['{{misconceptions}}'].replace(/[^a-z0-9\s()\[\]{}\-\+]/gi, '').trim())){
-        
-        
+    if (title.includes(lang_data['{{misconceptions}}'].replace(/[^\p{L}\p{N}\s()\[\]{}\-\+]/gu, '').trim())){
         
         let list_items = getLeafMatchesBreadthFirst(elem, queries);
         let num_items = 0
@@ -409,19 +413,22 @@ function parse_wiki(elem, queries){
                 return
             }
 
-            console.log(item)
-
             let final_elem = item.parentElement.parentElement
-            while(!final_elem.id.includes("wiki-"))
+            while(!final_elem.id.includes("wiki-")){
                 final_elem = final_elem.previousElementSibling
+                if(!final_elem)
+                    return
+            }
 
             let final_path = wiki_path + "." + final_elem.id.replace("wiki-","")
-            let final_title = title + " >> " + final_elem.innerText.replace(/[^a-z0-9\s()\[\]{}\-\+]/gi, '')
+            let final_title = title + " >> " + final_elem.innerText.replace(/[^\p{L}\p{N}\s()\[\]{}\-\+]/gu, '')
 
             if (misHTML && num_items < 5) {
-
+                let parsed_data = cleanMis(misHTML.innerHTML,queries)
+                if(!parsed_data.trim())
+                    return
                 results += `<div class="search_result" onclick="$('.ghost_card').removeClass('result_focus');openWikiPath('${final_path}')"><div class="result_title">${final_title}<span class="result_location_misconception"> (${lang_data["{{misconceptions}}"]})</span></div><div class="result_preview">`
-                results += `<div class="result_part">${cleanMis(misHTML.innerHTML,queries)}</div>`
+                results += `<div class="result_part">${parsed_data}</div>`
                 results += `</div><div class="click_more">${lang_data["{{see_more}}"]}</div></div><hr>`
                 num_items += 1
             }

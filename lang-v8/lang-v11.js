@@ -71,6 +71,15 @@ const lang_menu_widths = {
         "menu_height":"740px",
         "menu_height_custom":"795px"
     },
+    "zh-cn":{
+        "left":"221px",
+        "width":"193px",
+        "maps":"calc(100% - 290px)",
+        "menu_bottom":"-665px",
+        "menu_bottom_custom":"-715px",
+        "menu_height":"695px",
+        "menu_height_custom":"750px"
+    }
 }
 
 // ----------------------------------
