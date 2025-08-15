@@ -35,6 +35,15 @@ const lang_menu_widths = {
         "menu_height":"695px",
         "menu_height_custom":"750px"
     },
+    "jp":{
+        "left":"230px",
+        "width":"209px",
+        "maps":"calc(100% - 299px)",
+        "menu_bottom":"-750px",
+        "menu_bottom_custom":"-815px",
+        "menu_height":"795px",
+        "menu_height_custom":"850px"
+    },
     "es":{
         "left":"230px",
         "width":"209px",

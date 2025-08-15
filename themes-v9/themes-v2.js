@@ -5,6 +5,7 @@ const themes = {
     "Blood Moon": "theme-blood-moon-particle",
     "Coral": "theme-coral",
     "Cozy": "theme-cozy",
+    "Desolate": "theme-desolate",
     "Dusk": "theme-dusk",
     "Frost": "theme-frost",
     "Halloween": "theme-halloween",
@@ -35,6 +36,7 @@ function loadThemes(){
 let light_interval = null
 let bloodMoonInterval = null
 let snowInterval = null
+let isAltered = false
 
 function changeTheme(name = null){
 
@@ -47,6 +49,11 @@ function changeTheme(name = null){
         "#info_box_debug","#info_box_zndl","#info_box_calibrate", "#info_box_weekly", "#resetMenu", "#broadcast-content",
         "#search_box","#search_tab"
     ]
+
+    if(isAltered){
+        undoDesolate(changeObjects)
+        isAltered = false
+    }
 
     let theme_name = name != null ? name : $("#theme").val()
     if(themes[theme_name] == undefined){
@@ -107,6 +114,10 @@ function changeTheme(name = null){
             createGhostSpacer()
         }
         document.body.style.backgroundImage = "radial-gradient(circle, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('https://zero-network.net/phasmophobia/static/imgs/background-cozy.png')"
+    }
+    else if(themes[theme_name] == "theme-desolate"){
+        isAltered = true
+        desolate(changeObjects)
     }
     else{
         document.body.style.backgroundImage = "radial-gradient(circle, rgba(0,0,0,0.75), rgba(0,0,0,1)), url('https://zero-network.net/phasmophobia/static/imgs/background.jpg')"
@@ -320,4 +331,135 @@ function createBMEffectParticle() {
     setTimeout(() => {
         bot_particle.remove();
     }, bot_duration * 1000);
+}
+
+function saveOriginalStyles(elem, styles) {
+    styles.forEach(style => {
+        if (!(style in elem.dataset)) {
+            elem.dataset["orig" + style] = elem.style[style] || "";
+        }
+    });
+}
+
+function restoreOriginalStyles(elem) {
+    Object.keys(elem.dataset).forEach(key => {
+        if (key.startsWith("orig")) {
+            let styleName = key.slice(4);
+            styleName = styleName.charAt(0).toLowerCase() + styleName.slice(1); // lowercase first letter
+            elem.style[styleName] = elem.dataset[key];
+        }
+    });
+}
+
+function undoDesolate(changeObjects) {
+    changeObjects.forEach(item => {
+        if (item[0] === '.') {
+            Array.from(document.getElementsByClassName(item.slice(1))).forEach(elem => {
+                restoreOriginalStyles(elem);
+            });
+        } else {
+            restoreOriginalStyles(document.getElementById(item.slice(1)));
+        }
+    });
+
+    // Also revert card icons and other manually changed elements
+    Array.from(document.getElementsByClassName("card_icon")).forEach(elem => {
+        restoreOriginalStyles(elem);
+    });
+
+    document.getElementById("num_evidence").style.background = null
+    document.getElementById("cust_num_evidence").style.background = null
+    document.getElementById("cust_hunt_length").style.background = null
+    document.getElementById("evidence").style.background = null
+    document.getElementById("feed_info_block").style.background = null
+    document.getElementById("3d_info_block").style.background = null
+    document.getElementsByClassName("speed")[0].style.background = null
+    document.getElementsByClassName("hunt_sanity")[0].style.background = null
+    document.getElementsByClassName("timers")[0].style.background = null
+    document.getElementsByClassName("modifier")[0].style.background = null
+
+    Array.from(document.getElementsByClassName("card_icon")).forEach(elem => {
+        elem.style.filter = null
+        elem.style.opacity = null
+    })
+}
+
+
+function desolate(changeObjects){
+    document.body.style.backgroundImage = 'radial-gradient(circle, rgba(20, 10, 0, 0.4), rgba(20, 10, 0, 0.6)), url("https://zero-network.net/phasmophobia/static/imgs/background-desolate.png")'
+
+    changeObjects.forEach((item) => {
+
+        let let_t = item == ".ghost_card"
+
+        function d(elem, t=false){
+            saveOriginalStyles(elem, [
+                "transform", "backgroundImage", "backgroundPosition", "backgroundSize",
+                "filter", "boxShadow", "clipPath"
+            ]);
+            
+            // Apply crooked position
+            if(t){
+                let rr = Math.random() * 3 - 1;   // small crooked rotation
+                let rx = Math.floor(Math.random() * 50) - 25; // horizontal offset
+                elem.style.transform = `rotate(${rr}deg) translate(${rx}px, 0px)`;
+            }
+
+            // Background
+            if(t)
+                elem.style.backgroundImage = 'radial-gradient(rgba(2, 0, 20, 0.9), rgba(33,34,47, 0.7)),url("https://zero-network.net/phasmophobia/static/imgs/wood-texture.png")'
+            else
+                elem.style.backgroundImage = 'radial-gradient(rgba(2, 0, 20, 0.8), rgba(33,34,47, 0.8)),url("https://zero-network.net/phasmophobia/static/imgs/wood-texture.png")'
+            let bgX = Math.floor(Math.random() * 100);
+            let bgY = Math.floor(Math.random() * 100);
+            let bgSize = 100 + Math.floor(Math.random() * 20);
+            elem.style.backgroundPosition = `${bgX}% ${bgY}%`;
+            elem.style.backgroundSize = `${bgSize}% auto`;
+
+            // Faded/aged look
+            elem.style.filter = `brightness(${0.8 + Math.random()*0.2}) grayscale(0.2)`;
+
+            // Uneven shadow
+            elem.style.boxShadow = `${Math.random()*10-5}px ${Math.random()*10-5}px 15px rgba(0,0,0,0.7)`;
+
+            // Generate a jagged edge shape
+            if (t) {
+            function randomJaggedPath() {
+                let points = [];
+                let width = 100;
+                let height = 100;
+                for (let x = 0; x <= width; x += 20) points.push(`${x}% ${Math.random()}%`);
+                for (let y = 0; y <= height; y += 20) points.push(`${100 - Math.random()}% ${y}%`);
+                for (let x = width; x >= 0; x -= 20) points.push(`${x}% ${100 - Math.random()}%`);
+                for (let y = height; y >= 0; y -= 20) points.push(`${Math.random()}% ${y}%`);
+                return `polygon(${points.join(",")})`;
+            }
+            elem.style.clipPath = randomJaggedPath();
+        }
+        }
+        if(item[0] == '.'){
+            Array.from(document.getElementsByClassName(item.slice(1))).forEach(elem => {
+                d(elem,let_t)
+            });
+        }
+        else{
+            d(document.getElementById(item.slice(1)),let_t)
+        }
+    })
+
+    document.getElementById("num_evidence").style.background = "rgba(0,0,0,0.4)"
+    document.getElementById("cust_num_evidence").style.background = "rgba(0,0,0,0.4)"
+    document.getElementById("cust_hunt_length").style.background = "rgba(0,0,0,0.4)"
+    document.getElementById("evidence").style.background = "rgba(0,0,0,0.4)"
+    document.getElementById("feed_info_block").style.background = "rgba(0,0,0,0.4)"
+    document.getElementById("3d_info_block").style.background = "rgba(0,0,0,0.4)"
+    document.getElementsByClassName("speed")[0].style.background = "rgba(0,0,0,0.4)"
+    document.getElementsByClassName("hunt_sanity")[0].style.background = "rgba(0,0,0,0.4)"
+    document.getElementsByClassName("timers")[0].style.background = "rgba(0,0,0,0.4)"
+    document.getElementsByClassName("modifier")[0].style.background = "rgba(0,0,0,0.4)"
+
+    Array.from(document.getElementsByClassName("card_icon")).forEach(elem => {
+        elem.style.filter = "invert(1)"
+        elem.style.opacity = 0.4
+    })
 }

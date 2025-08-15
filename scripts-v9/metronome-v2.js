@@ -406,6 +406,8 @@ function mark_ghosts(ms){
     var ghosts = document.getElementsByClassName("ghost_card")
     for (var i = 0; i < ghosts.length; i++){
         ghosts[i].style.boxShadow = 'none'
+        ghosts[i].style.border = null
+        ghosts[i].style.borderLeft = null
         
         if(ms != 0.00){
             var name = ghosts[i].getElementsByClassName("ghost_name")[0].textContent;
@@ -443,12 +445,16 @@ function mark_ghosts(ms){
                 if(["Raiju","Jinn"].includes(name)){
                     if(min_speed <= ms && ms <= (min_speed * 1.65)){
                         ghosts[i].style.boxShadow = '-6px 0px 5px -4px #dbd994'
+                        if(document.getElementById("theme").value == 'Desolate')
+                            ghosts[i].style.borderLeft = "6px solid rgb(227,224,110)"
                         bpm_los_list.push(ghosts[i].id)
                     }
                 }
                 else{
                     if(min_speed <= ms && ms <= (max_speed * 1.65)){
                         ghosts[i].style.boxShadow = '-6px 0px 5px -4px #dbd994'
+                        if(document.getElementById("theme").value == 'Desolate')
+                            ghosts[i].style.borderLeft = "6px solid rgb(227,224,110)"
                         bpm_los_list.push(ghosts[i].id)
                     }
                 }
@@ -457,20 +463,28 @@ function mark_ghosts(ms){
             if(document.getElementById("bpm_type").checked){
                 if ((speed_type == "range" && min_speed <= ms && ms <= max_speed) || name == "The Mimic"){
                     ghosts[i].style.boxShadow = '0px 0px 10px 2px #dbd994'
+                    if(document.getElementById("theme").value == 'Desolate')
+                        ghosts[i].style.border = "2px solid rgb(227,224,110)"
                     bpm_list.push(ghosts[i].id)
                 }
                 else if(min_speed === ms || max_speed === ms){
                     ghosts[i].style.boxShadow = '0px 0px 10px 2px #dbd994'
+                    if(document.getElementById("theme").value == 'Desolate')
+                        ghosts[i].style.border = "2px solid rgb(227,224,110)"
                     bpm_list.push(ghosts[i].id)
                 }
             }
             else{
                 if ((speed_type == "range" && (min_speed - 0.05) <= ms && ms <= (max_speed + 0.05)) || name == "The Mimic"){
                     ghosts[i].style.boxShadow = '0px 0px 10px 2px #dbd994'
+                    if(document.getElementById("theme").value == 'Desolate')
+                        ghosts[i].style.border = "2px solid rgb(227,224,110)"
                     bpm_list.push(ghosts[i].id)
                 }
                 else if(((min_speed - 0.05) <= ms && ms <= (min_speed + 0.05)) || ((max_speed - 0.05) <= ms && ms <= (max_speed + 0.05))){
                     ghosts[i].style.boxShadow = '0px 0px 10px 2px #dbd994'
+                    if(document.getElementById("theme").value == 'Desolate')
+                        ghosts[i].style.border = "2px solid rgb(227,224,110)"
                     bpm_list.push(ghosts[i].id)
                 }
             }
