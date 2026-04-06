@@ -63,6 +63,10 @@ body{
     color: white;
 }
 
+.invert{
+    filter: invert(1);
+}
+
 .option-disabled{
     opacity: 0.5;
     cursor: not-allowed !important;
@@ -314,7 +318,7 @@ body{
     }
     
 
-    #blackout, #blackout_voice, #blackout_zndl, #blackout_debug, #blackout_image, #blackout_calibrate, #blackout_weekly, #blackout_twitch{
+    #blackout, #blackout_voice, #blackout_zndl, #blackout_zntdl, #blackout_debug, #blackout_image, #blackout_calibrate, #blackout_weekly, #blackout_twitch{
         position: fixed;
         background: rgba(0,0,0,0.9);
         left: 0;
@@ -542,7 +546,7 @@ body{
         bottom: 0;
     }
 
-    .download_icon{
+    .download_icon,.download_icon_static{
         width: 20px;
         cursor: pointer;
     }
@@ -1028,7 +1032,7 @@ body{
         top: 0;
         z-index: 1;
         width: 20px;
-        height: 100dvh;
+        height: calc(100dvh - 10px);
         background-color: #313248;
         display: flex;
         flex-direction: column;
@@ -1354,7 +1358,7 @@ body{
         background-color: #747474;
     }
 
-    #info_box, #info_box_voice, #info_box_zndl, #info_box_debug, #info_box_weekly{
+    #info_box, #info_box_voice, #info_box_zndl, #info_box_zntdl, #info_box_debug, #info_box_weekly{
         z-index: 100;
         width: 600px;
         height: auto;
@@ -1414,7 +1418,7 @@ body{
         font-size: 12px;
     }
 
-    #info_box .icon, #info_box_voice .icon, #info_box_zndl .icon, #info_box_debug .icon, #info_box_calibrate .icon, #info_box_weekly .icon, #info_box_twitch .icon{
+    #info_box .icon, #info_box_voice .icon, #info_box_zndl .icon, #info_box_zntdl .icon, #info_box_debug .icon, #info_box_calibrate .icon, #info_box_weekly .icon, #info_box_twitch .icon{
         position: absolute;
         top: 10px;
         right: 10px;
@@ -1426,7 +1430,7 @@ body{
         cursor: pointer;
     }
 
-    #info_box .icon:before, #info_box_voice .icon:before, #info_box_zndl .icon:before, #info_box_debug .icon:before, #info_box_calibrate .icon:before, #info_box_weekly .icon:before, #info_box_twitch .icon:before{
+    #info_box .icon:before, #info_box_voice .icon:before, #info_box_zndl .icon:before, #info_box_zntdl .icon:before, #info_box_debug .icon:before, #info_box_calibrate .icon:before, #info_box_weekly .icon:before, #info_box_twitch .icon:before{
         content:"";
         position: absolute;
         width:3px;
@@ -1436,7 +1440,7 @@ body{
         top:4px;
     }
 
-    #info_box .icon:after, #info_box_voice .icon:after, #info_box_zndl .icon:after, #info_box_debug .icon:after, #info_box_calibrate .icon:after, #info_box_weekly .icon:after, #info_box_twitch .icon:after{
+    #info_box .icon:after, #info_box_voice .icon:after, #info_box_zndl .icon:after, #info_box_zntdl .icon:after, #info_box_debug .icon:after, #info_box_calibrate .icon:after, #info_box_weekly .icon:after, #info_box_twitch .icon:after{
         content:"";
         position: absolute;
         width:15px;
@@ -1450,7 +1454,7 @@ body{
         margin-bottom: 8px;
     }
 
-    #info_box .info_block, #info_box_voice .info_block, #info_box_zndl .info_block, #info_box_calibrate .info_block{
+    #info_box .info_block, #info_box_voice .info_block, #info_box_zndl .info_block, #info_box_zntdl .info_block, #info_box_calibrate .info_block{
         font-family: 'Courier New', Courier, monospace;
         box-shadow: inset 0 0 10px #161615;
         background: rgba(0,0,0,0.25);
@@ -1465,13 +1469,13 @@ body{
         padding-bottom: 5px !important;
     }
 
-    #info_box .info_block hr, #info_box_voice .info_block hr, #info_box_zndl .info_block hr, #info_box_calibrate .info_block hr{
+    #info_box .info_block hr, #info_box_voice .info_block hr, #info_box_zndl .info_block hr, #info_box_zntdl .info_block hr, #info_box_calibrate .info_block hr{
         width: calc(100% - 10px);
         margin-top: 15px;
         margin-bottom: 15px;
     }
 
-    #info_box .info_text, #info_box_voice .info_text, #info_box_zndl .info_text, #info_box_calibrate .info_text{
+    #info_box .info_text, #info_box_voice .info_text, #info_box_zndl .info_text, #info_box_zntdl .info_text, #info_box_calibrate .info_text{
         margin-left: 10px;
         display: flex;
         flex-direction: row;
@@ -1496,7 +1500,7 @@ body{
         z-index: -1;
     }
 
-    #info_box .copyright_text, #info_box_voice .copyright_text, #info_box_zndl .copyright_text{
+    #info_box .copyright_text, #info_box_voice .copyright_text, #info_box_zndl .copyright_text, #info_box_zntdl .copyright_text{
         margin-top: 10px;
         text-align: center;
         align-self: center;
@@ -1510,6 +1514,66 @@ body{
         align-self: center;
         font-size: 10px;
         line-height: 15px;
+    }
+
+    .drop-launcher-info{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        opacity: 0.5;
+        position: relative;
+    }
+
+    .zntdlinfo{
+        position: absolute;
+        left: 10px;
+        top: 0px;
+        width: 20px;
+        cursor: pointer;
+        filter: invert(1);
+        opacity: 0.5;
+    }
+
+    .zntdlinfo:hover{
+        opacity: 1.0;
+    }
+
+    .zntdl-buttons{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 80%;
+        justify-content: space-around;
+        margin: 10px 0px;
+    }
+
+    .zntdl-download{
+        cursor: pointer;
+        border: none;
+        margin: 0px 2px;
+        padding: 5px;
+        background: #ccc;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 40%;
+        text-decoration: none;
+        color: #121212;
+        border-radius: 5px;
+        justify-content: center;
+    }
+
+    .zntdl-download:hover{
+        background: rgb(128, 128, 128);
+    }
+
+    .zntdl-download-info{
+        display: flex;
+        justify-content: space-between;
+        width: 95%;
+        user-select: none;
+        align-items: center;
     }
 
     .thankyou_text_img{

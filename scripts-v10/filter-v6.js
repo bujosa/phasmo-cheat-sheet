@@ -1469,6 +1469,12 @@ function showZNDLInfo(event){
     $("#blackout_zndl").fadeToggle(400)
 }
 
+function showZNTDLInfo(event){
+    event.stopPropagation()
+    $("#zntdl_blockout").toggle()
+    $("#blackout_zntdl").fadeToggle(400)
+}
+
 function showDebug(event){
     event.stopPropagation()
     $("#debug_blockout").toggle()

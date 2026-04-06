@@ -1007,6 +1007,10 @@
         width: 100%;
     }
 
+    .drop-launcher-info{
+        display: none;
+    }
+
     .thankyou_text_img{
         display: flex;
         align-items: center;
