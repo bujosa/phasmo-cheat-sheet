@@ -546,9 +546,15 @@ body{
         bottom: 0;
     }
 
-    .download_icon,.download_icon_static{
+    .download_icon{
         width: 20px;
         cursor: pointer;
+    }
+
+    .download_icon_static{
+        width: 15px;
+        cursor: pointer;
+        margin-right: 3px;
     }
 
     .download_icon:hover{
@@ -1516,6 +1522,23 @@ body{
         line-height: 15px;
     }
 
+    .info-cols{
+        display: grid; 
+        grid-template-columns: 33% 34% 33%;
+    }
+
+    .info-cols > div{
+        padding: 5px;
+    }
+
+    .info-cols > div:nth-child(even){
+        background-color: rgba(255,255,255,0.1);
+    }
+
+    .info-cols ol, .info-cols ul{
+        padding-left: 20px;
+    }
+
     .drop-launcher-info{
         display: flex;
         flex-direction: column;
@@ -1570,8 +1593,7 @@ body{
 
     .zntdl-download-info{
         display: flex;
-        justify-content: space-between;
-        width: 95%;
+        justify-content: flex-start;
         user-select: none;
         align-items: center;
     }
