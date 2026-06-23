@@ -49,8 +49,8 @@
     </script>
     <script src="scripts-v10/ghost-intel-v1.js?v=fork3"></script>
     <script src="scripts-v10/ghost_template-v2.js?v=fork4"></script>
-    <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork4"/>
-    <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork3"/>
+    <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork5"/>
+    <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -1256,7 +1256,7 @@
                         <div class="label">&#9792; Femenino</div>
                     </button>
                 </div>
-                <div class="modifier_note" style="font-size:10px;opacity:.6;padding:2px 8px 6px;line-height:1.3;">
+                <div class="modifier_note tells_note">
                     &#9794; descarta Banshee y Dayan. &#9792; no descarta (casi todos pueden serlo).
                 </div>
 
@@ -1277,10 +1277,16 @@
                         <div class="label label-font-s">&#128266; 2 sonidos en &lt;80s &rarr; Myling</div>
                     </button>
                 </div>
-                <div class="modifier_note" style="font-size:10px;opacity:.6;padding:2px 8px 6px;line-height:1.3;">
+                <div class="modifier_note tells_note">
                     Sonidos del micr&oacute;fono parab&oacute;lico / caja espiritista que confirman un fantasma.
                 </div>
                 </div><!-- /.tells-section -->
+                <div class="filter-legend" style="grid-row:8;display:flex;gap:10px;flex-wrap:wrap;font-size:10px;color:#bbb;padding:6px 8px 8px;line-height:1.4;border-top:1px dashed rgba(255,255,255,0.12);margin-top:4px;">
+                    <span style="width:100%;opacity:.7;text-transform:uppercase;letter-spacing:.08em;font-size:9px;">Cómo leer los filtros · clic para alternar</span>
+                    <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:11px;height:11px;border:2px solid #1d8100;border-radius:3px;background:#ccc;display:inline-block;"></span>es</span>
+                    <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:11px;height:11px;border:2px solid #e90000;border-radius:3px;background:#ccc;display:inline-block;"></span><span style="text-decoration:line-through;">NO es</span></span>
+                    <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:11px;height:11px;border:2px solid #ccc;border-radius:3px;display:inline-block;"></span>sin marcar</span>
+                </div>
                 <div class="hunt_sanity_title yfont white">
                     {{hunt_sanity}}
                 </div>
@@ -1310,6 +1316,11 @@
                 6 Tanglewood Drive
             </button>
             <button id="reset" class="yfont standard_reset" onclick="reset()" onmouseenter="checkResetButton()" onmouseleave="resetResetButton()" oncontextmenu="showResetMenu(event)">{{reset}}</button>
+            <button id="clear_filters" class="yfont standard_reset" onclick="resetFilters()"
+                    title="Quita evidencias, velocidad, cordura y pistas de comportamiento sin recargar la página"
+                    style="width:100%;justify-self:center;font-size:15px;color:#bbb;border:2px solid #6c6f8f;background:none;border-radius:5px;margin:0 5px 5px;cursor:pointer;z-index:100;padding:4px 0;">
+                &#10226; Limpiar filtros
+            </button>
             <a id="kofi" href="https://ko-fi.com/severelyzero" target="_blank"><span>Support us on</span><img src="https://zero-network.net/phasmophobia/static/imgs/kofi.png"></a>
             <div id="active-users"><span id="current-version-label"></span><span id="active-users-label">{{active_users}}: -</span></div>
             <div class="copyright" onclick="showInfo(event)">{{info_copyright}}</div>
@@ -1420,7 +1431,7 @@
     </script>
     <script src="scripts-v10/utils-v2.js"></script>
     <script src="scripts-v10/mobile-v2.js"></script>
-    <script src="lang-v10/lang-v1.js?v=fork3"></script>
+    <script src="lang-v10/lang-v1.js?v=fork5"></script>
     <script src="themes-v10/themes-v2.js"></script>
     <script src="scripts-v10/audio_controller-v1.js"></script>
     <script src="scripts-v10/metronome-v6.js"></script>
@@ -1433,7 +1444,7 @@
     <script src="partners-v10/partners-v4.js"></script>
     <script src="models-v10/models-v1.js"></script>
     <script src="scripts-v10/zn-v5.js?v=fork3"></script>
-    <script src="scripts-v10/search-v3.js"></script>
+    <script src="scripts-v10/search-v3.js?v=fork5"></script>
     <script src="events-v10/events-v3.js"></script>
     <script src="feed-v10/feed-v2.js"></script>
     <script src="scripts-v10/voice_en-v2.js"></script>
