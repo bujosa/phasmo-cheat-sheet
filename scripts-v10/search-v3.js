@@ -25,7 +25,11 @@ function search() {
         // Search ghost cards
         const cards = document.getElementsByClassName("ghost_card");
         Array.from(cards).forEach((card) => {
-            const behaviorText = card.getElementsByClassName("ghost_behavior")[0].innerText.toLowerCase();
+            // [fork] also search evidence labels (ADN/Orbes/DOTS/huellas) on desktop, not just behavior text
+            const behaviorRaw = card.getElementsByClassName("ghost_behavior")[0].innerText;
+            const evidEl = card.getElementsByClassName("ghost_evidence")[0];
+            const evidText = evidEl ? evidEl.innerText : "";
+            const behaviorText = (behaviorRaw + " " + evidText).toLowerCase();
             const nameText = card.getElementsByClassName("ghost_name")[0].innerText.toLowerCase();
 
             relatedTerms.forEach(terms => {
@@ -77,7 +81,20 @@ function search() {
         })
     }
 
-    document.getElementById("search_results_block").innerHTML = results;
+    // [fork] friendly Spanish empty / no-results state
+    const block = document.getElementById("search_results_block");
+    const did_search = search_query.length > 1 || (search_query.length > 0 && ['ko','zh-cn'].includes(lang));
+    if (!did_search) {
+        block.innerHTML = "";
+    } else if (results.trim() === "") {
+        block.innerHTML = '<div class="search_empty">'
+            + '<div class="search_empty_glyph" aria-hidden="true">&#128269;</div>'
+            + '<div class="search_empty_title">Sin resultados</div>'
+            + '<div class="search_empty_hint">Prueba un nombre de fantasma, una prueba (ADN, Orbes, DOTS) o un comportamiento.</div>'
+            + '</div>';
+    } else {
+        block.innerHTML = results;
+    }
 }
 
 function get_partial_match(text, searchTerms) {
