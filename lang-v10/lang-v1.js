@@ -159,7 +159,7 @@ function load_translation(){
         if(!lang){
             lang = 'es' // [fork] default to Spanish
         }
-        fetch(`lang-v10/${lang}/data.json`)
+        fetch(`lang-v10/${lang}/data.json?v=fork5`)
         .then(data => data.json())
         .then(data => {
             lang_data = data
@@ -170,7 +170,7 @@ function load_translation(){
         .catch(err => {
             console.error(err)
             console.log(`${lang} is not yet supported!`)
-            fetch(`lang-v10/en/data.json`)
+            fetch(`lang-v10/en/data.json?v=fork5`)
             .then(data => data.json())
             .then(data => {
                 lang = 'en'
@@ -220,7 +220,7 @@ function convert_currency(content) {
 function translate(to_lang){
     return new Promise((resolve, reject) => {
         let body = document.body.innerHTML
-        fetch(`lang-v10/${to_lang}/data.json`)
+        fetch(`lang-v10/${to_lang}/data.json?v=fork5`)
         .then(data => data.json())
         .then(data => {
             body = body.replace(/{{([^{}]+)}}/g, (match,inner) => {
@@ -257,7 +257,7 @@ function translate(to_lang){
 function fallback_translate(to_lang){
     return new Promise((resolve, reject) => {
         let body = document.body.innerHTML
-        fetch(`lang-v10/en/data.json`)
+        fetch(`lang-v10/en/data.json?v=fork5`)
         .then(data => data.json())
         .then(data => {
             body = body.replace(/{{([^{}]+)}}/g, (match,inner) => {
@@ -289,7 +289,7 @@ function fallback_translate(to_lang){
 function translate_wiki(to_lang){
     return new Promise((resolve, reject) => {
         let body = document.body.innerHTML
-        fetch(`lang-v10/${to_lang}/wiki.json`)
+        fetch(`lang-v10/${to_lang}/wiki.json?v=fork5`)
         .then(data => data.json())
         .then(data => {
             body = body.replace(/{{([^{}]+)}}/g, (match,inner) => {
@@ -318,7 +318,7 @@ function translate_wiki(to_lang){
 function fallback_translate_wiki(to_lang){
     return new Promise((resolve, reject) => {
         let body = document.body.innerHTML
-        fetch(`lang-v10/en/wiki.json`)
+        fetch(`lang-v10/en/wiki.json?v=fork5`)
         .then(data => data.json())
         .then(data => {
             body = body.replace(/{{([^{}]+)}}/g, (match,inner) => {
