@@ -49,7 +49,7 @@
     </script>
     <script src="scripts-v10/ghost-intel-v1.js?v=fork3"></script>
     <script src="scripts-v10/ghost_template-v2.js?v=fork4"></script>
-    <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork6"/>
+    <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork7"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
@@ -896,7 +896,10 @@
 
         <div class="moving_content">
             <div class="settings_title yfont white">{{search}}</div>
-            <input type="text" id="search_bar" placeholder="{{search}}..." onkeyup="search()">
+            <div class="search_bar_wrap">
+                <input type="text" id="search_bar" placeholder="{{search}}..." onkeyup="search()">
+                <span id="search_clear" title="Limpiar b&uacute;squeda" onclick="document.getElementById('search_bar').value='';search();document.getElementById('search_bar').focus();">&#10005;</span>
+            </div>
             <div class="info_block" id="search_results_block" style="min-height: 10px;">
             </div>
         </div>
@@ -1438,13 +1441,13 @@
     <script src="scripts-v10/timer-v4.js"></script>
     <script src="login-v10/login-v1.js"></script>
     <script src="wiki-v10/wiki-v2.js"></script>
-    <script src="scripts-v10/filter-v15.js?v=fork3"></script>
+    <script src="scripts-v10/filter-v15.js?v=fork7"></script>
     <script src="scripts-v10/sanity-v1.js"></script>
     <script src="scripts-v10/wslink-v7.js"></script>
     <script src="partners-v10/partners-v4.js"></script>
     <script src="models-v10/models-v1.js"></script>
     <script src="scripts-v10/zn-v5.js?v=fork3"></script>
-    <script src="scripts-v10/search-v3.js?v=fork5"></script>
+    <script src="scripts-v10/search-v3.js?v=fork7"></script>
     <script src="events-v10/events-v3.js"></script>
     <script src="feed-v10/feed-v2.js"></script>
     <script src="scripts-v10/voice_en-v2.js"></script>
