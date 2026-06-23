@@ -1593,6 +1593,16 @@
         justify-content: flex-start;
     }
 
+    /* [fork] Behavioral tells section — right column, below Hunt Sanity */
+    .tells-section{
+        grid-column: 2;
+        grid-row: 6;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
     .speed{
         grid-column: 2;
         grid-row: 3;
@@ -2736,7 +2746,7 @@
 
     .ghost_speed .ms{
         font-size: 20px;
-        color: #ffffff60;
+        color: #ffffffb3;
         margin-left: -3px;
     }
 
@@ -2763,7 +2773,7 @@
 
     .ghost_hunt_alt{
         font-size: 25px;
-        color: rgba(255, 255, 255, 0.4);
+        color: rgba(255, 255, 255, 0.7);
         margin: 1px 5px 0px 5px;
     }
 

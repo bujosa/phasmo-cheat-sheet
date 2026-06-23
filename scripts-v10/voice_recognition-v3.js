@@ -438,8 +438,10 @@ function parse_speech(vtext){
             domovoi_msg += smallest_speed
 
             if(!$(document.getElementById(smallest_speed).querySelector("#checkbox")).hasClass("block")){
+                // Speed buttons are tri-state now (neutral -> good -> bad). Cycle with tristate
+                // so we always reach the requested state instead of looping forever on "bad".
                 while (!document.getElementById(smallest_speed).querySelector("#checkbox").classList.contains({"1":"good","0":"neutral"}[vvalue.toString()])){
-                    dualstate(document.getElementById(smallest_speed));
+                    tristate(document.getElementById(smallest_speed));
                 }
             }
             else{
