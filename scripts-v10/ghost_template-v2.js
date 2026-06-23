@@ -38,63 +38,119 @@ has_los_guide = [
 class Ghost {
     constructor(data,evidence){
         mquery = window.matchMedia("screen and (pointer: coarse) and (max-device-width: 600px)")
-        this.ghostTemplate = `
-        <div class="ghost_card" id="${data.ghost}">
-            ${data.ghost == 'Obambo' ? '<img id="obambo_timer_button" src="imgs/stopwatch-off.png" onclick="toggle_obambo_timer()" alt="Toggle Obambo state timer">' : ''}
-            <div class="ghost_name" onclick="toggleGhostExpand(this)">${data.name}</div>
-            <div class="ghost_hunt_info">
-                <div class="ghost_hunt ${parseInt(data.hunt_sanity_high) > 50 ?'high':(parseInt(data.hunt_sanity_high) < 50 && parseInt(data.hunt_sanity_high) >=0) ? 'low':'average'}">
-                    <img src="imgs/sanity.png">
-                    <div class="ghost_hunt_values">
-                        ${parseInt(data.hunt_sanity_low) < parseInt(data.hunt_sanity) ? ('<div class="ghost_hunt_alt">' + data.hunt_sanity_low + '</div>') : ''}
-                        <div>${parseInt(data.hunt_sanity) == -1 ? '???%' : data.hunt_sanity}</div>
-                        ${parseInt(data.hunt_sanity_high) > parseInt(data.hunt_sanity) ? ('<div class="ghost_hunt_alt">' + data.hunt_sanity_high + '</div>') : ''}
-                    </div>
-                </div>
-                <div class="ghost_speed">
-                    <div class="footstep_los" onclick="openWikiPath('hunts.los-sim')">
-                        <img src="imgs/${(+data.has_los) || data.ghost == 'The Mimic' ? 'los' : 'nlos'}.png" title="${(+data.has_los) || data.ghost == 'The Mimic' ? '{{has_los}}' : '{{not_los}}'}"${data.min_speed == -1 ? ' style="display:none;"' : ''}>
-                        <img src="imgs/footsteps.png" style="filter: invert(1);">
-                    </div>
-                    <div class="ghost_speed_values">
-                        ${data.min_speed == -1 ? '???' : this.toNumStr(data.min_speed)} <span class="ms">m/s</span> <span class="sound" onclick="toggleSound(${data.min_speed},'${data.ghost}0')"${data.min_speed == -1 ? ' style="display:none;"' : ''}>&#128266;</span>${data.max_speed == null ? '' : (+data.speed_is_range)?' - ':' | '}${data.max_speed == null ? '' : this.toNumStr(data.max_speed)+' <span class="ms">m/s</span> <span class="sound" onclick="toggleSound('+data.max_speed+',\''+data.ghost+'1\')">&#128266;</span>'}${data.alt_speed == null ? '' : '<br>('+this.toNumStr(data.alt_speed)+' <span class="ms">m/s</span> <span class="sound" onclick="toggleSound('+data.alt_speed+',\''+data.ghost+'2\')">&#128266;</span>)'}
-                    </div>
-                </div>
-            </div>
-            <div class="ghost_evidence" onclick="toggleGhostExpand(this)">
-                ${this.build_evidence_item(data.evidence[0],evidence[data.evidence[0]],mquery.matches)}
-                ${this.build_evidence_item(data.evidence[1],evidence[data.evidence[1]],mquery.matches)}
-                ${this.build_evidence_item(data.evidence[2],evidence[data.evidence[2]],mquery.matches)}
-                ${data.ghost == "The Mimic" ? this.build_evidence_item('Ghost Orbs',evidence['Ghost Orbs'],mquery.matches) : ''}
-            </div>
-            <div class="ghost_nightmare_evidence">${data.nightmare_evidence?data.nightmare_evidence:''}</div>
-            <div class="ghost_hunt_high">${data.hunt_sanity_high}</div>
-            <div class="ghost_hunt_low">${data.hunt_sanity_low}</div>
-            <div class="ghost_has_los">${+data.has_los}</div>
 
-            <div class="ghost_behavior" onpointerup="doubleTap(toggleGhostExpand, event, this)">
-                <div class="ghost_evidence_internal">
-                    ${mquery.matches ? this.build_evidence_item(data.evidence[0],evidence[data.evidence[0]]) : ''}
-                    ${mquery.matches ? this.build_evidence_item(data.evidence[1],evidence[data.evidence[1]]) : ''}
-                    ${mquery.matches ? this.build_evidence_item(data.evidence[2],evidence[data.evidence[2]]) : ''}
-                    ${mquery.matches ? data.ghost == "The Mimic" ? this.build_evidence_item('Ghost Orbs',evidence['Ghost Orbs']) : '' : ''}
+        // [fork] EVIDENCE-FIRST card (.gcard2). Keeps .ghost_card + all data-carrier
+        // hooks so filter-v15 / metronome / search / wslink keep working.
+        const isMimic = data.ghost === 'The Mimic';
+        const eviKeys = data.evidence.slice(0, 3).concat(isMimic ? ['Ghost Orbs'] : []);
+        const eviTiles = eviKeys.map(k => `
+            <div class="ghost_evidence_item g2-evi" name="${k}" style="--evi:${(typeof evi_color !== 'undefined' && evi_color[k]) || '#888'}">
+              <span class="g2-evi-ic"><img src="${(typeof evi_icons !== 'undefined' && evi_icons[k]) || ''}" alt=""></span>
+              <span class="g2-evi-lbl">${(evidence && evidence[k]) || k}</span>
+            </div>`).join('');
+
+        let speedStr;
+        if (data.min_speed == -1) { speedStr = '??? m/s'; }
+        else {
+            const sep = (+data.speed_is_range) ? ' - ' : ' | ';
+            speedStr = this.toNumStr(data.min_speed) + ' m/s';
+            if (data.max_speed != null) speedStr += sep + this.toNumStr(data.max_speed) + ' m/s';
+            if (data.alt_speed != null) speedStr += ' (' + this.toNumStr(data.alt_speed) + ' m/s)';
+        }
+        const sanityStr = parseInt(data.hunt_sanity) == -1 ? '???%' : data.hunt_sanity;
+
+        const intel = (typeof GHOST_INTEL !== 'undefined') ? GHOST_INTEL[data.ghost] : null;
+        let weak = '—', strong = '—';
+        if (intel && !intel.datamined) { weak = intel.w; strong = intel.s; }
+        else if (intel && intel.datamined) { weak = 'Sin confirmar'; strong = 'Fantasma datamined (no confirmado en el juego en vivo).'; }
+
+        const bh = (typeof GHOST_BEHAVIOR !== 'undefined') ? GHOST_BEHAVIOR[data.ghost] : null;
+        const sight = (bh && bh.sight) || 'Normal';
+        const hearing = (bh && bh.hearing) || 'Normal';
+        const light = (bh && bh.light) || 'Normal';
+        const movement = (bh && bh.movement) || ('Normal (' + (data.min_speed == -1 ? '???' : this.toNumStr(data.min_speed)) + ' m/s)');
+        const huntPhrase = (bh && bh.hunt) || ('Caza desde ' + sanityStr);
+        const tip = (bh && bh.survivalTip) || '';
+        const st = (v) => (v && !/^\s*normal/i.test(v)) ? 'alert' : 'normal';
+
+        // off-screen carrier: keeps text search (behavior + survival) and the
+        // shared-journal link (reads .ghost_behavior) working without showing a wall of text.
+        const searchText = `${this.behavior(data.wiki)} ${sight} ${hearing} ${light} ${movement} ${huntPhrase} ${tip} ${weak} ${strong}`;
+
+        this.ghostTemplate = `
+        <div class="gcard2 ghost_card" id="${data.ghost}">
+            ${data.ghost == 'Obambo' ? '<img id="obambo_timer_button" src="imgs/stopwatch-off.png" onclick="toggle_obambo_timer()" alt="Toggle Obambo state timer">' : ''}
+
+            <header class="g2-head">
+                <h3 class="ghost_name g2-name" onclick="toggleGhostExpand(this)">${data.name}</h3>
+                <button class="g2-more" type="button" onClick="openGhostInfo('${data.ghost}')">
+                    <span class="g2-more-txt">{{0_evidence_tests}}</span>
+                    <svg class="g2-more-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                </button>
+            </header>
+
+            <div class="ghost_evidence g2-evidence" onclick="toggleGhostExpand(this)">${eviTiles}
+            </div>
+
+            <div class="g2-intel">
+                <div class="g2-irow g2-weak">
+                    <span class="g2-imark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg></span>
+                    <span class="g2-ibody"><span class="g2-ilabel">Debilidad</span><span class="g2-ivalue">${weak}</span></span>
                 </div>
-                <div class="ghost_tests_button" onClick="openGhostInfo('${data.ghost}')">{{0_evidence_tests}} >></div>
-                ${this.intel(data.ghost)}
-                ${this.behavior(data.wiki)}
-                <div class="ghost_extra">
-                    <div class="ghost_extra_button" onClick="openWikiPath('known-bugs#${data.ghost.replace(" ","-")}-bugs')">[{{known_bugs}}]</div>
-                    ${document.getElementById("wiki-extra-"+data.ghost.replace(" ","-").toLowerCase()) ? "<div class=\"ghost_extra_button\" onClick=\"openWikiPath('ghost-data.extra-"+data.ghost.replace(" ","-").toLowerCase()+"')\">[{{more_details}}]</div>" : ''}
+                <div class="g2-irow g2-strong">
+                    <span class="g2-imark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20V9m0 0l-4 4m4-4l4 4M5 4h14"/></svg></span>
+                    <span class="g2-ibody"><span class="g2-ilabel">Fuerza</span><span class="g2-ivalue">${strong}</span></span>
                 </div>
             </div>
-            <div class="ghost_clear">
+
+            <div class="g2-move">
+                <div class="g2-stat g2-stat-speed">
+                    <span class="g2-stat-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h9m0 0l-3-3m3 3l-3 3M14 5l5 7-5 7"/></svg></span>
+                    <span class="g2-stat-body"><span class="g2-stat-lbl">Velocidad</span><span class="ghost_speed g2-stat-val">${speedStr}</span></span>
+                </div>
+                <div class="g2-stat g2-stat-sanity">
+                    <span class="g2-stat-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3C9 7 6 9 6 13a6 6 0 0012 0c0-4-3-6-6-10z"/></svg></span>
+                    <span class="g2-stat-body"><span class="g2-stat-lbl">Caza desde</span><span class="g2-stat-val">${sanityStr}</span></span>
+                </div>
+            </div>
+
+            <div class="g2-chips">
+                <span class="g2-chip g2-chip-sight" data-state="${st(sight)}" title="${sight.replace(/"/g,'&quot;')}"><svg class="g2-chip-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg><span class="g2-chip-txt">${sight}</span></span>
+                <span class="g2-chip g2-chip-hear" data-state="${st(hearing)}" title="${hearing.replace(/"/g,'&quot;')}"><svg class="g2-chip-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0112 0c0 4-4 4-4 7a3 3 0 01-6 0"/><path d="M9 13a3 3 0 016 0"/></svg><span class="g2-chip-txt">${hearing}</span></span>
+                <span class="g2-chip g2-chip-light" data-state="${st(light)}" title="${light.replace(/"/g,'&quot;')}"><svg class="g2-chip-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4M12 2a6 6 0 00-4 10c1 1 1 2 1 3h6c0-1 0-2 1-3a6 6 0 00-4-10z"/></svg><span class="g2-chip-txt">${light}</span></span>
+            </div>
+
+            <input class="g2-hunt-toggle" type="checkbox" id="hunt-${data.ghost.replace(/\s+/g,'-')}" hidden>
+            <label class="g2-hunt-btn" for="hunt-${data.ghost.replace(/\s+/g,'-')}">
+                <span class="g2-hunt-dot" aria-hidden="true"></span>
+                <span class="g2-hunt-btn-txt">MODO CACER&Iacute;A</span>
+                <svg class="g2-hunt-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </label>
+            <div class="g2-hunt"><div class="g2-hunt-inner">
+                <div class="g2-hunt-grid">
+                    <div class="g2-hcell" data-state="${st(sight)}"><svg class="g2-hcell-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg><span class="g2-hcell-lbl">Vista</span><span class="g2-hcell-val">${sight}</span></div>
+                    <div class="g2-hcell" data-state="${st(hearing)}"><svg class="g2-hcell-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0112 0c0 4-4 4-4 7a3 3 0 01-6 0"/><path d="M9 13a3 3 0 016 0"/></svg><span class="g2-hcell-lbl">O&iacute;do</span><span class="g2-hcell-val">${hearing}</span></div>
+                    <div class="g2-hcell" data-state="${st(light)}"><svg class="g2-hcell-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4M12 2a6 6 0 00-4 10c1 1 1 2 1 3h6c0-1 0-2 1-3a6 6 0 00-4-10z"/></svg><span class="g2-hcell-lbl">Luz</span><span class="g2-hcell-val">${light}</span></div>
+                    <div class="g2-hcell g2-hcell-move"><svg class="g2-hcell-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h9m0 0l-3-3m3 3l-3 3M14 5l5 7-5 7"/></svg><span class="g2-hcell-lbl">Movimiento</span><span class="g2-hcell-val">${movement}</span></div>
+                </div>
+                <div class="g2-tip"><svg class="g2-tip-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4M12 2a6 6 0 00-4 10c1 1 1 2 1 3h6c0-1 0-2 1-3a6 6 0 00-4-10z"/></svg><span class="g2-tip-txt"><b>Sobrevivir:</b> ${tip}</span></div>
+                <div class="g2-hunt-meta"><span class="g2-hunt-pill"><b>Velocidad</b> ${speedStr}</span><span class="g2-hunt-pill"><b>${huntPhrase}</b></span></div>
+            </div></div>
+
+            <div class="g2-clear ghost_clear">
                 <img class="card_icon card_icon_select" title="{{select_ghost}}" src="imgs/select.png" onclick="select(this.parentElement.parentElement)">
                 <img class="card_icon card_icon_guess" title="{{guess_ghost}}" style="display:none;" src="imgs/guess.png" onclick="guess(this.parentElement.parentElement)">
                 <img class="card_icon card_icon_not" title="{{not_ghost}}" src="imgs/not.png" onclick="fade(this.parentElement.parentElement)" ondblclick="remove(this.parentElement.parentElement)">
                 <img class="card_icon card_icon_died" title="{{died_to_ghost}}" style="display:none;" src="imgs/died.png" onclick="died(this.parentElement.parentElement)">
             </div>
             <div class="ghost_guesses"></div>
-            <div class="ghost_expand" onclick="toggleGhostExpand(this)">▼ Show More ▼</div>
+
+            <div class="ghost_behavior" style="position:absolute;left:-99999px;top:0;width:260px;" aria-hidden="true">${searchText}</div>
+            <div class="ghost_nightmare_evidence" style="display:none">${data.nightmare_evidence?data.nightmare_evidence:''}</div>
+            <div class="ghost_hunt_high" style="display:none">${data.hunt_sanity_high}</div>
+            <div class="ghost_hunt_low" style="display:none">${data.hunt_sanity_low}</div>
+            <div class="ghost_has_los" style="display:none">${+data.has_los}</div>
+            <div class="ghost_speed_values" style="display:none">${speedStr}</div>
         </div>
         `
 
