@@ -9,7 +9,19 @@ const RELATED = [
     ['picture','photo'],
     ['video','clip','footage'],
     ['ghost orb','orbs'],
-    ['fingerprints','prints','uv','ultraviolet']
+    ['fingerprints','prints','uv','ultraviolet'],
+    // [fork] Spanish ↔ English bridges for evidence + key tells (the card text is Spanish)
+    ['ultravioleta','uv','huellas','fingerprints'],
+    ['orbes','orb','orbs'],
+    ['escritura','writing'],
+    ['temperaturas heladas','freezing','heladas','frio','frío'],
+    ['caja espectral','spirit box','espectral'],
+    ['dots','d.o.t.s'],
+    ['mujer','femenino','female'],
+    ['grito','gritos','scream'],
+    ['respiracion','respiración','breathing'],
+    ['crucifijo','crucifix'],
+    ['incienso','smudge','incense']
 ]
 
 
@@ -84,6 +96,9 @@ function search() {
     // [fork] friendly Spanish empty / no-results state
     const block = document.getElementById("search_results_block");
     const did_search = search_query.length > 1 || (search_query.length > 0 && ['ko','zh-cn'].includes(lang));
+    // toggle the clear (✕) button
+    const clearBtn = document.getElementById("search_clear");
+    if (clearBtn) clearBtn.style.display = search_query.length > 0 ? "flex" : "none";
     if (!did_search) {
         block.innerHTML = "";
     } else if (results.trim() === "") {
@@ -93,7 +108,9 @@ function search() {
             + '<div class="search_empty_hint">Prueba un nombre de fantasma, una prueba (ADN, Orbes, DOTS) o un comportamiento.</div>'
             + '</div>';
     } else {
-        block.innerHTML = results;
+        const n = (results.match(/class="search_result"/g) || []).length;
+        const header = '<div class="search_count">' + n + (n === 1 ? ' resultado' : ' resultados') + '</div>';
+        block.innerHTML = header + results;
     }
 }
 
