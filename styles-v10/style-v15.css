@@ -3275,17 +3275,18 @@ body{
 
     .ghost_card{
         display: grid;
-        max-width: 510px;
-        min-width: 470px;
-        border-radius: 5px;
-        grid-template-columns: 245px auto;
-        grid-template-rows: 45px 35px 45px 70px;
+        max-width: 560px;
+        min-width: 466px;
+        border-radius: 7px;
+        grid-template-columns: 256px auto;
+        grid-template-rows: 50px 38px 50px 74px;
         color: white;
         background-color: #313248;
-        margin: 20px 5px 0px 5px;
-        height: 195px;
+        margin: 18px 6px 0px 6px;
+        height: 212px;
         position: relative;
         flex:1;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.28);
     }
 
     .ghost_card_alt_1{
@@ -3343,12 +3344,12 @@ body{
         grid-column: 1;
         grid-row: 1;
         font-family:"ZNPrimary";
-        font-size: 24px;
+        font-size: 26px;
         font-weight: bold;
-        padding:10px 10px 0px 10px;
+        padding:11px 10px 0px 10px;
         text-align: center;
         letter-spacing: 2px;
-        height: 30px;
+        height: 34px;
     }
 
     .ghost_name_alt_2{
