@@ -3341,7 +3341,8 @@ body{
     .ghost_evidence{
         grid-column: 1;
         grid-row: 2;
-        font-size: 12px;
+        font-size: 13px;
+        font-weight: 600;
         text-align: center;
         display: flex;
         justify-content: space-around;
@@ -3431,15 +3432,16 @@ body{
     }
 
     .ghost_speed .ms{
-        font-size: 10px;
-        color: #ffffff60;
+        font-size: 11px;
+        color: #ffffffb3;
         margin-left: -3px;
     }
 
     .ghost_speed_values{
         width: fit-content;
-        line-height: 1.2;
-        color: #ccc;
+        line-height: 1.25;
+        font-size: 15px;
+        color: #ffffff;
     }
 
     .ghost_hunt{
@@ -3458,8 +3460,8 @@ body{
     }
 
     .ghost_hunt_alt{
-        font-size: 10px;
-        color: rgba(255,255,255,0.4);
+        font-size: 11px;
+        color: rgba(255,255,255,0.7);
         margin: -4px 0px;
     }
 

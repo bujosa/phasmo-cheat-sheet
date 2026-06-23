@@ -1,4 +1,4 @@
-var lang = 'en'
+var lang = 'es' // [fork] default to Spanish
 var lang_data = null
 
 // ----------------------------------
@@ -157,7 +157,7 @@ function load_translation(){
     return new Promise((resolve, reject) => {
         lang = getCookie("lang")
         if(!lang){
-            lang = 'en'
+            lang = 'es' // [fork] default to Spanish
         }
         fetch(`lang-v10/${lang}/data.json`)
         .then(data => data.json())

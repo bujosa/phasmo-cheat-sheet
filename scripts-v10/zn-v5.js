@@ -136,7 +136,10 @@ function loadAllAndConnect(){
                 $('#link_id').val("Can't Connect!")
                 $("#session").text("no-connection-to-server")
                 $("#prev-session").text(`P: ${pznid == '' ? '-' : pznid}`)
-                reject("Unable to connect")
+                // [fork/standalone] Don't reject: online account/sync features (shared journal
+                // link, stats) simply stay off when there's no Zero-Network connection, instead
+                // of blocking the whole app with the maintenance screen.
+                resolve("Offline mode (no Zero-Network connection)")
             })
         }
     })
@@ -146,10 +149,14 @@ function loadAllAndConnect(){
         lang = getCookie("lang")
 
         if(!lang){
-            lang = 'en'
+            lang = 'es' // [fork] default to Spanish
         }
         try{
-            fetch(`https://zero-network.net/phasmophobia/data/ghosts.json?lang=${lang}${ghost_version ? ('&version='+ghost_version) : ''}`, {cache: 'default', signal: AbortSignal.timeout(10000)})
+            // [fork/standalone] Ghost data is bundled locally under data-local/ so this fork
+            // works on its own without the gated zero-network.net API (which 401s off-origin).
+            // Refresh the snapshot with: scripts/update-data.sh   (see data-local/README.md)
+            fetch(`data-local/ghosts-${lang}.json`, {cache: 'default'})
+            .catch(() => fetch(`data-local/ghosts-en.json`, {cache: 'default'}))
             .then(data => data.json())
             .then(data => {
 
@@ -221,8 +228,12 @@ function loadAllAndConnect(){
                         monkeyPawFilter($(document.getElementById(key)).parent().find(".monkey-paw-select"))
                     }
                 }
-                for (const [key, value] of Object.entries(read_state["speed"])){ 
+                for (const [key, value] of Object.entries(read_state["speed"])){
                     if (value == 1){
+                        $("#"+key)[0].click();
+                    }
+                    else if (value == -1){
+                        $("#"+key)[0].click();
                         $("#"+key)[0].click();
                     }
                 }
@@ -286,7 +297,7 @@ function loadAllAndConnect(){
     })
 
     let loadMaps = new Promise((resolve, reject) => {
-        fetch("https://zero-network.net/phasmophobia/data/maps", {cache: 'default', signal: AbortSignal.timeout(12000)})
+        fetch("data-local/maps.json", {cache: 'default'})
         .then(data => data.json())
         .then(data => {
             var map_html = ""
@@ -321,7 +332,7 @@ function loadAllAndConnect(){
     })
 
     let loadWeekly = new Promise((resolve, reject) => {
-        fetch("https://zero-network.net/phasmophobia/data/weekly.json", {cache: 'default', signal: AbortSignal.timeout(10000)})
+        fetch("data-local/weekly.json", {cache: 'default'})
         .then(data => data.json())
         .then(data => {
             weekly_data = {
@@ -372,7 +383,7 @@ function loadAllAndConnect(){
     })
 
     let loadLanguages = new Promise((resolve, reject) => {
-        fetch("https://zero-network.net/phasmophobia/languages", {cache: 'default', signal: AbortSignal.timeout(10000)})
+        fetch("data-local/languages.json", {cache: 'default'})
         .then(data => data.json())
         .then(data => {
             var lang_html = ""
