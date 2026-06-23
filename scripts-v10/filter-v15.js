@@ -1287,6 +1287,7 @@ function filter(ignore_link=false){
         $("#evidence").css("box-shadow","inset 0 0 10px #161615")
     }
 
+    updateGhostCounter()
     prioritySort()
     clearTimeout(auto_select_timeout)
     autoPreSelect()
@@ -1297,6 +1298,38 @@ function filter(ignore_link=false){
     updateScaling()
     if (hasLink && !ignore_link){send_state()}
     if (hasDLLink){send_evidence_link(); send_ghosts_link();}
+}
+
+// [fork] Live "remaining ghosts" counter — floating pill over the cards area.
+// Counts candidate cards (visible, not manually ruled out / hidden).
+function updateGhostCounter(){
+    var el = document.getElementById('ghost_counter');
+    if (!el){
+        el = document.createElement('div');
+        el.id = 'ghost_counter';
+        document.body.appendChild(el);
+    }
+    var cards = document.getElementsByClassName('ghost_card');
+    var total = cards.length;
+    var remaining = 0, lastName = '';
+    for (var i = 0; i < cards.length; i++){
+        var c = cards[i];
+        if (!c.classList.contains('hidden') && !c.classList.contains('faded') && !c.classList.contains('permhidden')){
+            remaining++;
+            lastName = (c.getElementsByClassName('ghost_name')[0] || {}).textContent || c.id;
+        }
+    }
+    el.classList.remove('gc-one', 'gc-zero', 'gc-idle');
+    if (remaining === 0){
+        el.classList.add('gc-zero');
+        el.innerHTML = '<span class="gc-num">0</span> coinciden';
+    } else if (remaining === 1){
+        el.classList.add('gc-one');
+        el.innerHTML = '&#9889; &iexcl;Es <b>' + lastName.trim() + '</b>!';
+    } else {
+        if (remaining === total) el.classList.add('gc-idle');
+        el.innerHTML = 'Quedan <span class="gc-num">' + remaining + '</span> fantasmas';
+    }
 }
 
 function prioritySort(){
