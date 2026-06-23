@@ -221,11 +221,26 @@ class Ghost {
         var d = (typeof GHOST_INTEL !== 'undefined') ? GHOST_INTEL[ghost] : null;
         if(!d) return '';
         if(d.datamined){
-            return `<div class="ghost_intel datamined">&#9888; Fantasma datamined (no confirmado en el juego en vivo)</div>`;
+            return `<div class="ghost_intel datamined">
+                <span class="gi_dm_mark" aria-hidden="true">&#9888;</span>
+                <span class="gi_dm_text">Fantasma datamined (no confirmado en el juego en vivo)</span>
+            </div>`;
         }
         return `<div class="ghost_intel">
-            <div class="intel_row intel_weak"><b>&#129656; Debilidad:</b> ${d.w}</div>
-            <div class="intel_row intel_strong"><b>&#128170; Fuerza:</b> ${d.s}</div>
+            <div class="gi_row gi_weak">
+                <span class="gi_mark" aria-hidden="true"><span class="gi_glyph">&#9660;</span></span>
+                <span class="gi_body">
+                    <span class="gi_label">Debilidad</span>
+                    <span class="gi_value">${d.w}</span>
+                </span>
+            </div>
+            <div class="gi_row gi_strong">
+                <span class="gi_mark" aria-hidden="true"><span class="gi_glyph">&#9650;</span></span>
+                <span class="gi_body">
+                    <span class="gi_label">Fuerza</span>
+                    <span class="gi_value">${d.s}</span>
+                </span>
+            </div>
         </div>`;
     }
 
