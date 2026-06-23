@@ -80,6 +80,7 @@ class Ghost {
                     ${mquery.matches ? data.ghost == "The Mimic" ? this.build_evidence_item('Ghost Orbs',evidence['Ghost Orbs']) : '' : ''}
                 </div>
                 <div class="ghost_tests_button" onClick="openGhostInfo('${data.ghost}')">{{0_evidence_tests}} >></div>
+                ${this.intel(data.ghost)}
                 ${this.behavior(data.wiki)}
                 <div class="ghost_extra">
                     <div class="ghost_extra_button" onClick="openWikiPath('known-bugs#${data.ghost.replace(" ","-")}-bugs')">[{{known_bugs}}]</div>
@@ -214,6 +215,33 @@ class Ghost {
 
         data += "</ul>"
         return data
+    }
+
+    intel(ghost){
+        var d = (typeof GHOST_INTEL !== 'undefined') ? GHOST_INTEL[ghost] : null;
+        if(!d) return '';
+        if(d.datamined){
+            return `<div class="ghost_intel datamined">
+                <span class="gi_dm_mark" aria-hidden="true">&#9888;</span>
+                <span class="gi_dm_text">Fantasma datamined (no confirmado en el juego en vivo)</span>
+            </div>`;
+        }
+        return `<div class="ghost_intel">
+            <div class="gi_row gi_weak">
+                <span class="gi_mark" aria-hidden="true"><span class="gi_glyph">&#9660;</span></span>
+                <span class="gi_body">
+                    <span class="gi_label">Debilidad</span>
+                    <span class="gi_value">${d.w}</span>
+                </span>
+            </div>
+            <div class="gi_row gi_strong">
+                <span class="gi_mark" aria-hidden="true"><span class="gi_glyph">&#9650;</span></span>
+                <span class="gi_body">
+                    <span class="gi_label">Fuerza</span>
+                    <span class="gi_value">${d.s}</span>
+                </span>
+            </div>
+        </div>`;
     }
 
     behavior(value){

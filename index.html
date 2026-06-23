@@ -15,7 +15,10 @@
     <script src="https://zero-network.net/zn/static/scripts/copyShare.js"></script>
     <script src="jquery/jquery-3.6.2.min.js"></script>
     <script>
-        if (!window.location.href.includes("tybayn.github.io") && !location.search.includes('zn=beta')){
+        // [fork] Upstream forces every host to redirect to tybayn.github.io, which would
+        // hide this fork's changes. Disabled so this fork serves its own version.
+        // Re-enable by removing the `false &&` if you ever want the upstream behavior back.
+        if (false && !window.location.href.includes("tybayn.github.io") && !location.search.includes('zn=beta')){
             window.location.href = "https://tybayn.github.io/phasmo-cheat-sheet"+window.location.search
         }
         if (location.search.includes('refresh=1')) {
@@ -44,9 +47,10 @@
             return controller.signal;
         };
     </script>
-    <script src="scripts-v10/ghost_template-v2.js"></script>
-    <link rel="stylesheet" href="styles-v10/style-v15.css"/>
-    <link rel="stylesheet" href="styles-v10/style-mobile-v9.css"/>
+    <script src="scripts-v10/ghost-intel-v1.js?v=fork3"></script>
+    <script src="scripts-v10/ghost_template-v2.js?v=fork4"></script>
+    <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork4"/>
+    <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork3"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -884,8 +888,9 @@
     </div>
 
     <div id="search_box" style="right:-36px;">
-        <div id="search_tab" onclick="showSearch();">
-            <img src="imgs/search.png" width="24px"/>
+        <div id="search_tab" onclick="showSearch();" title="Buscar fantasmas por comportamiento (Ctrl/Cmd + F)">
+            <img src="imgs/search.png" width="20px"/>
+            <span class="search_tab_label">Buscar</span>
         </div>
         <span class="icon" onclick="showSearch()"></span>
 
@@ -1217,15 +1222,15 @@
                     {{speed}}
                 </div>
                 <div class="speed">
-                    <button id="Slow" class="tricheck white" name="speed" onclick="dualstate(this)" value="Slow">
+                    <button id="Slow" class="tricheck white" name="speed" onclick="tristate(this)" value="Slow">
                         <div id="checkbox" class="neutral"><span class="icon"></span></div>
                         <div class="label">{{slow}}</div>
                     </button>
-                    <button id="Normal" class="tricheck white" name="speed" onclick="dualstate(this)" value="Normal">
+                    <button id="Normal" class="tricheck white" name="speed" onclick="tristate(this)" value="Normal">
                         <div id="checkbox" class="neutral"><span class="icon"></span></div>
                         <div class="label">{{speed_normal}}</div>
                     </button>
-                    <button id="Fast" class="tricheck white" name="speed" onclick="dualstate(this)" value="Fast">
+                    <button id="Fast" class="tricheck white" name="speed" onclick="tristate(this)" value="Fast">
                         <div id="checkbox" class="neutral"><span class="icon"></span></div>
                         <div class="label">{{fast}}</div>
                     </button>
@@ -1235,6 +1240,47 @@
                         <div class="label label-font-s">{{los_speed_up}}</div>
                     </button>
                 </div>
+
+                <!-- [fork] Behavioral tells: gender + distinctive parabolic/spirit-box sounds -->
+                <div class="tells-section">
+                <div class="speed_title yfont white">
+                    Género del modelo
+                </div>
+                <div class="speed">
+                    <button id="GenderMale" class="tricheck white" name="gender" onclick="dualstate(this,false,true)" value="Male">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label">&#9794; Masculino</div>
+                    </button>
+                    <button id="GenderFemale" class="tricheck white" name="gender" onclick="dualstate(this,false,true)" value="Female">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label">&#9792; Femenino</div>
+                    </button>
+                </div>
+                <div class="modifier_note" style="font-size:10px;opacity:.6;padding:2px 8px 6px;line-height:1.3;">
+                    &#9794; descarta Banshee y Dayan. &#9792; no descarta (casi todos pueden serlo).
+                </div>
+
+                <div class="speed_title yfont white">
+                    Sonido distintivo
+                </div>
+                <div class="speed">
+                    <button id="SoundBanshee" class="tricheck white" name="tell-sound" onclick="dualstate(this)" value="Banshee">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">&#128266; Grito &rarr; Banshee</div>
+                    </button>
+                    <button id="SoundDeogen" class="tricheck white" name="tell-sound" onclick="dualstate(this)" value="Deogen">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">&#128266; Respiraci&oacute;n a &lt;1m &rarr; Deogen</div>
+                    </button>
+                    <button id="SoundMyling" class="tricheck white" name="tell-sound" onclick="dualstate(this)" value="Myling">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">&#128266; 2 sonidos en &lt;80s &rarr; Myling</div>
+                    </button>
+                </div>
+                <div class="modifier_note" style="font-size:10px;opacity:.6;padding:2px 8px 6px;line-height:1.3;">
+                    Sonidos del micr&oacute;fono parab&oacute;lico / caja espiritista que confirman un fantasma.
+                </div>
+                </div><!-- /.tells-section -->
                 <div class="hunt_sanity_title yfont white">
                     {{hunt_sanity}}
                 </div>
@@ -1374,19 +1420,19 @@
     </script>
     <script src="scripts-v10/utils-v2.js"></script>
     <script src="scripts-v10/mobile-v2.js"></script>
-    <script src="lang-v10/lang-v1.js"></script>
+    <script src="lang-v10/lang-v1.js?v=fork3"></script>
     <script src="themes-v10/themes-v2.js"></script>
     <script src="scripts-v10/audio_controller-v1.js"></script>
     <script src="scripts-v10/metronome-v6.js"></script>
     <script src="scripts-v10/timer-v4.js"></script>
     <script src="login-v10/login-v1.js"></script>
     <script src="wiki-v10/wiki-v2.js"></script>
-    <script src="scripts-v10/filter-v15.js"></script>
+    <script src="scripts-v10/filter-v15.js?v=fork3"></script>
     <script src="scripts-v10/sanity-v1.js"></script>
     <script src="scripts-v10/wslink-v7.js"></script>
     <script src="partners-v10/partners-v4.js"></script>
     <script src="models-v10/models-v1.js"></script>
-    <script src="scripts-v10/zn-v5.js"></script>
+    <script src="scripts-v10/zn-v5.js?v=fork3"></script>
     <script src="scripts-v10/search-v3.js"></script>
     <script src="events-v10/events-v3.js"></script>
     <script src="feed-v10/feed-v2.js"></script>

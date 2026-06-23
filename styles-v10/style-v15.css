@@ -834,18 +834,29 @@ body{
     #search_tab{
         position: absolute;
         height: 24px;
-        width: 25px;
+        width: auto;
         text-align: center;
         top: 5px;
-        left: -35px;
-        background-color: #313248;
-        padding: 5px;
+        left: -92px;
+        background-color: #3a3b58;
+        padding: 5px 8px;
         cursor: pointer;
         border-style: solid;
         border-color: #ccc;
         border-width: 1px 0px 1px 1px;
         border-radius: 5px 0px 0px 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
     }
+    /* [fork] visible "Buscar" label to make search discoverable */
+    .search_tab_label{
+        font-size: 13px;
+        color: #fff;
+        white-space: nowrap;
+        font-weight: 600;
+    }
+    #search_tab:hover{ background-color: #4a4b6e; }
 
     #news_box{
         position: fixed;
@@ -2245,6 +2256,16 @@ body{
         padding: 2px 0;
     }
 
+    /* [fork] Behavioral tells section — own grid row so it never overlaps Speed */
+    .tells-section{
+        grid-column: 1;
+        grid-row: 7;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+
     .hunt_sanity_title{
         grid-column: 1;
         grid-row: 5;
@@ -3257,11 +3278,11 @@ body{
         min-width: 470px;
         border-radius: 5px;
         grid-template-columns: 245px auto;
-        grid-template-rows: 45px 35px 45px;
+        grid-template-rows: 45px 35px 45px 70px;
         color: white;
         background-color: #313248;
         margin: 20px 5px 0px 5px;
-        height: 125px;
+        height: 195px;
         position: relative;
         flex:1;
     }
@@ -3341,7 +3362,8 @@ body{
     .ghost_evidence{
         grid-column: 1;
         grid-row: 2;
-        font-size: 12px;
+        font-size: 13px;
+        font-weight: 600;
         text-align: center;
         display: flex;
         justify-content: space-around;
@@ -3431,15 +3453,16 @@ body{
     }
 
     .ghost_speed .ms{
-        font-size: 10px;
-        color: #ffffff60;
+        font-size: 11px;
+        color: #ffffffb3;
         margin-left: -3px;
     }
 
     .ghost_speed_values{
         width: fit-content;
-        line-height: 1.2;
-        color: #ccc;
+        line-height: 1.25;
+        font-size: 15px;
+        color: #ffffff;
     }
 
     .ghost_hunt{
@@ -3458,8 +3481,8 @@ body{
     }
 
     .ghost_hunt_alt{
-        font-size: 10px;
-        color: rgba(255,255,255,0.4);
+        font-size: 11px;
+        color: rgba(255,255,255,0.7);
         margin: -4px 0px;
     }
 
@@ -3471,7 +3494,7 @@ body{
 
     .ghost_behavior{
         grid-column: 2;
-        grid-row: 1 / 4;
+        grid-row: 1 / 5;
         padding:10px 10px;
         margin-left: 2px;
         margin-right: 30px;
@@ -3502,6 +3525,115 @@ body{
 
     .ghost_behavior_hidden{
         display: none !important;
+    }
+
+    /* [fork] Strengths & weaknesses block — "Sentinel Intel" design (workflow winner) */
+    .ghost_intel{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 8px;
+        padding-bottom: 9px;
+        border-bottom: 1px dashed rgba(255,255,255,0.14);
+        font-size: 12.5px;
+        line-height: 15px;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* --- intel row: subtle inset sub-card --- */
+    .ghost_intel .gi_row{
+        position: relative;
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+        padding: 6px 8px 6px 7px;
+        border-radius: 7px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+    }
+    .ghost_intel .gi_row::before{
+        content: "";
+        position: absolute;
+        left: 0; top: 5px; bottom: 5px;
+        width: 3px;
+        border-radius: 3px;
+    }
+    .ghost_intel .gi_weak::before{ background: #db4d48; box-shadow: 0 0 8px rgba(219,77,72,0.55); }
+    .ghost_intel .gi_strong::before{ background: #2ccc29; box-shadow: 0 0 8px rgba(44,204,41,0.5); }
+
+    /* --- shaped icon badge (shape carries meaning, not color alone) --- */
+    .ghost_intel .gi_mark{
+        flex: 0 0 auto;
+        width: 18px; height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .ghost_intel .gi_weak .gi_mark{
+        color: #ffd9d7;
+        background: rgba(219,77,72,0.22);
+        box-shadow: inset 0 0 0 1px rgba(219,77,72,0.6);
+    }
+    .ghost_intel .gi_strong .gi_mark{
+        color: #d6ffd2;
+        background: rgba(44,204,41,0.2);
+        box-shadow: inset 0 0 0 1px rgba(44,204,41,0.55);
+    }
+    .ghost_intel .gi_glyph{ display: block; transform: translateY(-0.5px); }
+
+    /* --- text stack --- */
+    .ghost_intel .gi_body{ display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .ghost_intel .gi_label{
+        font-size: 9.5px;
+        font-weight: 700;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+    }
+    .ghost_intel .gi_weak .gi_label{ color: #ff9a96; text-shadow: 0 0 6px rgba(219,77,72,0.35); }
+    .ghost_intel .gi_strong .gi_label{ color: #7fe07c; text-shadow: 0 0 6px rgba(44,204,41,0.3); }
+    .ghost_intel .gi_value{
+        color: #f3f4f8;
+        font-size: 12px;
+        line-height: 15px;
+        font-weight: 400;
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    /* --- datamined variant --- */
+    .ghost_intel.datamined{
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 7px;
+        padding: 7px 9px;
+        border-bottom: none;
+        border-radius: 7px;
+        background: linear-gradient(180deg, rgba(219,217,147,0.1), rgba(219,217,147,0.03));
+        box-shadow: inset 0 0 0 1px rgba(219,217,147,0.22);
+    }
+    .ghost_intel.datamined .gi_dm_mark{
+        flex: 0 0 auto;
+        color: #1c1c14;
+        background: #dbd993;
+        width: 18px; height: 18px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1;
+    }
+    .ghost_intel.datamined .gi_dm_text{
+        color: #e9e3a9;
+        font-style: italic;
+        font-size: 12px;
+        line-height: 15px;
     }
 
     .ghost_behavior_item{
