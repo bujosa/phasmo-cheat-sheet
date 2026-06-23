@@ -15,7 +15,10 @@
     <script src="https://zero-network.net/zn/static/scripts/copyShare.js"></script>
     <script src="jquery/jquery-3.6.2.min.js"></script>
     <script>
-        if (!window.location.href.includes("tybayn.github.io") && !location.search.includes('zn=beta')){
+        // [fork] Upstream forces every host to redirect to tybayn.github.io, which would
+        // hide this fork's changes. Disabled so this fork serves its own version.
+        // Re-enable by removing the `false &&` if you ever want the upstream behavior back.
+        if (false && !window.location.href.includes("tybayn.github.io") && !location.search.includes('zn=beta')){
             window.location.href = "https://tybayn.github.io/phasmo-cheat-sheet"+window.location.search
         }
         if (location.search.includes('refresh=1')) {
@@ -1217,15 +1220,15 @@
                     {{speed}}
                 </div>
                 <div class="speed">
-                    <button id="Slow" class="tricheck white" name="speed" onclick="dualstate(this)" value="Slow">
+                    <button id="Slow" class="tricheck white" name="speed" onclick="tristate(this)" value="Slow">
                         <div id="checkbox" class="neutral"><span class="icon"></span></div>
                         <div class="label">{{slow}}</div>
                     </button>
-                    <button id="Normal" class="tricheck white" name="speed" onclick="dualstate(this)" value="Normal">
+                    <button id="Normal" class="tricheck white" name="speed" onclick="tristate(this)" value="Normal">
                         <div id="checkbox" class="neutral"><span class="icon"></span></div>
                         <div class="label">{{speed_normal}}</div>
                     </button>
-                    <button id="Fast" class="tricheck white" name="speed" onclick="dualstate(this)" value="Fast">
+                    <button id="Fast" class="tricheck white" name="speed" onclick="tristate(this)" value="Fast">
                         <div id="checkbox" class="neutral"><span class="icon"></span></div>
                         <div class="label">{{fast}}</div>
                     </button>

@@ -574,6 +574,7 @@ function filter(ignore_link=false){
     var evi_array = [];
     var not_evi_array = [];
     var spe_array = [];
+    var not_spe_array = [];
     var san_array = [];
     var san_lookup = {"Late":0,"Average":40,"Early":50,"VeryEarly":75}
     var monkey_evi = ""
@@ -582,6 +583,7 @@ function filter(ignore_link=false){
     var good_checkboxes = document.querySelectorAll('[name="evidence"] .good');
     var bad_checkboxes = document.querySelectorAll('[name="evidence"] .bad');
     var speed_checkboxes = document.querySelectorAll('[name="speed"] .good');
+    var bad_speed_checkboxes = document.querySelectorAll('[name="speed"] .bad');
     var sanity_checkboxes = document.querySelectorAll('[name="hunt-sanity"] .good');
     if(document.getElementById("cust_num_evidence").value == "")
         document.getElementById("cust_num_evidence").value = "3"
@@ -617,6 +619,11 @@ function filter(ignore_link=false){
     for (var i = 0; i < speed_checkboxes.length; i++) {
         spe_array.push(speed_checkboxes[i].parentElement.value);
         state["speed"][speed_checkboxes[i].parentElement.value] = 1;
+    }
+
+    for (var i = 0; i < bad_speed_checkboxes.length; i++) {
+        not_spe_array.push(bad_speed_checkboxes[i].parentElement.value);
+        state["speed"][bad_speed_checkboxes[i].parentElement.value] = -1;
     }
 
     for (var i = 0; i < sanity_checkboxes.length; i++) {
@@ -880,13 +887,14 @@ function filter(ignore_link=false){
             }
         }
 
-        // Check if ghost is being kept
+        // Which speed buckets (Slow/Normal/Fast) can this ghost move in?
+        var shas = (min_speed < base_speed || name == "The Mimic") || (alt_speed != null && alt_speed < base_speed)
+        var nhas = (speed_type == "or" && (min_speed === base_speed || max_speed === base_speed || name == "The Mimic")) || (speed_type == "range" && min_speed <= base_speed && base_speed <= max_speed) || (alt_speed != null && alt_speed == base_speed)
+        var fhas = (max_speed > base_speed || name == "The Mimic") || (alt_speed != null && alt_speed > base_speed)
+
+        // Check if ghost is being kept by SELECTED (green) speeds
         if (spe_array.length > 0){
             var skeep = false,nkeep = false,fkeep = false;
-
-            var shas = (min_speed < base_speed || name == "The Mimic") || (alt_speed != null && alt_speed < base_speed)
-            var nhas = (speed_type == "or" && (min_speed === base_speed || max_speed === base_speed || name == "The Mimic")) || (speed_type == "range" && min_speed <= base_speed && base_speed <= max_speed) || (alt_speed != null && alt_speed == base_speed)
-            var fhas = (max_speed > base_speed || name == "The Mimic") || (alt_speed != null && alt_speed > base_speed)
 
             spe_array.forEach(function (item,index){
                 if (item == "Slow") skeep = true
@@ -906,6 +914,17 @@ function filter(ignore_link=false){
                 if(!(skeep == (skeep && shas) && nkeep == (nkeep && nhas) && fkeep == (fkeep && fhas))){
                     keep = false
                 }
+            }
+        }
+
+        // Rule OUT speeds marked as "not this" (struck-through). Hide any ghost that can
+        // move at a ruled-out speed. The Mimic is exempt: it copies another ghost, so its
+        // speed can't be ruled out from a single observation.
+        if (not_spe_array.length > 0 && name != "The Mimic"){
+            if ((not_spe_array.includes("Slow") && shas) ||
+                (not_spe_array.includes("Normal") && nhas) ||
+                (not_spe_array.includes("Fast") && fhas)){
+                keep = false
             }
         }
 
@@ -1192,12 +1211,13 @@ function filter(ignore_link=false){
     }
 
     if (evi_array.length > 0 || not_evi_array.length > 0){
-        all_speed.filter(spe => !keep_speed.has(spe)).forEach(function(item){
+        all_speed.filter(spe => !keep_speed.has(spe) && !not_spe_array.includes(spe)).forEach(function(item){
             var checkbox = document.getElementById(item);
             $(checkbox).addClass("block")
-            $(checkbox).find("#checkbox").removeClass(["good"])
+            $(checkbox).find("#checkbox").removeClass(["good","bad"])
             $(checkbox).find("#checkbox").addClass(["neutral","block","disabled"])
             $(checkbox).find(".label").addClass("disabled-text")
+            $(checkbox).find(".label").removeClass("strike")
         })
 
         all_sanity.filter(san => !keep_sanity.has(san)).forEach(function(item){
