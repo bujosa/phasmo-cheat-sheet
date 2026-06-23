@@ -4,6 +4,33 @@ function setCookie(e,t,i){let n=new Date;n.setTime(n.getTime()+864e5*i);let o="e
 const all_speed = ["Slow","Normal","Fast"]
 const all_sanity = ["Late","Average","Early","VeryEarly"]
 
+// [fork] Behavioral "tells" — research-verified, definitive, ONE-DIRECTIONAL ghost
+// discriminators layered on top of evidence/speed/sanity (see data-local/README.md).
+// FEMALE_LOCKED: the only always-female ghosts → a MALE model rules them out.
+// SOUND_TELL_GHOST: each produces a unique parabolic-mic / spirit-box audio that
+// uniquely CONFIRMS that ghost when heard (isolates the list to it).
+const FEMALE_LOCKED = ["Banshee", "Dayan"]
+const SOUND_TELL_GHOST = ["Banshee", "Deogen", "Myling"]
+var tells_restored = false
+
+function saveTells(gender, sound){
+    try { localStorage.setItem('phasmo_tells', JSON.stringify({ gender: gender, sound: sound })) } catch (e) {}
+}
+
+function restoreTells(){
+    var t = {}
+    try { t = JSON.parse(localStorage.getItem('phasmo_tells') || '{}') } catch (e) {}
+    if (t.gender){
+        var gb = document.querySelector('button[name="gender"][value="' + t.gender + '"]');
+        if (gb) gb.querySelector('#checkbox').className = 'good';
+    }
+    var sounds = t.sound || [];
+    sounds.forEach(function(v){
+        var sb = document.querySelector('button[name="tell-sound"][value="' + v + '"]');
+        if (sb) sb.querySelector('#checkbox').className = 'good';
+    });
+}
+
 let all_evidence = {}
 let all_ghosts = {}
 let all_maps = {}
@@ -556,6 +583,7 @@ function revive(){
 }
 
 function filter(ignore_link=false){
+    if (!tells_restored){ tells_restored = true; try { restoreTells() } catch (e) {} }
     state["evidence"] = {}
     state["speed"] = {"Slow":0,"Normal":0,"Fast":0}
     for (var i = 0; i < Object.keys(all_evidence).length; i++){
@@ -585,6 +613,11 @@ function filter(ignore_link=false){
     var speed_checkboxes = document.querySelectorAll('[name="speed"] .good');
     var bad_speed_checkboxes = document.querySelectorAll('[name="speed"] .bad');
     var sanity_checkboxes = document.querySelectorAll('[name="hunt-sanity"] .good');
+    // [fork] Behavioral tells: gender (radio) + distinctive sounds (multi-select)
+    var gender_good = document.querySelector('[name="gender"] .good');
+    var gender_sel = gender_good ? gender_good.parentElement.value : '';
+    var sound_tells = Array.from(document.querySelectorAll('[name="tell-sound"] .good')).map(function(e){ return e.parentElement.value });
+    saveTells(gender_sel, sound_tells);
     if(document.getElementById("cust_num_evidence").value == "")
         document.getElementById("cust_num_evidence").value = "3"
     if(document.getElementById("cust_hunt_length").value == "")
@@ -926,6 +959,17 @@ function filter(ignore_link=false){
                 (not_spe_array.includes("Fast") && fhas)){
                 keep = false
             }
+        }
+
+        // [fork] Behavioral tells (definitive, one-directional)
+        // A MALE model rules out the always-female ghosts (Banshee, Dayan).
+        if (gender_sel == "Male" && FEMALE_LOCKED.includes(name)){
+            keep = false
+        }
+        // A heard distinctive sound (Banshee scream / Deogen breathing / Myling
+        // frequency) uniquely confirms its ghost → keep ONLY the selected one(s).
+        if (sound_tells.length > 0 && !sound_tells.includes(name)){
+            keep = false
         }
 
         // Check if speed is being kept
@@ -2525,7 +2569,17 @@ function resetFilters(skip_filter=false){
     e.querySelector("#checkbox").className = "neutral"
     $(e.querySelector(".label")).removeClass(["strike","disabled-text"]);
 
-    state['los'] = -1
+    state['los'] = -1;
+
+    // [fork] clear behavioral tells (gender + distinctive sounds)
+    var tell_groups = ["gender","tell-sound"];
+    tell_groups.forEach(function(nm){
+        document.querySelectorAll('button[name="' + nm + '"]').forEach(function(b){
+            b.querySelector("#checkbox").className = "neutral";
+            var l = b.querySelector(".label"); if (l) l.classList.remove("strike","disabled-text");
+        });
+    });
+    try { localStorage.removeItem("phasmo_tells") } catch (e) {}
 
     if(!skip_filter){
         setCookie("state",JSON.stringify(state),1)
@@ -2555,6 +2609,7 @@ function reset(skip_continue_session=false){
         }
         state['settings'] = JSON.stringify(user_settings)
         saveSettings(true)
+        try { localStorage.removeItem("phasmo_tells") } catch (e) {} // [fork] clear behavioral tells on full reset
 
         fetch("https://zero-network.net/zn/"+znid+"/end",{method:"POST",body:JSON.stringify(state),signal: AbortSignal.timeout(2000)})
         .then((response) => {

@@ -1238,6 +1238,47 @@
                         <div class="label label-font-s">{{los_speed_up}}</div>
                     </button>
                 </div>
+
+                <!-- [fork] Behavioral tells: gender + distinctive parabolic/spirit-box sounds -->
+                <div class="tells-section">
+                <div class="speed_title yfont white">
+                    Género del modelo
+                </div>
+                <div class="speed">
+                    <button id="GenderMale" class="tricheck white" name="gender" onclick="dualstate(this,false,true)" value="Male">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label">&#9794; Masculino</div>
+                    </button>
+                    <button id="GenderFemale" class="tricheck white" name="gender" onclick="dualstate(this,false,true)" value="Female">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label">&#9792; Femenino</div>
+                    </button>
+                </div>
+                <div class="modifier_note" style="font-size:10px;opacity:.6;padding:2px 8px 6px;line-height:1.3;">
+                    &#9794; descarta Banshee y Dayan. &#9792; no descarta (casi todos pueden serlo).
+                </div>
+
+                <div class="speed_title yfont white">
+                    Sonido distintivo
+                </div>
+                <div class="speed">
+                    <button id="SoundBanshee" class="tricheck white" name="tell-sound" onclick="dualstate(this)" value="Banshee">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">&#128266; Grito &rarr; Banshee</div>
+                    </button>
+                    <button id="SoundDeogen" class="tricheck white" name="tell-sound" onclick="dualstate(this)" value="Deogen">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">&#128266; Respiraci&oacute;n a &lt;1m &rarr; Deogen</div>
+                    </button>
+                    <button id="SoundMyling" class="tricheck white" name="tell-sound" onclick="dualstate(this)" value="Myling">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">&#128266; 2 sonidos en &lt;80s &rarr; Myling</div>
+                    </button>
+                </div>
+                <div class="modifier_note" style="font-size:10px;opacity:.6;padding:2px 8px 6px;line-height:1.3;">
+                    Sonidos del micr&oacute;fono parab&oacute;lico / caja espiritista que confirman un fantasma.
+                </div>
+                </div><!-- /.tells-section -->
                 <div class="hunt_sanity_title yfont white">
                     {{hunt_sanity}}
                 </div>
