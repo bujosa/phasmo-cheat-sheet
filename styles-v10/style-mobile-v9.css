@@ -2810,6 +2810,28 @@
         margin: 0px 20px 20px 20px;
     }
 
+    /* [fork] Sentinel Intel block sized for phones (desktop is ~12px, too small here) */
+    .ghost_intel{
+        width: calc(100% - 40px);
+        margin: 5px 20px 15px 20px;
+        gap: 12px;
+        padding-bottom: 15px;
+        font-size: 28px;
+        line-height: 1.35;
+        border-bottom: 1px dashed rgba(255,255,255,0.14);
+    }
+    .ghost_intel .gi_row{ gap: 14px; padding: 14px 16px; border-radius: 14px; }
+    .ghost_intel .gi_row::before{ width: 6px; top: 10px; bottom: 10px; }
+    .ghost_intel .gi_mark{ width: 44px; height: 44px; border-radius: 12px; font-size: 24px; }
+    .ghost_intel .gi_label{ font-size: 22px; letter-spacing: 0.08em; }
+    .ghost_intel .gi_value{ font-size: 28px; line-height: 1.3; }
+    .ghost_intel.datamined{ gap: 14px; padding: 14px 16px; border-radius: 14px; }
+    .ghost_intel.datamined .gi_dm_mark{ width: 44px; height: 44px; border-radius: 12px; font-size: 26px; }
+    .ghost_intel.datamined .gi_dm_text{ font-size: 26px; line-height: 1.3; }
+
+    /* [fork] behavior-tells helper notes readable on mobile */
+    .tells_note{ font-size: 22px; line-height: 1.3; margin: 0 8px 6px; opacity: .75; }
+
     .ghost_behavior_item .dtitle{
         width: 100%;
         display: flex;
