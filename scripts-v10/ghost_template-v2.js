@@ -80,6 +80,7 @@ class Ghost {
                     ${mquery.matches ? data.ghost == "The Mimic" ? this.build_evidence_item('Ghost Orbs',evidence['Ghost Orbs']) : '' : ''}
                 </div>
                 <div class="ghost_tests_button" onClick="openGhostInfo('${data.ghost}')">{{0_evidence_tests}} >></div>
+                ${this.intel(data.ghost)}
                 ${this.behavior(data.wiki)}
                 <div class="ghost_extra">
                     <div class="ghost_extra_button" onClick="openWikiPath('known-bugs#${data.ghost.replace(" ","-")}-bugs')">[{{known_bugs}}]</div>
@@ -214,6 +215,18 @@ class Ghost {
 
         data += "</ul>"
         return data
+    }
+
+    intel(ghost){
+        var d = (typeof GHOST_INTEL !== 'undefined') ? GHOST_INTEL[ghost] : null;
+        if(!d) return '';
+        if(d.datamined){
+            return `<div class="ghost_intel datamined">&#9888; Fantasma datamined (no confirmado en el juego en vivo)</div>`;
+        }
+        return `<div class="ghost_intel">
+            <div class="intel_row intel_weak"><b>&#129656; Debilidad:</b> ${d.w}</div>
+            <div class="intel_row intel_strong"><b>&#128170; Fuerza:</b> ${d.s}</div>
+        </div>`;
     }
 
     behavior(value){
