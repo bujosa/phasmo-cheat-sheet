@@ -479,3 +479,18 @@ body.gcard2--simple.gcard2--hunt .g2-hunt{ display:none !important; }
 @media (max-width: 1000px){
   .side-menu.tab-open, #wiki_box.tab-open{ z-index:80 !important; box-shadow:0 0 0 100vmax rgba(0,0,0,.5); }
 }
+
+/* =====================================================================
+   [fork] Declutter the LEFT vertical tabs — hide the ones that need the
+   online Zero-Network server (dead in this standalone fork), keep the
+   useful ones (Guías, Mapas) and pull them up below the settings gear.
+   ===================================================================== */
+#links_box, #data_link_box, #event_box { display: none !important; }
+/* (Guías/Mapas tabs are pulled up to fill the gap by a small script in index.html —
+   their top is set by a duplicated media-query rule that beats plain CSS here.) */
+
+/* extra card polish */
+.gcard2 .g2-name{ text-shadow: 0 0 18px rgba(173,140,231,.22); }
+.gcard2 .g2-evi{ transition: opacity .18s ease, filter .18s ease, transform .12s ease; }
+.gcard2 .g2-evidence:hover .g2-evi{ filter: brightness(1.06); }
+.gcard2 .g2-evi:hover{ transform: translateY(-2px); }
