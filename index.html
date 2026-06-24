@@ -1292,6 +1292,70 @@
                 <div class="modifier_note tells_note">
                     Sonidos del micr&oacute;fono parab&oacute;lico / caja espiritista que confirman un fantasma.
                 </div>
+                <div class="speed_title yfont white">
+                    Pruebas activas
+                </div>
+                <div class="speed">
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="breath-breaker-off" title="Apaga o rompe el breaker. Durante una caceria, mira si el fantasma exhala aliento helado visible.">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Aliento visible (breaker apagado)<br><span style="color:#8ee6a0;font-size:10px;">&rarr; confirma Hantu</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="salt-disturbed" title="Coloca sal donde el fantasma camine. Pisa la sal y la perturba en cualquier evento o caceria?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Perturba / pisa la sal<br><span style="color:#ff9a96;font-size:10px;">&rarr; descarta Wraith</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="breaker-on" title="Apaga el breaker. Durante las cacerias, el fantasma lo vuelve a encender?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Enciende el breaker<br><span style="color:#ff9a96;font-size:10px;">&rarr; descarta Hantu</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="flame-twice" title="Vela encendida en la sala del fantasma. Apaga la MISMA llama dos veces en menos de 20 segundos?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Apaga la misma llama 2× en 20s<br><span style="color:#8ee6a0;font-size:10px;">&rarr; confirma Onryo</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="phantom-invisible" title="Mira al fantasma durante la caceria. Es casi invisible / muy dificil de ver?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Casi invisible en la caza<br><span style="color:#8ee6a0;font-size:10px;">&rarr; confirma Phantom</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="light-on" title="En algun momento el fantasma enciende una luz / interruptor (excluyendo luces por movimiento)?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Enciende un interruptor<br><span style="color:#ff9a96;font-size:10px;">&rarr; descarta Mare</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="obake-blink" title="Loop al fantasma manteniendo vista durante la caceria. Ves el modelo cambiar por un solo frame/parpadeo?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Parpadeo de modelo en la caza<br><span style="color:#8ee6a0;font-size:10px;">&rarr; confirma Obake</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="mare-event-off" title="Mientras el fantasma hace un evento, enciende interruptores a menos de 4m. Los apaga durante el evento?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Apaga luces durante un evento<br><span style="color:#8ee6a0;font-size:10px;">&rarr; confirma Mare</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="breaker-off-direct" title="Manten el breaker encendido. El fantasma lo apaga directamente (no via electronica/sobrecarga)?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Apaga el breaker directamente <span style="opacity:.5">(avanzado)</span><br><span style="color:#ff9a96;font-size:10px;">&rarr; descarta Jinn</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="phantom-photo" title="Fotografia al fantasma en un evento o en DOTS. Desaparece (los sonidos siguen) y NO sale como foto 'Ghost' en el diario?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Desaparece en la foto<br><span style="color:#8ee6a0;font-size:10px;">&rarr; confirma Phantom</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="yurei-dots-smudge" title="Sahuma al fantasma y vigila la sala. Aparece DOTS en cualquier momento dentro de los 90s del sahumerio?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">DOTS antes de 90s tras sahumar <span style="opacity:.5">(avanzado)</span><br><span style="color:#ff9a96;font-size:10px;">&rarr; descarta Yurei</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="jinn-speed" title="Breaker encendido. A mas de 3m con linea de vista, acelera de 1.7 a 2.5 m/s y desacelera al acercarse a 3m?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Acelera con LOS >3m (breaker on) <span style="opacity:.5">(avanzado)</span><br><span style="color:#8ee6a0;font-size:10px;">&rarr; confirma Jinn</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="moroi-return" title="Sahuma durante la caceria. Con cronometro, tarda mas de 5s en volver hacia ti (asumiendo que aun te detecta)?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Tarda >5s en volver tras sahumar <span style="opacity:.5">(avanzado)</span><br><span style="color:#8ee6a0;font-size:10px;">&rarr; confirma Moroi</span></div>
+                    </button>
+                    <button class="tricheck white" name="active-test" onclick="dualstate(this)" value="demon-80" title="Sin velas encendidas y con nadie bajo 50% personal: el fantasma caza con cordura promedio por encima de 80%?">
+                        <div id="checkbox" class="neutral"><span class="icon"></span></div>
+                        <div class="label label-font-s">Caza con cordura promedio >80% <span style="opacity:.5">(avanzado)</span><br><span style="color:#8ee6a0;font-size:10px;">&rarr; confirma Demon</span></div>
+                    </button>
+                </div>
+                <div class="modifier_note tells_note">
+                    Marca lo que observaste en la partida. <span style="color:#8ee6a0;">Confirma</span> aísla al fantasma; <span style="color:#ff9a96;">descarta</span> lo oculta.
+                </div>
                 </div><!-- /.tells-section -->
                 <div class="filter-legend" style="grid-row:8;display:flex;gap:10px;flex-wrap:wrap;font-size:10px;color:#bbb;padding:6px 8px 8px;line-height:1.4;border-top:1px dashed rgba(255,255,255,0.12);margin-top:4px;">
                     <span style="width:100%;opacity:.7;text-transform:uppercase;letter-spacing:.08em;font-size:9px;">Cómo leer los filtros · clic para alternar</span>
@@ -1450,7 +1514,7 @@
     <script src="scripts-v10/timer-v4.js"></script>
     <script src="login-v10/login-v1.js"></script>
     <script src="wiki-v10/wiki-v2.js"></script>
-    <script src="scripts-v10/filter-v15.js?v=fork7"></script>
+    <script src="scripts-v10/filter-v15.js?v=fork9b"></script>
     <script src="scripts-v10/sanity-v1.js"></script>
     <script src="scripts-v10/wslink-v7.js"></script>
     <script src="partners-v10/partners-v4.js"></script>
