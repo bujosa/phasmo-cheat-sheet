@@ -1,7 +1,10 @@
 let feed_recent_date = null
 let feed_interactions = {}
 
-let load_feed = new Promise((resolve, reject) => {
+/* [fork/standalone] News feed is an online-only hidden feature — resolve instantly
+   and never fetch zero-network. The original Promise body is kept but never runs. */
+let load_feed = Promise.resolve("feed skipped (standalone)");
+var _dead_feed = false && new Promise((resolve, reject) => {
     fetch("https://zero-network.net/zn/feed.json", {signal: AbortSignal.timeout(6000)})
     .then(data => data.json())
     .then(data => {

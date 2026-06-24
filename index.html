@@ -52,7 +52,7 @@
     <script src="scripts-v10/ghost_template-v2.js?v=fork8c"></script>
     <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork10"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
-    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork18"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork19"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -729,7 +729,7 @@
             <div class="settings_title yfont white">{{data_link}}</div>
             <div class="title_note">( '◄' {{to_close}} )</div>
             <div class="info_block" style="position:relative;">
-                <img id="login_type_icon" src="https://cdn.simpleicons.org/twitch/white" style="display:none;">
+                <img id="login_type_icon" src="data:," style="display:none;">
 
                 <img id="data_avatar" src="https://file.garden/Z-9fual_RynAMoLc/zn-logo-2.png">
                 <div id="data_name">{{data_link_h1}}</div> 
@@ -778,13 +778,13 @@
                     
                     <a href="https://discord.com/api/oauth2/authorize?client_id=1077230568422510602&redirect_uri=https%3A%2F%2Fzero-network.net%2Fanalytics%2Fdiscord-connect&response_type=code&scope=identify" style="text-decoration: none;">
                         <div class="data_link_login" style="background-color: #7289DA;">
-                            <img src="https://cdn.simpleicons.org/Discord/white">
+                            <img src="data:,">
                             {{data_link_b5}}
                         </div>
                     </a>
                     <a href="https://id.twitch.tv/oauth2/authorize?client_id=hikrw1nha6u51lhwo7l9steirb0nwx&redirect_uri=https%3A%2F%2Fzero-network.net%2Fzn%2Ftwitch-connect&response_type=code&force_verify=true" style="text-decoration: none;">
                         <div class="data_link_login" style="background-color: #6441a5;">
-                            <img src="https://cdn.simpleicons.org/twitch/white">
+                            <img src="data:,">
                             {{data_link_b6}}
                         </div>
                     </a>
@@ -1019,7 +1019,7 @@
 
     <div id="partner-box" style="right:-36px;">
         <div id="partner-tab" onclick="showPartner();">
-            <img src="https://cdn.simpleicons.org/twitch/white" width="21px" style="padding-top: 2px;" id="partner_icon_img"/>
+            <img src="data:," width="21px" style="padding-top: 2px;" id="partner_icon_img"/>
         </div>
         <span class="icon" onclick="showPartner()"></span>
 
@@ -1500,18 +1500,8 @@
             console.log("ZN-Debug mode enabled")
         }
 
-        (async () => {
-            try {
-                const res = await fetch("https://zero-network.net/zn/health", {
-                    signal: AbortSignal.timeout(5000),
-                    cache: "no-store"
-                });
-                console.log("Zero-Network Server is reachable");
-            } catch (err) {
-                console.warn("Zero-Network Server is unreachable:", err);
-                $("#maintenance-block").fadeIn(1000);
-            }
-        })();
+        /* [fork/standalone] No Zero-Network health check — the app runs fully from
+           local data, so there's no server to ping and no maintenance state. */
 
         mquery = window.matchMedia("screen and (pointer: coarse) and (max-device-width: 600px)")
         if(mquery.matches){
@@ -1547,7 +1537,7 @@
     <script src="lang-v10/lang-v1.js?v=fork5"></script>
     <script src="themes-v10/themes-v2.js"></script>
     <script src="scripts-v10/audio_controller-v1.js"></script>
-    <script src="scripts-v10/metronome-v6.js"></script>
+    <script src="scripts-v10/metronome-v6.js?v=fork19"></script>
     <script src="scripts-v10/timer-v4.js"></script>
     <script src="login-v10/login-v1.js"></script>
     <script src="wiki-v10/wiki-v2.js"></script>
@@ -1556,10 +1546,10 @@
     <script src="scripts-v10/wslink-v7.js"></script>
     <script src="partners-v10/partners-v4.js"></script>
     <script src="models-v10/models-v1.js"></script>
-    <script src="scripts-v10/zn-v5.js?v=fork3"></script>
+    <script src="scripts-v10/zn-v5.js?v=fork19"></script>
     <script src="scripts-v10/search-v3.js?v=fork13"></script>
-    <script src="events-v10/events-v3.js"></script>
-    <script src="feed-v10/feed-v2.js"></script>
+    <script src="events-v10/events-v3.js?v=fork19"></script>
+    <script src="feed-v10/feed-v2.js?v=fork19"></script>
     <script src="scripts-v10/voice_en-v2.js"></script>
     <script src="scripts-v10/voice_recognition-v3.js"></script>
     <script src="scripts-v10/sparkles-v1.js"></script>
