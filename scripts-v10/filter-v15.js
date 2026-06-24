@@ -2681,11 +2681,14 @@ function resetFilters(skip_filter=false){
     });
     try { localStorage.removeItem("phasmo_tells") } catch (e) {}
 
-    // [fork] also clear manual marks (discarded / died / selected) so the candidate list is full again
+    // [fork] also clear manual marks (discarded / died / selected) so the candidate list is full again.
+    // NOTE: in this app's model state.ghosts[id] === 0 means "faded" and 1 means "visible"
+    // (fade() toggles on it), so a cleared ghost must be set to 1, not 0 — otherwise the next
+    // fade() click thinks it's already faded and no-ops.
     Array.prototype.forEach.call(document.getElementsByClassName("ghost_card"), function(c){
         c.classList.remove("faded","died","selected","guessed","permhidden");
         var nm = c.getElementsByClassName("ghost_name")[0]; if (nm) nm.classList.remove("strike");
-        if (state["ghosts"]) state["ghosts"][c.id] = 0;
+        if (state["ghosts"]) state["ghosts"][c.id] = 1;
     });
 
     if(!skip_filter){
