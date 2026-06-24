@@ -522,3 +522,87 @@ body, #page-loading {
   background-image: radial-gradient(circle at 50% -10%, #1b1b27, #0a0a10 70%) !important;
   background-color: #0a0a10 !important;
 }
+
+/* =====================================================================
+   [fork] Speed Tracker — footstep reference player + tap tempo
+   ===================================================================== */
+#speed_tracker_btn{
+  position:fixed; top:10px; right:392px; z-index:61;
+  display:flex; align-items:center; gap:7px;
+  padding:7px 13px; border-radius:999px; cursor:pointer;
+  font-family:'ZNSecondary', sans-serif; font-size:12px; font-weight:800;
+  text-transform:uppercase; letter-spacing:1.1px;
+  color:#9bd6ff;
+  background:rgba(28,29,46,0.92);
+  border:1px solid rgba(95,182,230,0.5);
+  box-shadow:0 4px 14px rgba(0,0,0,0.4);
+  backdrop-filter:blur(4px);
+  transition:background .2s, border-color .2s, color .2s;
+}
+#speed_tracker_btn .st-btn-ic{ width:15px; height:15px; }
+#speed_tracker_btn .st-btn-ic path,#speed_tracker_btn .st-btn-ic circle{ fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+#speed_tracker_btn:hover{ border-color:rgba(95,182,230,0.85); color:#c5e8ff; }
+#speed_tracker_btn.active{ color:#0c1118; background:linear-gradient(180deg,#9bd6ff,#5fb6e6); border-color:#c5e8ff; box-shadow:0 4px 18px rgba(95,182,230,0.5); }
+
+/* floating panel (bottom-right) */
+#speed_tracker{
+  position:fixed; right:18px; bottom:18px; z-index:70;
+  width:300px; max-width:calc(100vw - 36px);
+  background:#272838; color:#eceaf6;
+  border:1px solid rgba(95,182,230,0.35); border-radius:16px;
+  box-shadow:0 16px 40px -12px rgba(0,0,0,0.7);
+  padding:14px; display:none; flex-direction:column; gap:14px;
+  font-family:inherit;
+}
+#speed_tracker.st-open{ display:flex; }
+#speed_tracker .st-head{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:.95rem; }
+#speed_tracker .st-head-ic{ width:18px; height:18px; color:#9bd6ff; }
+#speed_tracker .st-head-ic path,#speed_tracker .st-head-ic circle{ fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+#speed_tracker .st-x{ margin-left:auto; background:none; border:none; color:#a9a7c4; font-size:22px; line-height:1; cursor:pointer; padding:0 4px; }
+#speed_tracker .st-x:hover{ color:#fff; }
+#speed_tracker .st-label{ font-size:.66rem; font-weight:800; text-transform:uppercase; letter-spacing:.8px; color:#7d7b9a; margin-bottom:7px; }
+#speed_tracker .st-refs{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; }
+#speed_tracker .st-ref{
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  padding:9px 4px; border-radius:10px; cursor:pointer;
+  background:#222232; border:1px solid rgba(255,255,255,.07); color:#eceaf6;
+  font-size:.78rem; font-weight:700;
+}
+#speed_tracker .st-ref small{ font-size:.6rem; color:#9aa; font-weight:500; }
+#speed_tracker .st-ref:hover{ border-color:rgba(95,182,230,.5); }
+#speed_tracker .st-ref.active{ background:linear-gradient(180deg,rgba(95,182,230,.25),#222232); border-color:#5fb6e6; color:#c5e8ff; box-shadow:0 0 0 1px rgba(95,182,230,.4); }
+#speed_tracker .st-tap{
+  width:100%; padding:18px 0; border-radius:12px; cursor:pointer;
+  font-family:'ZNSecondary', sans-serif; font-size:1.4rem; font-weight:800; letter-spacing:3px;
+  color:#0c1118; background:linear-gradient(180deg,#9bd6ff,#5fb6e6);
+  border:none; box-shadow:0 4px 14px rgba(95,182,230,.35); user-select:none;
+  transition:transform .05s;
+}
+#speed_tracker .st-tap:active{ transform:scale(.97); }
+#speed_tracker .st-result{ text-align:center; font-size:.95rem; color:#a9a7c4; margin-top:9px; min-height:20px; }
+#speed_tracker .st-result.st-have{ color:#eceaf6; font-size:1.05rem; }
+#speed_tracker .st-band{ font-weight:800; padding:2px 8px; border-radius:999px; font-size:.85rem; }
+#speed_tracker .st-band.st-slow{ background:rgba(103,224,163,.18); color:#7fe0a0; }
+#speed_tracker .st-band.st-normal{ background:rgba(155,214,255,.18); color:#9bd6ff; }
+#speed_tracker .st-band.st-fast{ background:rgba(240,165,91,.2); color:#f0b06b; }
+#speed_tracker .st-actions{ display:flex; gap:6px; margin-top:10px; }
+#speed_tracker .st-actions button{ flex:1; padding:8px; border-radius:9px; cursor:pointer; font-size:.74rem; font-weight:700; background:#222232; border:1px solid rgba(255,255,255,.08); color:#a9a7c4; }
+#speed_tracker .st-actions .st-apply{ color:#0c1118; background:linear-gradient(180deg,#9bd6ff,#5fb6e6); border:none; }
+#speed_tracker .st-actions button:hover{ filter:brightness(1.1); }
+
+@media (max-width:1100px){
+  #speed_tracker_btn .st-btn-txt{ display:none; }
+  #speed_tracker_btn{ right:188px; padding:8px 11px; gap:0; }
+}
+
+/* [fork] tracker shortcut inside the Velocidad filter title */
+#speed_tracker_link{
+  float:right; display:inline-flex; align-items:center; gap:4px;
+  margin-top:1px; padding:4px 7px; border-radius:999px; cursor:pointer;
+  font-family:inherit; font-size:10px; font-weight:700; letter-spacing:.3px;
+  color:#9bd6ff; background:rgba(95,182,230,.12); border:1px solid rgba(95,182,230,.4);
+  transition:background .15s, color .15s;
+}
+#speed_tracker_link svg{ width:12px; height:12px; }
+#speed_tracker_link svg path,#speed_tracker_link svg circle{ fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+#speed_tracker_link:hover{ background:rgba(95,182,230,.25); color:#c5e8ff; }
