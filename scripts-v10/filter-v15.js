@@ -1367,6 +1367,33 @@ function updateGhostCounter(){
     } else {
         if (remaining === total) el.classList.add('gc-idle');
         el.innerHTML = 'Quedan <span class="gc-num">' + remaining + '</span> fantasmas';
+        // [fork] deduction hint: when few candidates remain, show which evidence still SPLITS
+        // them — i.e. what to go test in-game to narrow down fastest.
+        if (remaining >= 2 && remaining <= 5){
+            var cand = [];
+            for (var j = 0; j < cards.length; j++){
+                var cc = cards[j];
+                if (!cc.classList.contains('hidden') && !cc.classList.contains('faded') && !cc.classList.contains('permhidden')) cand.push(cc);
+            }
+            var counts = {}, labels = {};
+            cand.forEach(function(c){
+                var seen = {};
+                Array.prototype.forEach.call(c.getElementsByClassName('ghost_evidence_item'), function(it){
+                    var k = it.getAttribute('name');
+                    if (!k || seen[k]) return;
+                    seen[k] = 1;
+                    counts[k] = (counts[k] || 0) + 1;
+                    var lbl = it.querySelector('.g2-evi-lbl');
+                    labels[k] = (lbl ? lbl.textContent : it.textContent).trim();
+                });
+            });
+            var disc = Object.keys(counts).filter(function(k){ return counts[k] > 0 && counts[k] < cand.length; });
+            disc.sort(function(a, b){ return Math.abs(counts[a] - cand.length / 2) - Math.abs(counts[b] - cand.length / 2); });
+            if (disc.length){
+                var top = disc.slice(0, 3).map(function(k){ return labels[k] || k; });
+                el.innerHTML += '<div class="gc-hint">Diferéncialos por: <b>' + top.join(' · ') + '</b></div>';
+            }
+        }
     }
 }
 
