@@ -594,3 +594,15 @@ body, #page-loading {
   #speed_tracker_btn .st-btn-txt{ display:none; }
   #speed_tracker_btn{ right:188px; padding:8px 11px; gap:0; }
 }
+
+/* [fork] tracker shortcut inside the Velocidad filter title */
+#speed_tracker_link{
+  float:right; display:inline-flex; align-items:center; gap:4px;
+  margin-top:1px; padding:4px 7px; border-radius:999px; cursor:pointer;
+  font-family:inherit; font-size:10px; font-weight:700; letter-spacing:.3px;
+  color:#9bd6ff; background:rgba(95,182,230,.12); border:1px solid rgba(95,182,230,.4);
+  transition:background .15s, color .15s;
+}
+#speed_tracker_link svg{ width:12px; height:12px; }
+#speed_tracker_link svg path,#speed_tracker_link svg circle{ fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+#speed_tracker_link:hover{ background:rgba(95,182,230,.25); color:#c5e8ff; }
