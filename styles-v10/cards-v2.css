@@ -1,0 +1,385 @@
+/* =====================================================================
+   [fork] Evidence-first ghost card (.gcard2) — new component (2026-06)
+   Winner of a multi-agent design pass. Loaded AFTER style-v15.css so it
+   wins; the .ghost_card class on the root is a JS/filter hook only.
+   ===================================================================== */
+
+/* Neutralize the OLD .ghost_card grid layout for the new flex card */
+.gcard2.ghost_card{
+  display:flex;
+  height:auto;
+  min-width:0;
+  margin:0;
+  grid-template-rows:none;
+  grid-template-columns:none;
+}
+/* each card sizes to its own content (don't stretch to the tallest in the row) */
+.gcard2{ align-self:flex-start; }
+/* old .ghost_clear stacked the marking icons in a right-aligned column — tidy centered row */
+.gcard2 .g2-clear{
+  flex-direction:row;
+  align-items:center;
+  align-content:center;
+  padding-right:0;
+}
+
+/* selection / guess / died states (old rules also toggle the marking icons) */
+.gcard2.selected{ outline:2px solid #67e0a3; outline-offset:-1px; }
+.gcard2.guessed{ outline:2px solid #cdb8ff; outline-offset:-1px; }
+.gcard2.died{ outline:2px solid #db4d48; outline-offset:-1px; opacity:.75; }
+.gcard2.preguessed{ box-shadow:0 0 0 1px rgba(205,184,255,.4), 0 10px 30px -12px rgba(0,0,0,.6); }
+
+/* =====================================================================
+   .gcard2 — Evidence-first ghost card (dark horror, ES default)
+   Self-contained: does NOT touch .ghost_card / .ghost_behavior.
+   Reuses required hook classes only as data carriers + filter targets.
+   ===================================================================== */
+
+.gcard2{
+  --bg:#313248;
+  --panel:#272838;
+  --panel-2:#222232;
+  --ink:#eceaf6;
+  --ink-dim:#a9a7c4;
+  --ink-faint:#7d7b9a;
+  --line:rgba(255,255,255,.07);
+  --weak:#67e0a3;     /* how to beat it — teal-green (paired w/ down-arrow icon) */
+  --strong:#f0a55b;   /* its strength — amber (paired w/ up-arrow icon) */
+  --hunt:#db4d48;     /* hunt red */
+  --radius:16px;
+
+  box-sizing:border-box;
+  width:100%;
+  max-width:560px;
+  flex:1 1 470px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:16px;
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(173,140,231,.10), transparent 60%),
+    var(--bg);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  color:var(--ink);
+  font-family:inherit;
+  box-shadow:0 10px 30px -12px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.03);
+  position:relative;
+}
+.gcard2 *{box-sizing:border-box;}
+.gcard2 svg{width:100%;height:100%;display:block;}
+.gcard2 svg path,.gcard2 svg circle{
+  fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+
+/* faded / not-this-ghost (filter adds .faded; search adds .strike) */
+.gcard2.faded{opacity:.42;filter:grayscale(.5);}
+.gcard2 .ghost_name.strike{text-decoration:line-through;opacity:.5;}
+
+/* HEADER */
+.g2-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.g2-name{
+  margin:0;font-size:1.32rem;font-weight:800;letter-spacing:.2px;
+  line-height:1.1;cursor:pointer;color:var(--ink);
+}
+.g2-more{
+  display:inline-flex;align-items:center;gap:4px;
+  background:transparent;border:1px solid var(--line);
+  color:var(--ink-dim);border-radius:999px;
+  padding:6px 10px;min-height:32px;cursor:pointer;
+  font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.6px;
+  transition:.15s ease;
+}
+.g2-more:hover{color:var(--ink);border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.04);}
+.g2-more-ic{width:14px;height:14px;}
+
+/* ===================================================================
+   1 > EVIDENCE HERO — three big colored tiles (icon over label)
+   =================================================================== */
+.g2-evidence{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  cursor:pointer;
+}
+.g2-evi{
+  --evi:#888;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;
+  padding:14px 8px 12px;
+  min-height:96px;
+  text-align:center;
+  border-radius:13px;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--evi) 16%, var(--panel)) 0%,
+                            var(--panel) 70%);
+  border:1px solid color-mix(in srgb, var(--evi) 42%, transparent);
+  box-shadow:inset 0 0 22px -10px var(--evi), 0 4px 12px -8px rgba(0,0,0,.6);
+  color:var(--evi);
+  transition:opacity .18s ease, filter .18s ease, transform .12s ease;
+  position:relative;overflow:hidden;
+}
+.g2-evi::before{ /* top accent bar — colorblind-safe extra cue */
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--evi);opacity:.9;
+}
+.g2-evi-ic{
+  width:34px;height:34px;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  filter:drop-shadow(0 0 6px color-mix(in srgb, var(--evi) 60%, transparent));
+}
+.g2-evi-ic img{width:100%;height:100%;object-fit:contain;display:block;}
+.g2-evi-lbl{
+  font-size:.74rem;font-weight:700;line-height:1.15;
+  letter-spacing:.2px;color:var(--ink);
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
+}
+
+/* filter hooks: dim found / strike-out impossible (keep contract working) */
+.gcard2 .ghost_evidence_found{opacity:.32;filter:grayscale(.4);}
+.gcard2 .ghost_evidence_not{opacity:.22;filter:grayscale(.7);}
+.gcard2 .ghost_evidence_not .g2-evi-lbl{text-decoration:line-through;}
+.gcard2 .ghost_evidence_not::after{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,transparent 0 6px,rgba(0,0,0,.25) 6px 7px);
+}
+
+/* ===================================================================
+   2 > INTELLIGENCE — weakness + strength
+   =================================================================== */
+.g2-intel{
+  display:flex;flex-direction:column;gap:1px;
+  background:var(--line);
+  border-radius:12px;overflow:hidden;
+  border:1px solid var(--line);
+}
+.g2-irow{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 12px;background:var(--panel);
+}
+.g2-imark{
+  flex:none;width:24px;height:24px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;margin-top:1px;
+}
+.g2-imark svg{width:15px;height:15px;}
+.g2-weak   .g2-imark{color:var(--weak);  background:color-mix(in srgb,var(--weak) 16%,transparent);}
+.g2-strong .g2-imark{color:var(--strong);background:color-mix(in srgb,var(--strong) 16%,transparent);}
+.g2-ibody{display:flex;flex-direction:column;gap:1px;min-width:0;}
+.g2-ilabel{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;}
+.g2-weak   .g2-ilabel{color:var(--weak);}
+.g2-strong .g2-ilabel{color:var(--strong);}
+.g2-ivalue{font-size:.86rem;line-height:1.34;color:var(--ink);}
+
+/* ===================================================================
+   3 > MOVEMENT — speed + sanity-to-hunt
+   =================================================================== */
+.g2-move{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.g2-stat{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 11px;border-radius:11px;
+  background:var(--panel-2);border:1px solid var(--line);
+}
+.g2-stat-ic{flex:none;width:26px;height:26px;color:var(--ink-dim);}
+.g2-stat-ic svg{width:100%;height:100%;}
+.g2-stat-sanity .g2-stat-ic{color:var(--hunt);}
+.g2-stat-body{display:flex;flex-direction:column;min-width:0;}
+.g2-stat-lbl{
+  font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--ink-faint);
+}
+.g2-stat-val{font-size:.92rem;font-weight:700;color:var(--ink);line-height:1.2;}
+.g2-stat-sanity .g2-stat-val{color:#ff9b97;}
+
+/* ===================================================================
+   4 > BEHAVIOR CHIPS — attraction / survival
+   =================================================================== */
+.g2-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.g2-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 10px;border-radius:999px;min-height:30px;
+  font-size:.74rem;font-weight:600;line-height:1.1;
+  border:1px solid var(--line);
+  background:var(--panel-2);color:var(--ink-dim);max-width:100%;
+}
+.g2-chip-ic{flex:none;width:15px;height:15px;}
+.g2-chip-txt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px;}
+/* quiet when normal */
+.g2-chip[data-state="normal"]{opacity:.6;}
+.g2-chip[data-state="normal"] .g2-chip-txt{color:var(--ink-faint);}
+/* light up when unusual — each category its own hue (not red/green-only) */
+.g2-chip[data-state="alert"]{
+  color:var(--ink);background:var(--panel);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.g2-chip-sight[data-state="alert"]{border-color:#e6c34d;color:#ffe08a;}
+.g2-chip-sight[data-state="alert"] .g2-chip-ic{color:#ffe08a;}
+.g2-chip-hear[data-state="alert"]{border-color:#5fb6e6;color:#9bd6ff;}
+.g2-chip-hear[data-state="alert"] .g2-chip-ic{color:#9bd6ff;}
+.g2-chip-light[data-state="alert"]{border-color:#ad8ce7;color:#cdb6ff;}
+.g2-chip-light[data-state="alert"] .g2-chip-ic{color:#cdb6ff;}
+
+/* ===================================================================
+   MODO CACERIA — pure-CSS disclosure
+   =================================================================== */
+.g2-hunt-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 12px;min-height:38px;cursor:pointer;
+  border-radius:11px;user-select:none;
+  border:1px solid color-mix(in srgb,var(--hunt) 36%,transparent);
+  background:linear-gradient(180deg, color-mix(in srgb,var(--hunt) 14%,var(--panel)), var(--panel));
+  color:#ff9c98;font-size:.74rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:1.4px;transition:.15s ease;
+}
+.g2-hunt-btn:hover{border-color:color-mix(in srgb,var(--hunt) 60%,transparent);color:#ffb3b0;}
+.g2-hunt-dot{
+  width:8px;height:8px;border-radius:50%;flex:none;background:var(--hunt);
+  box-shadow:0 0 0 0 color-mix(in srgb,var(--hunt) 70%,transparent);
+  animation:g2pulse 2s ease-out infinite;
+}
+@keyframes g2pulse{
+  0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--hunt) 65%,transparent);}
+  70%{box-shadow:0 0 0 8px transparent;}
+  100%{box-shadow:0 0 0 0 transparent;}
+}
+.g2-hunt-btn-txt{flex:1;text-align:left;}
+.g2-hunt-chev{width:16px;height:16px;color:#ff9c98;transition:transform .25s ease;}
+
+/* collapsed panel (grid-rows 0fr -> 1fr animation) */
+.g2-hunt{
+  display:grid;grid-template-rows:0fr;opacity:0;
+  transition:grid-template-rows .28s ease, opacity .2s ease, margin .28s ease;
+  margin-top:-12px;            /* swallow card gap while closed */
+  border-radius:13px;
+}
+.g2-hunt>*{min-height:0;overflow:hidden;}
+.g2-hunt-toggle:checked ~ .g2-hunt{grid-template-rows:1fr;opacity:1;margin-top:0;}
+.g2-hunt-toggle:checked ~ .g2-hunt-btn{
+  border-color:color-mix(in srgb,var(--hunt) 60%,transparent);
+  background:linear-gradient(180deg, color-mix(in srgb,var(--hunt) 22%,var(--panel)), var(--panel));
+}
+.g2-hunt-toggle:checked ~ .g2-hunt-btn .g2-hunt-chev{transform:rotate(180deg);}
+
+.g2-hunt-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:2px 0 0;}
+.g2-hcell{
+  display:flex;flex-direction:column;gap:3px;
+  padding:9px 10px;border-radius:10px;
+  background:var(--panel-2);border:1px solid var(--line);
+  border-left:3px solid var(--ink-faint);
+}
+.g2-hcell-ic{width:17px;height:17px;color:var(--ink-dim);}
+.g2-hcell-lbl{
+  font-size:.58rem;font-weight:800;text-transform:uppercase;letter-spacing:.9px;
+  color:var(--ink-faint);
+}
+.g2-hcell-val{font-size:.8rem;font-weight:600;color:var(--ink);line-height:1.25;}
+.g2-hcell[data-state="normal"]{opacity:.62;}
+.g2-hcell[data-state="normal"] .g2-hcell-val{color:var(--ink-dim);font-weight:500;}
+.g2-hcell-move{border-left-color:var(--ink-dim);}
+/* alert cells: colored left rail + icon by category (1=sight,2=hear,3=light) */
+.g2-hunt .g2-hcell:nth-child(1)[data-state="alert"]{border-left-color:#ffe08a;}
+.g2-hunt .g2-hcell:nth-child(1)[data-state="alert"] .g2-hcell-ic{color:#ffe08a;}
+.g2-hunt .g2-hcell:nth-child(2)[data-state="alert"]{border-left-color:#9bd6ff;}
+.g2-hunt .g2-hcell:nth-child(2)[data-state="alert"] .g2-hcell-ic{color:#9bd6ff;}
+.g2-hunt .g2-hcell:nth-child(3)[data-state="alert"]{border-left-color:#cdb6ff;}
+.g2-hunt .g2-hcell:nth-child(3)[data-state="alert"] .g2-hcell-ic{color:#cdb6ff;}
+
+.g2-tip{
+  display:flex;align-items:flex-start;gap:8px;
+  margin-top:6px;padding:10px 11px;border-radius:10px;
+  background:color-mix(in srgb,var(--hunt) 12%,var(--panel-2));
+  border:1px solid color-mix(in srgb,var(--hunt) 30%,transparent);
+}
+.g2-tip-ic{flex:none;width:17px;height:17px;color:#ffcf6b;margin-top:1px;}
+.g2-tip-txt{font-size:.82rem;line-height:1.34;color:var(--ink);}
+.g2-tip-txt b{color:#ffcf6b;}
+
+.g2-hunt-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.g2-hunt-pill{
+  font-size:.72rem;color:var(--ink-dim);
+  padding:4px 9px;border-radius:999px;
+  background:var(--panel-2);border:1px solid var(--line);
+}
+.g2-hunt-pill b{color:var(--ink);}
+
+/* marking controls */
+.g2-clear{display:flex;gap:14px;justify-content:center;padding-top:2px;}
+.g2-clear .card_icon{
+  width:30px;height:30px;min-width:30px;cursor:pointer;opacity:.85;transition:.12s ease;
+}
+.g2-clear .card_icon:hover{opacity:1;transform:translateY(-1px);}
+
+/* ===================================================================
+   GLOBAL HUNT BOARD — body.gcard2--hunt forces survival-first view
+   =================================================================== */
+.gcard2--hunt .g2-hunt{grid-template-rows:1fr;opacity:1;margin-top:0;}
+.gcard2--hunt .g2-hunt-grid{padding-top:2px;}
+.gcard2--hunt .g2-hunt-chev{transform:rotate(180deg);}
+.gcard2--hunt .g2-intel,
+.gcard2--hunt .g2-move,
+.gcard2--hunt .g2-chips{opacity:.4;}
+.gcard2--hunt .g2-evi{opacity:.85;}
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+@media (max-width:520px){
+  .gcard2{flex-basis:100%;max-width:100%;padding:14px;gap:10px;border-radius:14px;}
+  .g2-name{font-size:1.18rem;}
+  .g2-evi{min-height:86px;padding:12px 6px 10px;}
+  .g2-evi-ic{width:30px;height:30px;}
+  .g2-evi-lbl{font-size:.7rem;}
+  .g2-move{grid-template-columns:1fr;}
+  .g2-chip-txt{max-width:100%;white-space:normal;}
+}
+@media (max-width:360px){
+  .g2-hunt-grid{grid-template-columns:1fr;}
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion:reduce){
+  .g2-hunt-dot{animation:none;}
+  .g2-hunt,.g2-hunt-chev,.g2-evi,.g2-more{transition:none;}
+}
+/* [fork fix] directly-classed SVG icons were swallowed by `.gcard2 svg{width:100%}`
+   (equal-class but type-bump specificity). Re-pin their sizes with higher specificity. */
+.gcard2 svg.g2-more-ic{ width:14px; height:14px; flex:none; }
+.gcard2 svg.g2-chip-ic{ width:15px; height:15px; flex:none; }
+.gcard2 svg.g2-hcell-ic{ width:17px; height:17px; flex:none; }
+.gcard2 svg.g2-hunt-chev{ width:16px; height:16px; flex:none; }
+.gcard2 svg.g2-tip-ic{ width:17px; height:17px; flex:none; }
+
+/* [fork] GLOBAL hunt-board toggle button (flips every card into survival view) */
+#hunt_board_btn{
+  position:fixed; top:10px; right:108px; z-index:61;
+  display:flex; align-items:center; gap:7px;
+  padding:7px 14px; border-radius:999px; cursor:pointer;
+  font-family:'ZNSecondary', sans-serif; font-size:12px; font-weight:800;
+  text-transform:uppercase; letter-spacing:1.2px;
+  color:#ff9c98;
+  background:rgba(28,29,46,0.92);
+  border:1px solid rgba(219,77,72,0.5);
+  box-shadow:0 4px 14px rgba(0,0,0,0.4);
+  backdrop-filter:blur(4px);
+  transition:background .2s, border-color .2s, color .2s;
+}
+#hunt_board_btn .hb-dot{
+  width:8px; height:8px; border-radius:50%; background:#db4d48; flex:none;
+}
+#hunt_board_btn:hover{ border-color:rgba(219,77,72,0.85); color:#ffb3b0; }
+#hunt_board_btn.active{
+  color:#fff;
+  background:linear-gradient(180deg,#db4d48,#a8302c);
+  border-color:#ff9c98;
+  box-shadow:0 4px 18px rgba(219,77,72,0.55);
+}
+#hunt_board_btn.active .hb-dot{ background:#fff; animation:g2pulse 1.6s ease-out infinite; }
+@media (max-width:760px){
+  #hunt_board_btn{ right:auto; left:50%; transform:translateX(-50%); top:44px; }
+  #hunt_board_btn .hb-txt{ display:inline; }
+}
+
+/* [fork] clear the top toolbar zone (counter + hunt/search buttons) so it doesn't overlap the first card */
+@media screen and (pointer:fine), screen and (pointer:coarse) and (min-device-width:601px){
+  #cards{ padding-top:14px; }
+}
