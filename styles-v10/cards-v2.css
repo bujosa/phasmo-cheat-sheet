@@ -392,27 +392,33 @@
 /* =====================================================================
    [fork] VISTA SIMPLE — compact "just the names + evidence" scan view
    ===================================================================== */
-#simple_mode_btn{
-  position:fixed; top:10px; right:248px; z-index:61;
-  display:flex; align-items:center; gap:7px;
-  padding:7px 14px; border-radius:999px; cursor:pointer;
-  font-family:'ZNSecondary', sans-serif; font-size:12px; font-weight:800;
-  text-transform:uppercase; letter-spacing:1.2px;
-  color:#cdb8ff;
+/* segmented density control: Completa / Media / Simple */
+#density_control{
+  position:fixed; top:10px; right:236px; z-index:61;
+  display:flex; align-items:center; gap:2px;
+  padding:3px; border-radius:999px;
   background:rgba(28,29,46,0.92);
-  border:1px solid rgba(173,140,231,0.5);
+  border:1px solid rgba(173,140,231,0.4);
   box-shadow:0 4px 14px rgba(0,0,0,0.4);
   backdrop-filter:blur(4px);
-  transition:background .2s, border-color .2s, color .2s;
 }
-#simple_mode_btn .sm-ic{ width:15px; height:15px; }
-#simple_mode_btn .sm-ic path{ fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; }
-#simple_mode_btn:hover{ border-color:rgba(173,140,231,0.85); color:#e3d4ff; }
-#simple_mode_btn.active{
+#density_control button{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:5px 11px; border:none; border-radius:999px; cursor:pointer;
+  background:transparent; color:#a9a7c4;
+  font-family:'ZNSecondary', sans-serif; font-size:11px; font-weight:800;
+  text-transform:uppercase; letter-spacing:.8px;
+  transition:background .15s, color .15s;
+}
+#density_control button svg{ width:15px; height:15px; }
+#density_control button svg rect,#density_control button svg path{
+  fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round;
+}
+#density_control button:hover{ color:#e3d4ff; }
+#density_control button.active{
   color:#1c1c24;
   background:linear-gradient(180deg,#cdb8ff,#a98ce0);
-  border-color:#e3d4ff;
-  box-shadow:0 4px 18px rgba(173,140,231,0.5);
+  box-shadow:0 2px 8px rgba(173,140,231,0.4);
 }
 
 /* compact cards: name + small evidence icons only, many per row */
@@ -445,8 +451,20 @@ body.gcard2--simple .g2-evi-ic{ width:20px; height:20px; }
 /* in simple view, global hunt board has nothing to show — keep it sane */
 body.gcard2--simple.gcard2--hunt .g2-hunt{ display:none !important; }
 @media (max-width:760px){
-  #simple_mode_btn{ right:auto; left:50%; transform:translateX(-50%); top:78px; }
+  #density_control{ right:auto; left:50%; transform:translateX(-50%); top:78px; }
 }
+
+/* --- MEDIUM density: evidence + weakness/strength + speed; drop chips & hunt --- */
+body.gcard2--medium .g2-chips,
+body.gcard2--medium .g2-hunt-btn,
+body.gcard2--medium .g2-hunt,
+body.gcard2--medium .g2-hunt-toggle,
+body.gcard2--medium .g2-more{ display:none !important; }
+body.gcard2--medium .gcard2{ gap:10px; padding:14px; }
+body.gcard2--medium .g2-evi{ min-height:78px; padding:11px 6px 9px; }
+body.gcard2--medium .g2-evi-ic{ width:28px; height:28px; }
+/* but if the GLOBAL hunt board is on, bring the survival panel back even in medium */
+body.gcard2--medium.gcard2--hunt .g2-hunt{ display:grid !important; }
 
 /* =====================================================================
    [fork] Card color polish + hover + narrow-window responsive
@@ -470,10 +488,11 @@ body.gcard2--simple.gcard2--hunt .g2-hunt{ display:none !important; }
 
 /* --- narrow window (e.g. resized desktop) : keep the top bar tidy --- */
 @media (max-width: 1000px){
-  #hunt_board_btn .hb-txt, #simple_mode_btn .sm-txt{ display:none; }
+  #hunt_board_btn .hb-txt{ display:none; }
   #hunt_board_btn{ right:92px; padding:8px 11px; gap:0; }
-  #simple_mode_btn{ right:140px; padding:8px 11px; gap:0; }
-  #ghost_counter{ max-width:260px; font-size:13px; }
+  #density_control span{ display:none; }            /* icon-only segments */
+  #density_control{ right:140px; }
+  #ghost_counter{ max-width:240px; font-size:13px; }
 }
 /* when a side menu is open on a narrow window, let it overlay cleanly on top */
 @media (max-width: 1000px){
