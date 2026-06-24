@@ -27,10 +27,10 @@ var GHOST_INTEL = {
     "Moroi":       { s: "Maldice a quien oye sus sonidos (drena cordura).", w: "Cordura alta la ralentiza; el incienso la frena más." },
     "Deogen":      { s: "Siempre te encuentra: no puedes esconderte.", w: "Lentísima de cerca (0,4 m/s): corre y rodéala." },
     "Thaye":       { s: "Rápida y agresiva al inicio.", w: "Se debilita y ralentiza a medida que envejece." },
-    // Datamined / not confirmed live — intel comes from the maintained behavior data.
-    "Aswang":      { datamined: true },
-    "Dayan":       { datamined: true },
-    "Gallu":       { datamined: true },
-    "Kormos":      { datamined: true },
-    "Obambo":      { datamined: true }
+    // Now LIVE (Winter's Jest Dec-2025 + Alan Wake May-2026 updates) — no longer datamined.
+    "Aswang":      { s: "Se fija en un objetivo y lo acosa sin descanso.", w: "Caza constante: mantén distancia y rompe la línea de visión." },
+    "Dayan":       { s: "Acelera muchísimo si corres cerca de ella.", w: "Camina, no corras: quieto se mueve lento (~1,2 m/s)." },
+    "Gallu":       { s: "Se enfurece y acelera en su próxima caza si la repeles.", w: "No abuses de sal / incienso / crucifijo: la enfurecen." },
+    "Kormos":      { s: "Oído excepcional: te detecta por tus pasos.", w: "Camina agachado o quédate quieto para que no te oiga." },
+    "Obambo":      { s: "Alterna estados; caza muy rápido cuando se agita.", w: "En estado calmado es más lenta y predecible." }
 };
