@@ -28,6 +28,18 @@
 }
 #ghost_counter .gc-num{ color:#cdb8ff; font-weight:700; }
 #ghost_counter.gc-idle{ opacity:0.55; }
+/* [fork] deduction hint line under the counter */
+#ghost_counter{ white-space: normal; text-align: center; max-width: 360px; }
+#ghost_counter .gc-hint{
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px dashed rgba(255,255,255,0.15);
+    font-size: 11px;
+    color: #9bd6ff;
+    font-weight: 400;
+    line-height: 1.3;
+}
+#ghost_counter .gc-hint b{ color: #cfe9ff; }
 #ghost_counter.gc-one{
     color:#102015;
     background: linear-gradient(180deg, #8ee6a0, #5ec878);

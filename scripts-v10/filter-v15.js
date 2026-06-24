@@ -13,8 +13,30 @@ const FEMALE_LOCKED = ["Banshee", "Dayan"]
 const SOUND_TELL_GHOST = ["Banshee", "Deogen", "Myling"]
 var tells_restored = false
 
-function saveTells(gender, sound){
-    try { localStorage.setItem('phasmo_tells', JSON.stringify({ gender: gender, sound: sound })) } catch (e) {}
+// [fork] ACTIVE TESTS — player-performable in-game checks (beyond the 7 evidences)
+// compiled + adversarially verified against the wiki. Marking one as "observed"
+// either CONFIRMS a ghost (in[] → isolate the list to it) or ELIMINATES ghosts
+// (out[] → hide them). adv = needs a stopwatch / breaker state / sanity monitor.
+const ACTIVE_TESTS = [
+  { id: 'breath-breaker-off', label: 'Aliento visible (breaker apagado)', in: ['Hantu'],   out: [],         adv: false },
+  { id: 'salt-disturbed',     label: 'Perturba / pisa la sal',            in: [],           out: ['Wraith'], adv: false },
+  { id: 'breaker-on',         label: 'Enciende el breaker',               in: [],           out: ['Hantu'],  adv: false },
+  { id: 'flame-twice',        label: 'Apaga la misma llama 2× en 20s',    in: ['Onryo'],    out: [],         adv: false },
+  { id: 'phantom-invisible',  label: 'Casi invisible en la caza',         in: ['Phantom'],  out: [],         adv: false },
+  { id: 'light-on',           label: 'Enciende un interruptor',           in: [],           out: ['Mare'],   adv: false },
+  { id: 'obake-blink',        label: 'Parpadeo de modelo en la caza',     in: ['Obake'],    out: [],         adv: false },
+  { id: 'mare-event-off',     label: 'Apaga luces durante un evento',     in: ['Mare'],     out: [],         adv: false },
+  { id: 'breaker-off-direct', label: 'Apaga el breaker directamente',     in: [],           out: ['Jinn'],   adv: false },
+  { id: 'phantom-photo',      label: 'Desaparece en la foto',             in: ['Phantom'],  out: [],         adv: false },
+  { id: 'yurei-dots-smudge',  label: 'DOTS antes de 90s tras sahumar',    in: [],           out: ['Yurei'],  adv: true  },
+  { id: 'jinn-speed',         label: 'Acelera con LOS >3m (breaker on)',  in: ['Jinn'],     out: [],         adv: true  },
+  { id: 'moroi-return',       label: 'Tarda >5s en volver tras sahumar',  in: ['Moroi'],    out: [],         adv: true  },
+  { id: 'demon-80',           label: 'Caza con cordura promedio >80%',    in: ['Demon'],    out: [],         adv: true  },
+]
+const ACTIVE_TESTS_MAP = {}; ACTIVE_TESTS.forEach(function (t) { ACTIVE_TESTS_MAP[t.id] = t });
+
+function saveTells(gender, sound, tests){
+    try { localStorage.setItem('phasmo_tells', JSON.stringify({ gender: gender, sound: sound, tests: tests })) } catch (e) {}
 }
 
 function restoreTells(){
@@ -24,10 +46,13 @@ function restoreTells(){
         var gb = document.querySelector('button[name="gender"][value="' + t.gender + '"]');
         if (gb) gb.querySelector('#checkbox').className = 'good';
     }
-    var sounds = t.sound || [];
-    sounds.forEach(function(v){
+    (t.sound || []).forEach(function(v){
         var sb = document.querySelector('button[name="tell-sound"][value="' + v + '"]');
         if (sb) sb.querySelector('#checkbox').className = 'good';
+    });
+    (t.tests || []).forEach(function(v){
+        var ab = document.querySelector('button[name="active-test"][value="' + v + '"]');
+        if (ab) ab.querySelector('#checkbox').className = 'good';
     });
 }
 
@@ -613,11 +638,25 @@ function filter(ignore_link=false){
     var speed_checkboxes = document.querySelectorAll('[name="speed"] .good');
     var bad_speed_checkboxes = document.querySelectorAll('[name="speed"] .bad');
     var sanity_checkboxes = document.querySelectorAll('[name="hunt-sanity"] .good');
-    // [fork] Behavioral tells: gender (radio) + distinctive sounds (multi-select)
+    // [fork] Behavioral tells + active tests → build confirm/eliminate ghost sets.
+    // confirmSet (rule-IN): if non-empty, ONLY these ghosts survive (isolate).
+    // eliminateSet (rule-OUT): these ghosts are hidden.
     var gender_good = document.querySelector('[name="gender"] .good');
     var gender_sel = gender_good ? gender_good.parentElement.value : '';
     var sound_tells = Array.from(document.querySelectorAll('[name="tell-sound"] .good')).map(function(e){ return e.parentElement.value });
-    saveTells(gender_sel, sound_tells);
+    var active_tests = Array.from(document.querySelectorAll('[name="active-test"] .good')).map(function(e){ return e.parentElement.value });
+    saveTells(gender_sel, sound_tells, active_tests);
+
+    var confirmSet = new Set();
+    var eliminateSet = new Set();
+    sound_tells.forEach(function(g){ confirmSet.add(g) });
+    if (gender_sel == "Male") FEMALE_LOCKED.forEach(function(g){ eliminateSet.add(g) });
+    active_tests.forEach(function(id){
+        var t = ACTIVE_TESTS_MAP[id];
+        if (!t) return;
+        (t.in || []).forEach(function(g){ confirmSet.add(g) });
+        (t.out || []).forEach(function(g){ eliminateSet.add(g) });
+    });
     if(document.getElementById("cust_num_evidence").value == "")
         document.getElementById("cust_num_evidence").value = "3"
     if(document.getElementById("cust_hunt_length").value == "")
@@ -961,14 +1000,13 @@ function filter(ignore_link=false){
             }
         }
 
-        // [fork] Behavioral tells (definitive, one-directional)
-        // A MALE model rules out the always-female ghosts (Banshee, Dayan).
-        if (gender_sel == "Male" && FEMALE_LOCKED.includes(name)){
+        // [fork] Behavioral tells + active tests (gender, distinctive sounds, in-game checks).
+        // CONFIRM (rule-IN): if any confirm signal is active, only those ghosts survive.
+        if (confirmSet.size > 0 && !confirmSet.has(name)){
             keep = false
         }
-        // A heard distinctive sound (Banshee scream / Deogen breathing / Myling
-        // frequency) uniquely confirms its ghost → keep ONLY the selected one(s).
-        if (sound_tells.length > 0 && !sound_tells.includes(name)){
+        // ELIMINATE (rule-OUT): hide ghosts ruled out by gender / active tests.
+        if (eliminateSet.has(name)){
             keep = false
         }
 
@@ -1329,6 +1367,33 @@ function updateGhostCounter(){
     } else {
         if (remaining === total) el.classList.add('gc-idle');
         el.innerHTML = 'Quedan <span class="gc-num">' + remaining + '</span> fantasmas';
+        // [fork] deduction hint: when few candidates remain, show which evidence still SPLITS
+        // them — i.e. what to go test in-game to narrow down fastest.
+        if (remaining >= 2 && remaining <= 5){
+            var cand = [];
+            for (var j = 0; j < cards.length; j++){
+                var cc = cards[j];
+                if (!cc.classList.contains('hidden') && !cc.classList.contains('faded') && !cc.classList.contains('permhidden')) cand.push(cc);
+            }
+            var counts = {}, labels = {};
+            cand.forEach(function(c){
+                var seen = {};
+                Array.prototype.forEach.call(c.getElementsByClassName('ghost_evidence_item'), function(it){
+                    var k = it.getAttribute('name');
+                    if (!k || seen[k]) return;
+                    seen[k] = 1;
+                    counts[k] = (counts[k] || 0) + 1;
+                    var lbl = it.querySelector('.g2-evi-lbl');
+                    labels[k] = (lbl ? lbl.textContent : it.textContent).trim();
+                });
+            });
+            var disc = Object.keys(counts).filter(function(k){ return counts[k] > 0 && counts[k] < cand.length; });
+            disc.sort(function(a, b){ return Math.abs(counts[a] - cand.length / 2) - Math.abs(counts[b] - cand.length / 2); });
+            if (disc.length){
+                var top = disc.slice(0, 3).map(function(k){ return labels[k] || k; });
+                el.innerHTML += '<div class="gc-hint">Diferéncialos por: <b>' + top.join(' · ') + '</b></div>';
+            }
+        }
     }
 }
 
@@ -2604,8 +2669,8 @@ function resetFilters(skip_filter=false){
 
     state['los'] = -1;
 
-    // [fork] clear behavioral tells (gender + distinctive sounds)
-    var tell_groups = ["gender","tell-sound"];
+    // [fork] clear behavioral tells (gender + distinctive sounds + active tests)
+    var tell_groups = ["gender","tell-sound","active-test"];
     tell_groups.forEach(function(nm){
         document.querySelectorAll('button[name="' + nm + '"]').forEach(function(b){
             b.querySelector("#checkbox").className = "neutral";
