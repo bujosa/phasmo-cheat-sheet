@@ -52,7 +52,7 @@
     <script src="scripts-v10/ghost_template-v2.js?v=fork8c"></script>
     <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork10"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
-    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork17"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork18"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -896,12 +896,42 @@
         <span class="hb-txt">MODO CACER&Iacute;A</span>
     </button>
 
-    <button id="simple_mode_btn" type="button"
-            title="Vista compacta: solo el nombre y la evidencia de cada fantasma, para escanear r&aacute;pido qui&eacute;nes quedan"
-            onclick="this.classList.toggle('active'); document.body.classList.toggle('gcard2--simple');">
-        <svg class="sm-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-        <span class="sm-txt">VISTA SIMPLE</span>
-    </button>
+    <div id="density_control" role="group" aria-label="Tama&ntilde;o de las cartas">
+        <button type="button" data-density="full" class="active" title="Cartas completas: toda la informaci&oacute;n">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
+            <span>Completa</span>
+        </button>
+        <button type="button" data-density="medium" title="Cartas medianas: evidencia, debilidad/fuerza y velocidad">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 11h8"/></svg>
+            <span>Media</span>
+        </button>
+        <button type="button" data-density="simple" title="Cartas compactas: solo el nombre y la evidencia, para escanear r&aacute;pido">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            <span>Simple</span>
+        </button>
+    </div>
+    <script>
+    /* [fork] card density control: full / medium / simple (persisted) */
+    (function(){
+        function setDensity(d){
+            document.body.classList.remove('gcard2--simple','gcard2--medium');
+            if (d === 'simple') document.body.classList.add('gcard2--simple');
+            else if (d === 'medium') document.body.classList.add('gcard2--medium');
+            document.querySelectorAll('#density_control button').forEach(function(b){
+                b.classList.toggle('active', b.dataset.density === d);
+            });
+            try { localStorage.setItem('phasmo_density', d); } catch(e){}
+        }
+        window.setCardDensity = setDensity;
+        document.addEventListener('click', function(e){
+            var btn = e.target.closest('#density_control button');
+            if (btn) setDensity(btn.dataset.density);
+        });
+        var saved;
+        try { saved = localStorage.getItem('phasmo_density'); } catch(e){}
+        if (saved && saved !== 'full') setDensity(saved);
+    })();
+    </script>
 
     <div id="search_box" style="right:-36px;">
         <div id="search_tab" onclick="showSearch();" title="Buscar fantasmas por comportamiento (Ctrl/Cmd + F)">
