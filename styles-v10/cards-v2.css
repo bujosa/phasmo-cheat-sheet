@@ -388,3 +388,62 @@
    Kept: search (#search_box) and the show-hidden eye (#eye). */
 #news_box, #language_box, #theme_box, #z3d-box, #partner-box { display: none !important; }
 #data_tab { display: none !important; }
+
+/* =====================================================================
+   [fork] VISTA SIMPLE — compact "just the names + evidence" scan view
+   ===================================================================== */
+#simple_mode_btn{
+  position:fixed; top:10px; right:248px; z-index:61;
+  display:flex; align-items:center; gap:7px;
+  padding:7px 14px; border-radius:999px; cursor:pointer;
+  font-family:'ZNSecondary', sans-serif; font-size:12px; font-weight:800;
+  text-transform:uppercase; letter-spacing:1.2px;
+  color:#cdb8ff;
+  background:rgba(28,29,46,0.92);
+  border:1px solid rgba(173,140,231,0.5);
+  box-shadow:0 4px 14px rgba(0,0,0,0.4);
+  backdrop-filter:blur(4px);
+  transition:background .2s, border-color .2s, color .2s;
+}
+#simple_mode_btn .sm-ic{ width:15px; height:15px; }
+#simple_mode_btn .sm-ic path{ fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; }
+#simple_mode_btn:hover{ border-color:rgba(173,140,231,0.85); color:#e3d4ff; }
+#simple_mode_btn.active{
+  color:#1c1c24;
+  background:linear-gradient(180deg,#cdb8ff,#a98ce0);
+  border-color:#e3d4ff;
+  box-shadow:0 4px 18px rgba(173,140,231,0.5);
+}
+
+/* compact cards: name + small evidence icons only, many per row */
+body.gcard2--simple #cards{ gap:8px; align-content:flex-start; }
+body.gcard2--simple .gcard2{
+  flex:0 1 auto; width:auto; max-width:none; min-width:0;
+  flex-direction:row; align-items:center; gap:10px;
+  padding:9px 14px; border-radius:11px; min-height:0;
+}
+/* hide the verbose blocks */
+body.gcard2--simple .g2-intel,
+body.gcard2--simple .g2-move,
+body.gcard2--simple .g2-chips,
+body.gcard2--simple .g2-hunt,
+body.gcard2--simple .g2-hunt-btn,
+body.gcard2--simple .g2-hunt-toggle,
+body.gcard2--simple .g2-clear,
+body.gcard2--simple .g2-more,
+body.gcard2--simple .g2-evi-lbl{ display:none !important; }
+/* header → just the name, inline */
+body.gcard2--simple .g2-head{ margin:0; }
+body.gcard2--simple .g2-name{ font-size:1.05rem; white-space:nowrap; }
+/* evidence → tiny icon chips */
+body.gcard2--simple .g2-evidence{ display:flex; gap:5px; }
+body.gcard2--simple .g2-evi{
+  min-height:0; width:30px; height:30px; padding:5px; gap:0; border-radius:8px;
+}
+body.gcard2--simple .g2-evi::before{ height:2px; }
+body.gcard2--simple .g2-evi-ic{ width:20px; height:20px; }
+/* in simple view, global hunt board has nothing to show — keep it sane */
+body.gcard2--simple.gcard2--hunt .g2-hunt{ display:none !important; }
+@media (max-width:760px){
+  #simple_mode_btn{ right:auto; left:50%; transform:translateX(-50%); top:78px; }
+}
