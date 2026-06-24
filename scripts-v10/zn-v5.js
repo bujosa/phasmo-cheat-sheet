@@ -121,8 +121,8 @@ function loadAllAndConnect(){
             // [fork/standalone] Ghost data is bundled locally under data-local/ so this fork
             // works on its own without the gated zero-network.net API (which 401s off-origin).
             // Refresh the snapshot with: scripts/update-data.sh   (see data-local/README.md)
-            fetch(`data-local/ghosts-${lang}.json`, {cache: 'default'})
-            .catch(() => fetch(`data-local/ghosts-en.json`, {cache: 'default'}))
+            fetch(`data-local/ghosts-${lang}.json?v=fork20`, {cache: 'default'})
+            .catch(() => fetch(`data-local/ghosts-en.json?v=fork20`, {cache: 'default'}))
             .then(data => data.json())
             .then(data => {
 
@@ -263,7 +263,7 @@ function loadAllAndConnect(){
     })
 
     let loadMaps = new Promise((resolve, reject) => {
-        fetch("data-local/maps.json", {cache: 'default'})
+        fetch("data-local/maps.json?v=fork20", {cache: 'default'})
         .then(data => data.json())
         .then(data => {
             var map_html = ""
@@ -298,7 +298,7 @@ function loadAllAndConnect(){
     })
 
     let loadWeekly = new Promise((resolve, reject) => {
-        fetch("data-local/weekly.json", {cache: 'default'})
+        fetch("data-local/weekly.json?v=fork20", {cache: 'default'})
         .then(data => data.json())
         .then(data => {
             weekly_data = {
@@ -349,7 +349,7 @@ function loadAllAndConnect(){
     })
 
     let loadLanguages = new Promise((resolve, reject) => {
-        fetch("data-local/languages.json", {cache: 'default'})
+        fetch("data-local/languages.json?v=fork20", {cache: 'default'})
         .then(data => data.json())
         .then(data => {
             var lang_html = ""

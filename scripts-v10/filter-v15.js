@@ -2151,7 +2151,9 @@ function loadSettings(){
         var map_exists = setInterval(function(){
             if(document.getElementById(user_settings['map']) != null){
                 var map_elem = document.getElementById(user_settings['map'])
-                changeMap(map_elem,map_elem.onclick.toString().match(/(http.+?)'\)/)[1],true)
+                // [fork] use the (now local) URL from all_maps instead of regex-parsing the
+                // onclick for an http URL (which broke once map images became local paths).
+                changeMap(map_elem, all_maps[user_settings['map']], true)
                 clearInterval(map_exists)
             }
         },500)
