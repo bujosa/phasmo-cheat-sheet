@@ -1,1 +1,182 @@
-[{"id":2,"div_id":"edgefield","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/edgefield.png","size":"S","name":"42 Edgefield Road","extra":"{\"ppm\":22.5}","event_url":"","category":null},{"id":4,"div_id":"grafton","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/grafton_new.png","size":"S","name":"Grafton Farmhouse","extra":"{\"ppm\":31.67}","event_url":"","category":null},{"id":39,"div_id":"nells","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/nells.png","size":"S","name":"Nell's Diner","extra":"{\"ppm\":43.5}","event_url":"","category":null},{"id":3,"div_id":"ridgeview","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/ridgeview.png","size":"S","name":"10 Ridgeview Court","extra":"{\"ppm\":22.5}","event_url":"","category":null},{"id":1,"div_id":"tanglewood","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/tanglewood_new.png","size":"S","name":"6 Tanglewood Drive","extra":"{\"ppm\":61.93}","event_url":"","category":null},{"id":5,"div_id":"willow","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/willow.png","size":"S","name":"13 Willow Street","extra":"{\"ppm\":22.5}","event_url":"","category":null},{"id":16,"div_id":"woodwind","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/woodwind.png","size":"S","name":"Camp Woodwind","extra":"{\"ppm\":48.67}","event_url":"","category":null},{"id":7,"div_id":"bleasdale","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/bleasdale_new.png","size":"M","name":"Bleasdale Farmhouse","extra":"{\"ppm\":31.75}","event_url":"","category":null},{"id":15,"div_id":"maplelodge","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/maplelodge.png","size":"M","name":"Maple Lodge Campsite","extra":"{\"ppm\":28.94}","event_url":"","category":null},{"id":17,"div_id":"pointhope","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/pointhope.png","size":"M","name":"Point Hope","extra":"{\"ppm\":26.5}","event_url":"","category":null},{"id":14,"div_id":"prison","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/prison.png","size":"M","name":"Prison","extra":"{\"ppm\":22.5}","event_url":"","category":null},{"id":9,"div_id":"sunnymeadows_courtyard","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/sunnymeadows_courtyard.png","size":"M","name":"SM Restricted - Courtyard","extra":"{\"ppm\":20.03}","event_url":"","category":null},{"id":11,"div_id":"sunnymeadows_female","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/sunnymeadows_female.png","size":"M","name":"SM Restricted - Female Wing","extra":"{\"ppm\":24.81}","event_url":"","category":null},{"id":12,"div_id":"sunnymeadows_hospital","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/sunnymeadows_hospital.png","size":"M","name":"SM Restricted - Hospital","extra":"{\"ppm\":23.4}","event_url":"","category":null},{"id":10,"div_id":"sunnymeadows_male","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/sunnymeadows_male.png","size":"M","name":"SM Restricted - Male Wing","extra":"{\"ppm\":24.153}","event_url":"","category":null},{"id":13,"div_id":"sunnymeadows_restricted","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/sunnymeadows_restricted.png","size":"M","name":"SM Restricted - Restricted","extra":"{\"ppm\":23.38}","event_url":"","category":null},{"id":6,"div_id":"brownstone","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/brownstone.png","size":"L","name":"Brownstone High School","extra":"{\"ppm\":22.5}","event_url":"","category":null},{"id":8,"div_id":"sunnymeadows","file_url":"https://zero-network.net/phasmophobia/static/imgs/maps/zn/sunnymeadows.png","size":"L","name":"Sunny Meadows","extra":"{\"ppm\":14.5}","event_url":"","category":null}]
+[
+ {
+  "id": 2,
+  "div_id": "edgefield",
+  "file_url": "imgs/maps/edgefield.png",
+  "size": "S",
+  "name": "42 Edgefield Road",
+  "extra": "{\"ppm\":22.5}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 4,
+  "div_id": "grafton",
+  "file_url": "imgs/maps/zn/grafton_new.png",
+  "size": "S",
+  "name": "Grafton Farmhouse",
+  "extra": "{\"ppm\":31.67}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 39,
+  "div_id": "nells",
+  "file_url": "imgs/maps/zn/nells.png",
+  "size": "S",
+  "name": "Nell's Diner",
+  "extra": "{\"ppm\":43.5}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 3,
+  "div_id": "ridgeview",
+  "file_url": "imgs/maps/ridgeview.png",
+  "size": "S",
+  "name": "10 Ridgeview Court",
+  "extra": "{\"ppm\":22.5}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 1,
+  "div_id": "tanglewood",
+  "file_url": "imgs/maps/zn/tanglewood_new.png",
+  "size": "S",
+  "name": "6 Tanglewood Drive",
+  "extra": "{\"ppm\":61.93}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 5,
+  "div_id": "willow",
+  "file_url": "imgs/maps/willow.png",
+  "size": "S",
+  "name": "13 Willow Street",
+  "extra": "{\"ppm\":22.5}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 16,
+  "div_id": "woodwind",
+  "file_url": "imgs/maps/zn/woodwind.png",
+  "size": "S",
+  "name": "Camp Woodwind",
+  "extra": "{\"ppm\":48.67}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 7,
+  "div_id": "bleasdale",
+  "file_url": "imgs/maps/zn/bleasdale_new.png",
+  "size": "M",
+  "name": "Bleasdale Farmhouse",
+  "extra": "{\"ppm\":31.75}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 15,
+  "div_id": "maplelodge",
+  "file_url": "imgs/maps/zn/maplelodge.png",
+  "size": "M",
+  "name": "Maple Lodge Campsite",
+  "extra": "{\"ppm\":28.94}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 17,
+  "div_id": "pointhope",
+  "file_url": "imgs/maps/zn/pointhope.png",
+  "size": "M",
+  "name": "Point Hope",
+  "extra": "{\"ppm\":26.5}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 14,
+  "div_id": "prison",
+  "file_url": "imgs/maps/prison.png",
+  "size": "M",
+  "name": "Prison",
+  "extra": "{\"ppm\":22.5}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 9,
+  "div_id": "sunnymeadows_courtyard",
+  "file_url": "imgs/maps/zn/sunnymeadows_courtyard.png",
+  "size": "M",
+  "name": "SM Restricted - Courtyard",
+  "extra": "{\"ppm\":20.03}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 11,
+  "div_id": "sunnymeadows_female",
+  "file_url": "imgs/maps/zn/sunnymeadows_female.png",
+  "size": "M",
+  "name": "SM Restricted - Female Wing",
+  "extra": "{\"ppm\":24.81}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 12,
+  "div_id": "sunnymeadows_hospital",
+  "file_url": "imgs/maps/zn/sunnymeadows_hospital.png",
+  "size": "M",
+  "name": "SM Restricted - Hospital",
+  "extra": "{\"ppm\":23.4}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 10,
+  "div_id": "sunnymeadows_male",
+  "file_url": "imgs/maps/zn/sunnymeadows_male.png",
+  "size": "M",
+  "name": "SM Restricted - Male Wing",
+  "extra": "{\"ppm\":24.153}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 13,
+  "div_id": "sunnymeadows_restricted",
+  "file_url": "imgs/maps/zn/sunnymeadows_restricted.png",
+  "size": "M",
+  "name": "SM Restricted - Restricted",
+  "extra": "{\"ppm\":23.38}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 6,
+  "div_id": "brownstone",
+  "file_url": "imgs/maps/brownstone.png",
+  "size": "L",
+  "name": "Brownstone High School",
+  "extra": "{\"ppm\":22.5}",
+  "event_url": "",
+  "category": null
+ },
+ {
+  "id": 8,
+  "div_id": "sunnymeadows",
+  "file_url": "imgs/maps/zn/sunnymeadows.png",
+  "size": "L",
+  "name": "Sunny Meadows",
+  "extra": "{\"ppm\":14.5}",
+  "event_url": "",
+  "category": null
+ }
+]
