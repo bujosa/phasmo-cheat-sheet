@@ -4,6 +4,7 @@ function uncover(elem){
 }
 
 $(window).on('load', function() {
+    return; /* [fork/standalone] Events tab is hidden and event.json 401s offline — skip it. */
     let p = new URL(window.location.href).searchParams
     let vers = p.get('version')
     fetch(`https://zero-network.net/phasmophobia/data/event.json${vers ? ('?version='+vers) : ''}`, {signal: AbortSignal.timeout(6000)})

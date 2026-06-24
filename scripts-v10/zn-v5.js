@@ -99,48 +99,14 @@ function loadAllAndConnect(){
             resolve("Loaded existing session")
         }
         else{
-            var id;
-            try{
-                id = JSON.parse(getCookie("data_link"))['id'];
-            } catch(Error) {
-                id = false;
-            }
-            fetch(`https://zero-network.net/zn/?lang=${lang}${id ? '&data_id='+id : ''}`,{headers:{Accept:"application/json"}, signal: AbortSignal.timeout(10000)})
-            .then(e=>e.json())
-            .then(e => {
-                znid = e.znid
-                setCookie("znid",e.znid,1)
-
-                $("#session").text(`C: ${e.znid}`)
-                $("#prev-session").text(`P: ${pznid == '' ? '-' : pznid}`)
-
-                $('#room_id').val("")
-                $('#room_id').css('color',"#CCC")
-                $('#room_id').prop('disabled',false)
-                $('#room_id_create').show()
-                $('#room_id_link').show()
-                $('#link_id_create').show()
-                mquery = window.matchMedia("screen and (pointer: coarse) and (max-device-width: 600px)")
-                if(!mquery.matches && navigator.platform.toLowerCase().includes('win'))
-                    $('#link_id_create_launch').show()
-            })
-            .then(x =>{
-                resolve("New session created")
-            })
-            .catch(response => {
-                znid = 'no-connection-to-server'
-                console.log(response)
-                console.warn("Possible latency issues!")
-                setCookie("znid","no-connection-to-server",1)
-                $('#room_id').val("Can't Connect!")
-                $('#link_id').val("Can't Connect!")
-                $("#session").text("no-connection-to-server")
-                $("#prev-session").text(`P: ${pznid == '' ? '-' : pznid}`)
-                // [fork/standalone] Don't reject: online account/sync features (shared journal
-                // link, stats) simply stay off when there's no Zero-Network connection, instead
-                // of blocking the whole app with the maintenance screen.
-                resolve("Offline mode (no Zero-Network connection)")
-            })
+            // [fork/standalone] Skip the Zero-Network session call entirely — it 401s offline,
+            // adds latency, and only powers account/sync features this fork doesn't use.
+            // Go straight to offline mode.
+            znid = 'no-connection-to-server'
+            setCookie("znid","no-connection-to-server",1)
+            $("#session").text("no-connection-to-server")
+            $("#prev-session").text(`P: ${pznid == '' ? '-' : pznid}`)
+            resolve("Offline mode (standalone)")
         }
     })
 
@@ -430,16 +396,9 @@ function loadAllAndConnect(){
                                 auto_link()
                                 openWikiFromURL()
                                 loadSearch()
-                                load_partners(true)
-                                load_models()
-
-                                try{heartbeat()} catch(Error){console.warn("Possible latency issues!")}
-                                setInterval(function(){
-                                    if(!document.hidden){
-                                        try{heartbeat()} catch(Error){console.error("Heartbeat failed!")}
-                                        try{load_partners()} catch(Error){console.error("Failed to load partners!")}
-                                    }
-                                }, 300000)
+                                // [fork/standalone] Skip the online-only loaders (partners, 3D
+                                // models, heartbeat) and their 5-min polling — they all 401
+                                // off-origin and power features this fork hides. Big speed win.
                             })
                         })
                     })

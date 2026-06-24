@@ -513,3 +513,12 @@ body.gcard2--medium.gcard2--hunt .g2-hunt{ display:grid !important; }
 .gcard2 .g2-evi{ transition: opacity .18s ease, filter .18s ease, transform .12s ease; }
 .gcard2 .g2-evidence:hover .g2-evi{ filter: brightness(1.06); }
 .gcard2 .g2-evi:hover{ transform: translateY(-2px); }
+
+/* =====================================================================
+   [fork] Performance + simpler look: plain dark background instead of the
+   external background.jpg (faster load, cleaner).
+   ===================================================================== */
+body, #page-loading {
+  background-image: radial-gradient(circle at 50% -10%, #1b1b27, #0a0a10 70%) !important;
+  background-color: #0a0a10 !important;
+}
