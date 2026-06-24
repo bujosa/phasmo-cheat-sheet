@@ -517,7 +517,7 @@ function link_room(){
                         if(document.getElementById(incoming_state['map']) != null){
                             state['map'] = incoming_state['map'];
                             var map_elem = document.getElementById(incoming_state["map"])
-                            changeMap(map_elem,map_elem.onclick.toString().match(/(http.+?)'\)/)[1],true)
+                            changeMap(map_elem,all_maps[map_elem.id],true)
                             saveSettings()
                             clearInterval(map_exists)
                             map_loaded = true
@@ -805,7 +805,7 @@ function link_link(reconnect = false){
                 let cur_map_elem = document.getElementById("maps_list").querySelector(".selected_map").nextSibling
                 if (cur_map_elem === undefined || cur_map_elem === null)
                     cur_map_elem = document.getElementById("maps_list").children[0]
-                changeMap(cur_map_elem,cur_map_elem.onclick.toString().match(/(http.+?)'\)/)[1],true)
+                changeMap(cur_map_elem,cur_all_maps[map_elem.id],true)
                 saveSettings()
                 send_cur_map_link()
                 send_state()
@@ -815,7 +815,7 @@ function link_link(reconnect = false){
                 let cur_map_elem = document.getElementById("maps_list").querySelector(".selected_map").previousSibling
                 if (cur_map_elem === undefined || cur_map_elem === null)
                     cur_map_elem = document.getElementById("maps_list").children[document.getElementById("maps_list").children.length-1]
-                changeMap(cur_map_elem,cur_map_elem.onclick.toString().match(/(http.+?)'\)/)[1],true)
+                changeMap(cur_map_elem,cur_all_maps[map_elem.id],true)
                 saveSettings()
                 send_cur_map_link()
                 send_state()
