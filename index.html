@@ -52,7 +52,7 @@
     <script src="scripts-v10/ghost_template-v2.js?v=fork8c"></script>
     <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork10"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
-    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork15"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork17"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -1557,6 +1557,24 @@
                 loadAllAndConnect()
             })
         });
+    </script>
+
+    <script>
+    /* [fork] After the dead left tabs (Enlaces / ZN Logic / Evento Actual) are hidden,
+       pull the kept tabs (Guías, Mapas) up below the settings gear so there's no gap.
+       Done in JS because a duplicated media-query rule beats plain stylesheet CSS. */
+    (function placeKeptTabs(){
+        function place(){
+            var w = document.getElementById('wiki_tab');
+            var m = document.getElementById('maps_tab');
+            if (w) w.style.setProperty('top', '48px', 'important');
+            if (m) m.style.setProperty('top', '150px', 'important');
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', place);
+        else place();
+        setTimeout(place, 500);
+        window.addEventListener('resize', place);
+    })();
     </script>
 
 </body>
