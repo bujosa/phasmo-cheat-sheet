@@ -52,7 +52,7 @@
     <script src="scripts-v10/ghost_template-v2.js?v=fork8c"></script>
     <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork10"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
-    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork22"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork24"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -1301,6 +1301,9 @@
 
                 <div class="speed_title yfont white">
                     {{speed}}
+                    <button type="button" id="speed_tracker_link" title="Tracker de pasos: escucha velocidades de referencia y toca al ritmo del fantasma para detectar su velocidad" onclick="toggleSpeedTracker()">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg>
+                    </button>
                 </div>
                 <div class="speed">
                     <button id="Slow" class="tricheck white" name="speed" onclick="tristate(this)" value="Slow">
