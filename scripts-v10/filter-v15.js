@@ -2679,6 +2679,13 @@ function resetFilters(skip_filter=false){
     });
     try { localStorage.removeItem("phasmo_tells") } catch (e) {}
 
+    // [fork] also clear manual marks (discarded / died / selected) so the candidate list is full again
+    Array.prototype.forEach.call(document.getElementsByClassName("ghost_card"), function(c){
+        c.classList.remove("faded","died","selected","guessed","permhidden");
+        var nm = c.getElementsByClassName("ghost_name")[0]; if (nm) nm.classList.remove("strike");
+        if (state["ghosts"]) state["ghosts"][c.id] = 0;
+    });
+
     if(!skip_filter){
         setCookie("state",JSON.stringify(state),1)
         filter()
