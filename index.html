@@ -48,9 +48,11 @@
         };
     </script>
     <script src="scripts-v10/ghost-intel-v1.js?v=fork3"></script>
-    <script src="scripts-v10/ghost_template-v2.js?v=fork4"></script>
-    <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork7"/>
+    <script src="scripts-v10/ghost-behavior-v1.js?v=fork8"></script>
+    <script src="scripts-v10/ghost_template-v2.js?v=fork8c"></script>
+    <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork8"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork8e"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -886,6 +888,13 @@
             </a>
         </div>
     </div>
+
+    <button id="hunt_board_btn" type="button"
+            title="Modo Cacer&iacute;a: ver de un vistazo c&oacute;mo sobrevivir a TODOS los fantasmas a la vez"
+            onclick="this.classList.toggle('active'); document.body.classList.toggle('gcard2--hunt');">
+        <span class="hb-dot" aria-hidden="true"></span>
+        <span class="hb-txt">MODO CACER&Iacute;A</span>
+    </button>
 
     <div id="search_box" style="right:-36px;">
         <div id="search_tab" onclick="showSearch();" title="Buscar fantasmas por comportamiento (Ctrl/Cmd + F)">
