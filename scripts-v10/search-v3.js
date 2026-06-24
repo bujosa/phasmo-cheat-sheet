@@ -34,32 +34,46 @@ function search() {
         let query_parts = search_query.split(/\s+/);
         const relatedTerms = get_terms(query_parts, RELATED);
 
-        // Search ghost cards
+        // Search ghost cards. [fork] Two passes so NAME matches rank above behavior
+        // matches, and BOTH the localized name and the English id are searchable
+        // (so "mare" and "pesadilla" both find the same ghost), plus evidence labels.
         const cards = document.getElementsByClassName("ghost_card");
-        Array.from(cards).forEach((card) => {
-            // [fork] also search evidence labels (ADN/Orbes/DOTS/huellas) on desktop, not just behavior text
+        const cardData = Array.from(cards).map(function(card){
             const behaviorRaw = card.getElementsByClassName("ghost_behavior")[0].innerText;
             const evidEl = card.getElementsByClassName("ghost_evidence")[0];
             const evidText = evidEl ? evidEl.innerText : "";
-            const behaviorText = (behaviorRaw + " " + evidText).toLowerCase();
-            const nameText = card.getElementsByClassName("ghost_name")[0].innerText.toLowerCase();
-
-            relatedTerms.forEach(terms => {
-                if(!matched.has(card)){
-                    if (all_match(behaviorText,terms)) {
-                        results += parse_card(card, terms);
-                        matched.add(card)
-                    } 
-                    else if (all_match(nameText,terms)) {
-                        results += parse_card(card, terms, true);
-                        matched.add(card)
-                    }
-                    else if (all_match(nameText+" "+behaviorText,terms)){
-                        results += parse_card(card, get_partial_match(behaviorText,terms))
-                        matched.add(card)
-                    }
+            return {
+                card: card,
+                behaviorText: (behaviorRaw + " " + evidText).toLowerCase(),
+                nameText: (card.getElementsByClassName("ghost_name")[0].innerText + " " + card.id).toLowerCase()
+            };
+        });
+        // Pass 1 — NAME matches first (most relevant)
+        cardData.forEach(function(d){
+            if (matched.has(d.card)) return;
+            for (var i = 0; i < relatedTerms.length; i++){
+                if (all_match(d.nameText, relatedTerms[i])){
+                    results += parse_card(d.card, relatedTerms[i], true);
+                    matched.add(d.card);
+                    break;
                 }
-            })
+            }
+        });
+        // Pass 2 — behavior / evidence matches
+        cardData.forEach(function(d){
+            if (matched.has(d.card)) return;
+            for (var i = 0; i < relatedTerms.length; i++){
+                var terms = relatedTerms[i];
+                if (all_match(d.behaviorText, terms)){
+                    results += parse_card(d.card, terms);
+                    matched.add(d.card);
+                    break;
+                } else if (all_match(d.nameText + " " + d.behaviorText, terms)){
+                    results += parse_card(d.card, get_partial_match(d.behaviorText, terms));
+                    matched.add(d.card);
+                    break;
+                }
+            }
         });
 
         // Search wiki

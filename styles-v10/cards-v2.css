@@ -447,3 +447,35 @@ body.gcard2--simple.gcard2--hunt .g2-hunt{ display:none !important; }
 @media (max-width:760px){
   #simple_mode_btn{ right:auto; left:50%; transform:translateX(-50%); top:78px; }
 }
+
+/* =====================================================================
+   [fork] Card color polish + hover + narrow-window responsive
+   ===================================================================== */
+/* richer card surface + hover feedback (was none) */
+.gcard2{ transition:border-color .15s ease, box-shadow .15s ease; }
+.gcard2:hover{
+  border-color:rgba(173,140,231,.30);
+  box-shadow:0 12px 32px -12px rgba(0,0,0,.65), 0 0 0 1px rgba(173,140,231,.12), inset 0 1px 0 rgba(255,255,255,.04);
+}
+/* tint the intel rows by meaning — debilidad faint green, fuerza faint amber (more color + clarity) */
+.gcard2 .g2-weak{ background:linear-gradient(90deg, color-mix(in srgb, var(--weak) 9%, var(--panel)), var(--panel) 70%); }
+.gcard2 .g2-strong{ background:linear-gradient(90deg, color-mix(in srgb, var(--strong) 9%, var(--panel)), var(--panel) 70%); }
+/* evidence tiles: a touch more vivid */
+.gcard2 .g2-evi{
+  border-color:color-mix(in srgb, var(--evi) 55%, transparent);
+  box-shadow:inset 0 0 26px -8px var(--evi), 0 4px 12px -8px rgba(0,0,0,.6);
+}
+/* speed/sanity values pop a little more */
+.gcard2 .g2-stat-val{ color:#f4f3fb; }
+
+/* --- narrow window (e.g. resized desktop) : keep the top bar tidy --- */
+@media (max-width: 1000px){
+  #hunt_board_btn .hb-txt, #simple_mode_btn .sm-txt{ display:none; }
+  #hunt_board_btn{ right:92px; padding:8px 11px; gap:0; }
+  #simple_mode_btn{ right:140px; padding:8px 11px; gap:0; }
+  #ghost_counter{ max-width:260px; font-size:13px; }
+}
+/* when a side menu is open on a narrow window, let it overlay cleanly on top */
+@media (max-width: 1000px){
+  .side-menu.tab-open, #wiki_box.tab-open{ z-index:80 !important; box-shadow:0 0 0 100vmax rgba(0,0,0,.5); }
+}
