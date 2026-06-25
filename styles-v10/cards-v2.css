@@ -606,3 +606,36 @@ body, #page-loading {
 #speed_tracker_link svg{ width:12px; height:12px; }
 #speed_tracker_link svg path,#speed_tracker_link svg circle{ fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 #speed_tracker_link:hover{ background:rgba(95,182,230,.25); color:#c5e8ff; }
+
+/* [fork] collapsible "Filtros avanzados" group (género · sonido · pruebas activas) */
+.tells-toggle{
+  display:flex; align-items:center; gap:7px; cursor:pointer; user-select:none;
+  padding:8px 8px 6px; color:#cdb8ff; font-weight:800; font-size:13px;
+}
+.tells-toggle:hover{ color:#e3d4ff; }
+.tells-toggle .tells-chev{ width:13px; height:13px; flex:none; transition:transform .2s; }
+.tells-toggle .tells-chev path{ fill:none; stroke:currentColor; stroke-width:2.3; stroke-linecap:round; stroke-linejoin:round; }
+.tells-section:not(.collapsed) .tells-toggle .tells-chev{ transform:rotate(90deg); }
+.tells-toggle small{ margin-left:auto; color:#7d7b9a; font-weight:500; font-size:10px; }
+.tells-section.collapsed > *:not(.tells-toggle){ display:none !important; }
+
+/* [fork] unified top-bar controls — flex container so density/tracker/hunt never overlap */
+#topbar_controls{
+  position:fixed; top:10px; right:100px; z-index:61;
+  display:flex; align-items:center; gap:8px;
+}
+#topbar_controls > #density_control,
+#topbar_controls > #speed_tracker_btn,
+#topbar_controls > #hunt_board_btn{
+  position:static !important; right:auto !important; left:auto !important; top:auto !important;
+}
+/* density = icon-only segments (tooltips explain); keeps the bar compact */
+#density_control button span{ display:none; }
+#density_control button{ padding:6px 9px; }
+@media (max-width:1150px){
+  #hunt_board_btn .hb-txt, #speed_tracker_btn .st-btn-txt{ display:none; }
+  #topbar_controls{ right:92px; gap:6px; }
+}
+@media (max-width:680px){
+  #topbar_controls{ right:auto; left:50%; transform:translateX(-50%); top:46px; }
+}
