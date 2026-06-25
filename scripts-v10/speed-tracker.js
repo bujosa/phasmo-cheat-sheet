@@ -40,18 +40,19 @@
     function bandOf(ms) { return ms < 1.6 ? 'Slow' : ms > 1.85 ? 'Fast' : 'Normal'; }
     function bandEs(b) { return b === 'Slow' ? 'Lento' : b === 'Fast' ? 'Rápido' : 'Normal'; }
 
-    // ---- reference loop ----
-    var loopTimer = null, loopMs = null;
+    // ---- footstep loop (used by the panel references AND per-card play buttons) ----
+    var loopTimer = null, loopMs = null, loopBtn = null;
     function stopLoop() {
         if (loopTimer) { clearInterval(loopTimer); loopTimer = null; }
-        loopMs = null;
-        var btns = document.querySelectorAll('#speed_tracker .st-ref');
+        loopMs = null; loopBtn = null;
+        var btns = document.querySelectorAll('#speed_tracker .st-ref.active, .g2-steps.active');
         for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
     }
     function playRef(ms, btn) {
-        if (loopMs === ms) { stopLoop(); return; }
+        // clicking the same button again stops it
+        if (loopBtn === (btn || null) && loopMs === ms) { stopLoop(); return; }
         stopLoop();
-        loopMs = ms;
+        loopMs = ms; loopBtn = btn || null;
         if (btn) btn.classList.add('active');
         thud();
         loopTimer = setInterval(thud, msToInterval(ms));
