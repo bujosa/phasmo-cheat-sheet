@@ -59,6 +59,19 @@ class Ghost {
         }
         const sanityStr = parseInt(data.hunt_sanity) == -1 ? '???%' : data.hunt_sanity;
 
+        // [fork] per-card footstep play buttons — hear the cadence at each of this ghost's speeds
+        var stepSpeeds = [];
+        if (data.min_speed != -1) {
+            stepSpeeds.push(+data.min_speed);
+            if (data.max_speed != null && +data.max_speed !== +data.min_speed) stepSpeeds.push(+data.max_speed);
+            if (data.alt_speed != null && stepSpeeds.indexOf(+data.alt_speed) === -1) stepSpeeds.push(+data.alt_speed);
+        }
+        var stepsBtns = stepSpeeds.map(function (s) {
+            return '<button type="button" class="g2-steps" title="Oír los pasos a ' + s + ' m/s" ' +
+                'onclick="event.stopPropagation(); stPlayRef(' + s + ', this)">' +
+                '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>';
+        }).join('');
+
         const intel = (typeof GHOST_INTEL !== 'undefined') ? GHOST_INTEL[data.ghost] : null;
         let weak = '—', strong = '—';
         if (intel && !intel.datamined) { weak = intel.w; strong = intel.s; }
@@ -107,6 +120,7 @@ class Ghost {
                 <div class="g2-stat g2-stat-speed">
                     <span class="g2-stat-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h9m0 0l-3-3m3 3l-3 3M14 5l5 7-5 7"/></svg></span>
                     <span class="g2-stat-body"><span class="g2-stat-lbl">Velocidad</span><span class="ghost_speed g2-stat-val">${speedStr}</span></span>
+                    <span class="g2-steps-group" title="Escuchar los pasos">${stepsBtns}</span>
                 </div>
                 <div class="g2-stat g2-stat-sanity">
                     <span class="g2-stat-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3C9 7 6 9 6 13a6 6 0 0012 0c0-4-3-6-6-10z"/></svg></span>
