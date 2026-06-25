@@ -639,3 +639,19 @@ body, #page-loading {
 @media (max-width:680px){
   #topbar_controls{ right:auto; left:50%; transform:translateX(-50%); top:46px; }
 }
+
+/* [fork] per-card footstep play buttons (▶) next to Velocidad */
+.gcard2 .g2-steps-group{ display:inline-flex; gap:4px; align-items:center; margin-left:auto; }
+.gcard2 .g2-steps{
+  width:24px; height:24px; flex:none; padding:0; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center;
+  border-radius:50%; border:1px solid rgba(95,182,230,.4);
+  background:rgba(95,182,230,.12); color:#9bd6ff;
+  transition:background .15s, color .15s, border-color .15s;
+}
+.gcard2 .g2-steps svg{ width:11px; height:11px; }
+.gcard2 .g2-steps svg path{ fill:currentColor; stroke:none; }
+.gcard2 .g2-steps:hover{ background:rgba(95,182,230,.28); color:#c5e8ff; }
+.gcard2 .g2-steps.active{ background:linear-gradient(180deg,#9bd6ff,#5fb6e6); color:#0c1118; border-color:#c5e8ff; animation:g2pulse 1.3s ease-out infinite; }
+/* in simple/medium density the steps buttons stay available */
+body.gcard2--simple .g2-steps-group{ display:none; }
