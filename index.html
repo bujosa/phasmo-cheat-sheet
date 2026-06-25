@@ -52,7 +52,7 @@
     <script src="scripts-v10/ghost_template-v2.js?v=fork27"></script>
     <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork10"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
-    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork27"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork30"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -963,6 +963,28 @@
         var saved;
         try { saved = localStorage.getItem('phasmo_density'); } catch(e){}
         if (saved && saved !== 'full') setDensity(saved);
+
+        /* [fork] Vista Simple interaction: single click = descartar (toggle fade),
+           double click = seleccionar. A short delay disambiguates click vs dblclick. */
+        var clickTimer = null;
+        document.addEventListener('click', function(e){
+            if (!document.body.classList.contains('gcard2--simple')) return;
+            var card = e.target.closest('.gcard2');
+            if (!card) return;
+            if (clickTimer) return;            // second click of a dbl — let dblclick handle it
+            clickTimer = setTimeout(function(){
+                clickTimer = null;
+                if (typeof fade === 'function') fade(card);   // single = discard / undiscard
+            }, 230);
+        });
+        document.addEventListener('dblclick', function(e){
+            if (!document.body.classList.contains('gcard2--simple')) return;
+            var card = e.target.closest('.gcard2');
+            if (!card) return;
+            if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; }
+            card.classList.remove('faded');                   // cancel any stray fade
+            if (typeof select === 'function') select(card);   // double = select
+        });
     })();
     </script>
 

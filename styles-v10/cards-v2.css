@@ -655,3 +655,38 @@ body, #page-loading {
 .gcard2 .g2-steps.active{ background:linear-gradient(180deg,#9bd6ff,#5fb6e6); color:#0c1118; border-color:#c5e8ff; animation:g2pulse 1.3s ease-out infinite; }
 /* in simple/medium density the steps buttons stay available */
 body.gcard2--simple .g2-steps-group{ display:none; }
+
+/* =====================================================================
+   [fork] UX pass — simple-card interaction, counter prominence, toolbar unity
+   ===================================================================== */
+
+/* Vista Simple: clic = descartar · doble clic = seleccionar */
+body.gcard2--simple .gcard2{ cursor:pointer; transition:opacity .12s, outline-color .12s; outline:1px solid transparent; }
+body.gcard2--simple .gcard2:hover{ outline-color:rgba(173,140,231,.35); }
+body.gcard2--simple .gcard2.faded{ opacity:.3; }
+body.gcard2--simple .gcard2.selected{ outline:2px solid #67e0a3; }
+body.gcard2--simple #cards::before{
+  content:"Vista compacta · clic = descartar · doble clic = seleccionar";
+  display:block; width:100%; text-align:center; order:-1;
+  font-size:11px; color:#9bd6ff; opacity:.85; padding:2px 0 9px; letter-spacing:.3px;
+}
+
+/* Counter prominence — clearer "X left", celebratory "¡Es X!", warning on 0 */
+#ghost_counter{ font-weight:700; }
+#ghost_counter .gc-num{ font-size:1.12em; color:#cdb8ff; }
+#ghost_counter.gc-one{
+  color:#0c1610 !important;
+  background:linear-gradient(180deg,#86eb84,#49bf63) !important;
+  border-color:#9bffa0 !important;
+  box-shadow:0 4px 20px rgba(80,200,90,.55) !important;
+  font-size:15px; padding-left:16px; padding-right:16px;
+}
+#ghost_counter.gc-one b{ color:#0c1610; }
+#ghost_counter.gc-zero{ color:#ff9c98 !important; border-color:rgba(219,77,72,.6) !important; }
+
+/* Unify the top-bar toggles: neutral by default, accent only when active */
+#hunt_board_btn:not(.active), #speed_tracker_btn:not(.active){
+  color:#a9a7c4 !important; border-color:rgba(255,255,255,.12) !important;
+}
+#hunt_board_btn:not(.active):hover, #speed_tracker_btn:not(.active):hover{ color:#e3d4ff !important; }
+#hunt_board_btn:not(.active) .hb-dot{ background:#7d7b9a; }
