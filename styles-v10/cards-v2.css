@@ -867,3 +867,53 @@ body.gcard2--compact .gcard2.gc-expanded .g2-head::after{ content:"✕"; color:#
 
 /* keep the global hunt board usable from compact too */
 body.gcard2--compact.gcard2--hunt .g2-hunt{ display:grid !important; }
+
+/* =====================================================================
+   [fork] Ghost detail "ficha" modal — big per-ghost identification sheet
+   ===================================================================== */
+#ghost_detail{
+  position:fixed; inset:0; z-index:9500; display:none;
+  align-items:flex-start; justify-content:center;
+  background:rgba(8,8,12,.74); backdrop-filter:blur(3px);
+  overflow-y:auto; padding:42px 16px;
+}
+#ghost_detail.open{ display:flex; }
+#gd_modal{
+  position:relative; width:100%; max-width:680px;
+  background:#1c1d2b; border:1px solid rgba(173,140,231,.22); border-radius:18px;
+  padding:24px 22px 18px; box-shadow:0 24px 70px -22px #000; color:#eceaf6;
+}
+.gd-x{ position:absolute; top:12px; right:14px; background:none; border:none; color:#a9a7c4; font-size:26px; line-height:1; cursor:pointer; }
+.gd-x:hover{ color:#fff; }
+.gd-name{ margin:0 0 16px; font-family:'ZNPrimary','ZNSecondary',sans-serif; font-size:1.9rem; letter-spacing:.5px; }
+.gd-sec{ margin-bottom:16px; }
+.gd-h{ font-size:.66rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#9bd6ff; margin-bottom:8px; }
+.gd-intel{ display:flex; flex-direction:column; gap:2px; padding:9px 12px; border-radius:10px; margin-bottom:6px; background:#272838; }
+.gd-intel b{ font-size:.68rem; text-transform:uppercase; letter-spacing:.5px; }
+.gd-weak b{ color:#67e0a3; } .gd-strong b{ color:#f0a55b; }
+.gd-intel span{ font-size:.92rem; line-height:1.35; }
+.gd-cat{ display:flex; gap:10px; align-items:baseline; padding:7px 11px; border-radius:9px; background:#222232; margin-bottom:5px; }
+.gd-cat-lbl{ flex:0 0 118px; font-weight:700; color:#cdb8ff; font-size:.82rem; }
+.gd-cat-val{ flex:1; font-size:.86rem; color:#d4d3e2; line-height:1.32; }
+.gd-hunt-sec .gd-cat{ background:rgba(219,77,72,.1); }
+.gd-tip{ padding:10px 12px; border-radius:10px; background:rgba(219,77,72,.12); border:1px solid rgba(219,77,72,.28); font-size:.9rem; line-height:1.42; margin-top:4px; }
+.gd-tip b{ color:#ffcf6b; }
+.gd-tells{ font-size:.86rem; line-height:1.45; color:#c9c8da; }
+.gd-tells ul{ margin:0; padding-left:18px; } .gd-tells li{ margin-bottom:6px; }
+.gd-foot{ margin-top:10px; }
+.gd-wiki-btn{ width:100%; padding:11px; border-radius:11px; cursor:pointer; font-weight:700; font-size:.9rem; color:#cdb8ff; background:linear-gradient(180deg,rgba(173,140,231,.2),rgba(173,140,231,.08)); border:1px solid rgba(173,140,231,.4); }
+.gd-wiki-btn:hover{ color:#fff; background:linear-gradient(180deg,rgba(173,140,231,.32),rgba(173,140,231,.14)); }
+/* the cloned evidence/movement need their .gcard2-scoped bits + always show labels & all sounds */
+#gd_body .g2-evi-lbl{ display:block !important; font-size:.7rem !important; white-space:normal !important; }
+#gd_body .g2-steps{ display:inline-flex !important; width:26px; height:26px; flex:none; padding:0; cursor:pointer;
+  align-items:center; justify-content:center; border-radius:50%; border:1px solid rgba(95,182,230,.4);
+  background:rgba(95,182,230,.14); color:#9bd6ff; }
+#gd_body .g2-steps svg{ width:12px; height:12px; }
+#gd_body .g2-steps svg path{ fill:currentColor; stroke:none; }
+#gd_body .g2-steps:hover{ background:rgba(95,182,230,.3); }
+#gd_body .g2-steps.active{ background:linear-gradient(180deg,#9bd6ff,#5fb6e6); color:#0c1118; }
+#gd_body .ghost_evidence_found, #gd_body .ghost_evidence_not{ opacity:1; filter:none; }
+/* general icon stroke for the modal (the velocidad/caza stat icons) */
+#gd_body svg path, #gd_body svg circle{ fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+#gd_body .g2-steps svg path{ fill:currentColor; stroke:none; }
+#gd_body .g2-stat-ic{ color:#a9a7c4; } #gd_body .g2-stat-sanity .g2-stat-ic{ color:#db4d48; }
