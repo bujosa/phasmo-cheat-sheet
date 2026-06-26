@@ -795,3 +795,28 @@ body.gcard2--simple #cards::before{
 #open_tracker_sidebar svg path,#open_tracker_sidebar svg circle{ fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
 #open_tracker_sidebar small{ margin-left:auto; color:#7d9bb0; font-weight:500; font-size:10px; }
 #open_tracker_sidebar:hover{ background:linear-gradient(180deg, rgba(95,182,230,.28), rgba(95,182,230,.12)); border-color:rgba(95,182,230,.7); color:#e3f3ff; }
+
+/* [fork] clean sidebar action buttons (Limpiar filtros / Reiniciar) — replace the old mismatched styles */
+.sidebar-btn{
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  width:calc(100% - 16px); margin:7px 8px 0; padding:10px 0;
+  border-radius:11px; cursor:pointer; font-family:inherit;
+  font-size:13.5px; font-weight:700; letter-spacing:.2px; line-height:1;
+  transition:background .15s, border-color .15s, color .15s;
+}
+.sidebar-btn:last-of-type{ margin-bottom:8px; }
+.sidebar-btn svg{ width:15px; height:15px; flex:none; }
+.sidebar-btn svg path{ fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.sidebar-btn-primary{
+  color:#e3d4ff;
+  background:linear-gradient(180deg, rgba(173,140,231,.24), rgba(173,140,231,.09));
+  border:1px solid rgba(173,140,231,.45);
+}
+.sidebar-btn-primary:hover{ color:#fff; background:linear-gradient(180deg, rgba(173,140,231,.36), rgba(173,140,231,.15)); border-color:rgba(173,140,231,.75); }
+.sidebar-btn-ghost{
+  color:#9a99b6; background:transparent; border:1px solid rgba(255,255,255,.12);
+  padding:8px 0; font-size:12.5px; font-weight:600;
+}
+.sidebar-btn-ghost:hover{ color:#fff !important; background:rgba(255,255,255,.05) !important; border-color:rgba(255,255,255,.25); }
+/* the "no ghost selected" pulse state (only fires when logged in) still works */
+#reset.reset_pulse{ color:#ff9c98; border-color:rgba(219,77,72,.5); }
