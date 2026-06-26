@@ -1,0 +1,50 @@
+# Phasmo Cheat Sheet — DESPLIEGUE en ser9 (10.0.0.12) vía el contexto Docker "ser9".
+#
+#   docker --context ser9 compose -f deploy/docker-compose.ser9.yml up -d --build
+#   (o simplemente:  make deploy)
+#
+# Arquitectura:
+#   pihole(10.0.0.17)  ghost.home → 10.0.0.12
+#   ghost-proxy (nginx, :80)  vhost ghost.home → reenvía a la app
+#   phasmo (app, nginx estático)  interno + publicado en :48123 (puerto poco común)
+#
+# Notas de contexto remoto: se despliega contra el daemon de ser9 por SSH. Por eso
+# NO usamos bind-mounts (apuntarían al disco de ser9, no al local): la config de
+# nginx se HORNEA en la imagen del proxy (Dockerfile.proxy). El build context sí se
+# envía por SSH, así que `build:` funciona perfecto.
+name: ghost
+
+services:
+  phasmo:
+    build:
+      context: ..            # raíz del repo (donde está el Dockerfile)
+      dockerfile: Dockerfile
+    image: phasmo-cheat-sheet
+    container_name: phasmo
+    restart: unless-stopped
+    expose:
+      - "80"                 # accesible para el proxy por la red interna
+    ports:
+      - "48123:80"           # acceso directo http://10.0.0.12:48123 (puerto poco común)
+    networks: [ghostnet]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:80/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  ghost-proxy:
+    build:
+      context: .             # carpeta deploy/ (Dockerfile.proxy + ghost-proxy.conf)
+      dockerfile: Dockerfile.proxy
+    image: ghost-proxy
+    container_name: ghost-proxy
+    restart: unless-stopped
+    depends_on: [phasmo]
+    ports:
+      - "80:80"              # ghost.home (DNS de pihole) entra por aquí
+    networks: [ghostnet]
+
+networks:
+  ghostnet:
+    name: ghostnet

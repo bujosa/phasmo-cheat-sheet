@@ -72,3 +72,27 @@ docker-down:
 
 docker-logs:
 	@docker compose logs -f
+
+# --- Deploy en ser9 (Docker context "ser9" = ssh://bujosa@10.0.0.12) ---
+SER9_CTX ?= ser9
+PI_HOST  ?= pi
+DEPLOY   := deploy/docker-compose.ser9.yml
+
+deploy: ## construye y levanta la app en ser9 (proxy :80 + app :48123)
+	@docker --context $(SER9_CTX) compose -f $(DEPLOY) up -d --build
+	@echo "Desplegado en ser9:"
+	@echo "  http://ghost.home        (vía pihole + proxy nginx :80)"
+	@echo "  http://10.0.0.12         (proxy directo)"
+	@echo "  http://10.0.0.12:48123   (app directa, puerto poco comun)"
+
+deploy-down: ## apaga la app en ser9
+	@docker --context $(SER9_CTX) compose -f $(DEPLOY) down
+
+deploy-logs: ## logs de la app en ser9
+	@docker --context $(SER9_CTX) compose -f $(DEPLOY) logs -f
+
+deploy-ps: ## estado de los contenedores en ser9
+	@docker --context $(SER9_CTX) compose -f $(DEPLOY) ps
+
+deploy-dns: ## registra ghost.home -> 10.0.0.12 en la Pi-hole (pihole.toml v6) y reinicia FTL
+	@ssh $(PI_HOST) 'sudo bash -s' < deploy/pihole/add-ghost-record.sh
