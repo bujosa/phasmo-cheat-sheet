@@ -734,3 +734,8 @@ body.gcard2--simple #cards::before{
 .help-ok{ background:linear-gradient(180deg,#cdb8ff,#a98ce0); color:#1c1c24; border:none; border-radius:999px; padding:9px 22px; font-weight:800; font-size:13px; cursor:pointer; }
 .help-ok:hover{ filter:brightness(1.07); }
 @media (max-width:560px){ .help-grid{ grid-template-columns:1fr; } }
+
+/* [fork] attribution moved into the help modal (sidebar footer cleaned up) */
+.help-credit{ text-align:center; color:#6b6a86; font-size:10.5px; padding-top:10px; line-height:1.4; }
+.help-credit a{ color:#8a88a8; text-decoration:underline; }
+.help-credit a:hover{ color:#cdb8ff; }

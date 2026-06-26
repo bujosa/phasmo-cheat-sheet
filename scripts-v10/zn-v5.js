@@ -158,7 +158,7 @@ function loadAllAndConnect(){
                     cards.innerHTML += `${ghost.ghostTemplate}`
                     wiki.innerHTML += (i == data.ghosts.length-1 ? `${ghost.wikiTemplate.replace("&#9500;","&#9492;")}` : `${ghost.wikiTemplate}`)
                 }
-                cur_version.innerHTML = `${data.version}`
+                if (cur_version) cur_version.innerHTML = `${data.version}`
             })
             .then(data => {
                 var raw_state = getCookie("state")
