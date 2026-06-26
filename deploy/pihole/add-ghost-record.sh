@@ -12,7 +12,9 @@
 #       o directamente:  ssh pi 'sudo bash -s' < deploy/pihole/add-ghost-record.sh
 set -euo pipefail
 
-RECORD='10.0.0.12 ghost.home'
+# ghost.home apunta a la Pi (10.0.0.17), igual que el resto de servicios .home:
+# el nginx-proxy-manager de la Pi enruta ghost.home → ser9 (10.0.0.12:48123).
+RECORD='10.0.0.17 ghost.home'
 TOML='/etc/pihole/pihole.toml'
 
 if grep -qF 'ghost.home' "$TOML"; then

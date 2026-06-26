@@ -76,6 +76,8 @@ docker-logs:
 # --- Deploy en ser9 (Docker context "ser9" = ssh://bujosa@10.0.0.12) ---
 SER9_CTX ?= ser9
 PI_HOST  ?= pi
+PI_CTX   ?= pi
+NPM_NAME ?= nginx-proxy-manager
 DEPLOY   := deploy/docker-compose.ser9.yml
 
 deploy: ## construye y levanta la app en ser9 (proxy :80 + app :48123)
@@ -94,5 +96,12 @@ deploy-logs: ## logs de la app en ser9
 deploy-ps: ## estado de los contenedores en ser9
 	@docker --context $(SER9_CTX) compose -f $(DEPLOY) ps
 
-deploy-dns: ## registra ghost.home -> 10.0.0.12 en la Pi-hole (pihole.toml v6) y reinicia FTL
+deploy-dns: ## registra ghost.home -> 10.0.0.17 en la Pi-hole (pihole.toml v6) y reinicia FTL
 	@ssh $(PI_HOST) 'sudo bash -s' < deploy/pihole/add-ghost-record.sh
+
+deploy-npm: ## instala el vhost ghost.home en el nginx-proxy-manager de la Pi
+	@docker --context $(PI_CTX) exec $(NPM_NAME) mkdir -p /data/nginx/custom
+	@docker --context $(PI_CTX) cp deploy/npm/http.conf $(NPM_NAME):/data/nginx/custom/http.conf
+	@docker --context $(PI_CTX) exec $(NPM_NAME) nginx -t
+	@docker --context $(PI_CTX) exec $(NPM_NAME) nginx -s reload
+	@echo "vhost ghost.home -> 10.0.0.12:48123 instalado en NPM ($(NPM_NAME))"

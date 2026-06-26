@@ -1,34 +1,40 @@
 # Despliegue de Phasmo Cheat Sheet en el homelab
 
-Corre la app en **ser9** (`10.0.0.12`) y la sirve como **http://ghost.home** vía la
-Pi-hole (`10.0.0.17`) + un reverse proxy nginx.
+Corre la app en **ser9** (`10.0.0.12`) y la sirve como **http://ghost.home**,
+integrada con la infra existente: la **Pi-hole** resuelve el nombre y el
+**nginx-proxy-manager (NPM)** de la Pi enruta hasta ser9 — igual que el resto de los
+servicios `.home`.
 
 ```
-  navegador  →  ghost.home (Pi-hole DNS → 10.0.0.12)
+  navegador  →  ghost.home  (Pi-hole DNS → 10.0.0.17, como todos los .home)
                       │
-              ser9 :80  ghost-proxy (nginx, vhost ghost.home)
-                      │  →  phasmo (app, nginx estático)
-              ser9 :48123  ← acceso directo a la app (puerto poco común)
+              Pi 10.0.0.17 :80   nginx-proxy-manager (vhost ghost.home)
+                      │           → proxy_pass http://10.0.0.12:48123
+                      ▼
+              ser9 10.0.0.12 :48123   phasmo (la app, nginx estático)
+              ser9 :80                ghost-proxy (acceso directo extra)
 ```
 
 ## Componentes
 
 | Pieza | Dónde | Detalle |
 |------|-------|---------|
-| `phasmo` | ser9, contenedor | La app estática (imagen `phasmo-cheat-sheet`). Publicada en `:48123` y en la red interna. |
-| `ghost-proxy` | ser9, contenedor | nginx que es **dueño del :80** y enruta `ghost.home` → `phasmo`. |
-| Registro DNS | Pi-hole (10.0.0.17) | `ghost.home → 10.0.0.12` en `pihole.toml` (`dns.hosts`). |
+| `phasmo` | ser9, contenedor | La app estática (imagen `phasmo-cheat-sheet`). Publicada en `:48123` (puerto poco común) + red interna. |
+| `ghost-proxy` | ser9, contenedor | nginx en `:80` para acceso directo `http://10.0.0.12` (extra; el camino principal es NPM). |
+| vhost NPM | Pi (10.0.0.17) | `/data/nginx/custom/http.conf`: `ghost.home` → `http://10.0.0.12:48123`. Include custom que NPM no sobreescribe (no necesita la UI). |
+| Registro DNS | Pi-hole (10.0.0.17) | `ghost.home → 10.0.0.17` en `pihole.toml` (`dns.hosts`). |
 
 El **puerto 48123** es deliberadamente poco común para que ningún otro servicio lo
-ocupe; el acceso “bonito” es `http://ghost.home` (puerto 80 vía el proxy).
+ocupe; el acceso “bonito” es `http://ghost.home` (puerto 80 vía NPM).
 
 ## Desplegar / actualizar
 
 Requiere el contexto Docker `ser9` (`ssh://bujosa@10.0.0.12`) y acceso ssh a `pi`.
 
 ```bash
-make deploy        # build + up -d en ser9 (proxy :80 + app :48123)
-make deploy-dns    # registra ghost.home -> 10.0.0.12 en la Pi-hole
+make deploy        # build + up -d en ser9 (app :48123 + proxy :80)
+make deploy-npm    # instala el vhost ghost.home en el NPM de la Pi
+make deploy-dns    # registra ghost.home -> 10.0.0.17 en la Pi-hole
 make deploy-ps     # estado de los contenedores en ser9
 make deploy-logs   # logs
 make deploy-down   # apagar
@@ -38,6 +44,9 @@ O a mano:
 
 ```bash
 docker --context ser9 compose -f deploy/docker-compose.ser9.yml up -d --build
+docker --context pi cp deploy/npm/http.conf nginx-proxy-manager:/data/nginx/custom/http.conf
+docker --context pi exec nginx-proxy-manager nginx -t && \
+docker --context pi exec nginx-proxy-manager nginx -s reload
 ssh pi 'sudo bash -s' < deploy/pihole/add-ghost-record.sh
 ```
 
@@ -64,7 +73,8 @@ debe usar la Pi-hole (10.0.0.17) como DNS. Hoy esta Mac usa el DNS de Tailscale
 2. **Apuntar el DNS de la Mac a la Pi-hole**: Ajustes → Red → DNS → `10.0.0.17`.
 3. **Atajo local** (solo esta Mac): añadir a `/etc/hosts`:
    ```
-   10.0.0.12 ghost.home
+   10.0.0.17 ghost.home
    ```
 
-Comprobar:  `dig +short ghost.home @10.0.0.17`  → `10.0.0.12`.
+Comprobar:  `dig +short ghost.home @10.0.0.17`  → `10.0.0.17`  (y luego
+`curl -s -o /dev/null -w '%{http_code}\n' http://ghost.home/` → `200`).
