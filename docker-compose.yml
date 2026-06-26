@@ -1,0 +1,13 @@
+# Phasmo Cheat Sheet — one-command run on any machine with Docker.
+#
+#   docker compose up -d --build      # start in the background
+#   docker compose down               # stop
+#   → open http://localhost:8123
+services:
+  phasmo:
+    build: .
+    image: phasmo-cheat-sheet
+    container_name: phasmo-cheat-sheet
+    ports:
+      - "${PORT:-8123}:80"   # host PORT (default 8123) → container 80
+    restart: unless-stopped

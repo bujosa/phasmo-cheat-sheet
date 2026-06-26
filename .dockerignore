@@ -1,0 +1,6 @@
+# keep the build context small — but DON'T exclude docker/nginx.conf, it's COPYed in the build
+.git
+.github
+.server.pid
+.server.log
+**/.DS_Store

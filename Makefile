@@ -1,21 +1,29 @@
 # Phasmo Cheat Sheet — controles del servidor local
 # Uso: make up | make down | make restart | make status | make logs | make open | make update
+#      make docker-up | make docker-down | make docker-build  (con Docker)
 PORT    ?= 8123
 PY      ?= python3
 PIDFILE := .server.pid
 LOGFILE := .server.log
+IMAGE   := phasmo-cheat-sheet
 
-.PHONY: help up down restart status logs open update
+.PHONY: help up down restart status logs open update docker-build docker-up docker-down docker-logs
 
 help:
 	@echo "Phasmo Cheat Sheet — comandos:"
-	@echo "  make up       Prende el servidor en http://localhost:$(PORT)"
-	@echo "  make down     Apaga el servidor"
-	@echo "  make restart  Reinicia el servidor"
-	@echo "  make status   Muestra si esta corriendo"
-	@echo "  make logs     Muestra el log en vivo"
-	@echo "  make open     Abre el navegador"
-	@echo "  make update   Actualiza los datos del juego (scripts/update-data.sh)"
+	@echo "  Local (python):"
+	@echo "    make up       Prende el servidor en http://localhost:$(PORT)"
+	@echo "    make down     Apaga el servidor"
+	@echo "    make restart  Reinicia el servidor"
+	@echo "    make status   Muestra si esta corriendo"
+	@echo "    make logs     Muestra el log en vivo"
+	@echo "    make open     Abre el navegador"
+	@echo "    make update   Actualiza los datos del juego (scripts/update-data.sh)"
+	@echo "  Docker (para usar en otra PC):"
+	@echo "    make docker-up     Construye y levanta el contenedor en :$(PORT)"
+	@echo "    make docker-down   Apaga el contenedor"
+	@echo "    make docker-build  Solo construye la imagen"
+	@echo "    make docker-logs   Muestra los logs del contenedor"
 
 up:
 	@if lsof -ti tcp:$(PORT) >/dev/null 2>&1; then \
@@ -50,3 +58,17 @@ open:
 
 update:
 	@bash scripts/update-data.sh
+
+# --- Docker (usar la app en cualquier PC con Docker, sin python) ---
+docker-build:
+	@docker build -t $(IMAGE) .
+
+docker-up:
+	@PORT=$(PORT) docker compose up -d --build
+	@echo "Phasmo (Docker) corriendo en  http://localhost:$(PORT)"
+
+docker-down:
+	@docker compose down
+
+docker-logs:
+	@docker compose logs -f
