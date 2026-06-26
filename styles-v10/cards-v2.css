@@ -431,6 +431,7 @@ body.gcard2--simple .gcard2{
 /* hide the verbose blocks */
 body.gcard2--simple .g2-intel,
 body.gcard2--simple .g2-move,
+body.gcard2--simple .g2-sounds,
 body.gcard2--simple .g2-chips,
 body.gcard2--simple .g2-hunt,
 body.gcard2--simple .g2-hunt-btn,
@@ -651,20 +652,40 @@ body, #page-loading {
 }
 
 /* [fork] per-card footstep play buttons (▶) next to Velocidad */
-.gcard2 .g2-steps-group{ display:inline-flex; gap:4px; align-items:center; margin-left:auto; }
+/* [fork] LABELED speed-play pills — each shows its m/s value so multi-speed ghosts
+   are easy to play in every density (no more identical, ambiguous ▶ buttons). */
+.gcard2 .g2-sounds{ display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  padding:7px 10px; border-radius:11px; background:var(--panel-2); border:1px solid var(--line); }
+.gcard2 .g2-sounds-lbl{ display:inline-flex; align-items:center; gap:5px; flex:none;
+  font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:var(--ink-dim); }
+.gcard2 .g2-sounds-lbl svg{ width:14px; height:14px; }
+.gcard2 .g2-sounds-lbl svg path{ fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+.gcard2 .g2-steps-group{ display:flex; flex-wrap:wrap; gap:5px; align-items:center; }
 .gcard2 .g2-steps{
-  width:24px; height:24px; flex:none; padding:0; cursor:pointer;
-  display:inline-flex; align-items:center; justify-content:center;
-  border-radius:50%; border:1px solid rgba(95,182,230,.4);
-  background:rgba(95,182,230,.12); color:#9bd6ff;
+  height:25px; flex:none; padding:0 9px 0 7px; cursor:pointer;
+  display:inline-flex; align-items:center; gap:4px;
+  border-radius:13px; border:1px solid rgba(95,182,230,.42);
+  background:rgba(95,182,230,.13); color:#9bd6ff;
+  font-size:.76rem; font-weight:700; line-height:1; white-space:nowrap;
   transition:background .15s, color .15s, border-color .15s;
 }
-.gcard2 .g2-steps svg{ width:11px; height:11px; }
+.gcard2 .g2-steps svg{ width:10px; height:10px; flex:none; }
 .gcard2 .g2-steps svg path{ fill:currentColor; stroke:none; }
+.gcard2 .g2-steps-lbl::after{ content:" m/s"; opacity:.6; font-weight:600; font-size:.66rem; }
 .gcard2 .g2-steps:hover{ background:rgba(95,182,230,.28); color:#c5e8ff; }
 .gcard2 .g2-steps.active{ background:linear-gradient(180deg,#9bd6ff,#5fb6e6); color:#0c1118; border-color:#c5e8ff; animation:g2pulse 1.3s ease-out infinite; }
-/* in simple/medium density the steps buttons stay available */
-body.gcard2--simple .g2-steps-group{ display:none; }
+
+/* [fork] ⓘ info button — opens the full ghost ficha, present in EVERY density */
+.gcard2 .g2-info{
+  flex:none; width:26px; height:26px; margin-left:6px; padding:0; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center;
+  border-radius:50%; border:1px solid rgba(173,140,231,.4);
+  background:rgba(173,140,231,.12); color:#cdb8ff;
+  transition:background .15s, color .15s, border-color .15s, transform .15s;
+}
+.gcard2 .g2-info svg{ width:16px; height:16px; }
+.gcard2 .g2-info svg path,.gcard2 .g2-info svg circle{ fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+.gcard2 .g2-info:hover{ background:rgba(173,140,231,.26); color:#fff; border-color:rgba(173,140,231,.7); transform:scale(1.08); }
 
 /* =====================================================================
    [fork] UX pass — simple-card interaction, counter prominence, toolbar unity
@@ -847,23 +868,12 @@ body.gcard2--compact .g2-evi-lbl{ display:none; }
 /* movement: fixed-height cells so 1- and multi-speed cards line up; compact text */
 body.gcard2--compact .g2-stat{ padding:7px 9px; min-height:52px; }
 body.gcard2--compact .g2-stat-val{ font-size:.8rem; }
-/* collapsed: one play button; the rest appear when the card is expanded */
-body.gcard2--compact .g2-steps-group .g2-steps:not(:first-child){ display:none; }
-body.gcard2--compact .g2-steps{ width:22px; height:22px; }
+/* compact still shows ALL labeled speed pills (click the ⓘ or the card for the full ficha) */
+body.gcard2--compact .g2-steps-group{ margin-top:6px; }
+body.gcard2--compact .g2-steps{ height:23px; font-size:.72rem; }
 body.gcard2--compact .g2-clear{ padding-top:0; margin-top:auto; }
-/* a small "ver más" affordance */
-body.gcard2--compact .gcard2 .g2-head::after{
-  content:"ⓘ"; margin-left:auto; color:#7d7b9a; font-size:14px; transition:color .15s;
-}
-body.gcard2--compact .gcard2:hover .g2-head::after{ color:#cdb8ff; }
-
-/* EXPANDED compact card → reveal full info (intel, chips, ALL speed sounds, labels) */
-body.gcard2--compact .gcard2.gc-expanded .g2-intel,
-body.gcard2--compact .gcard2.gc-expanded .g2-chips{ display:flex !important; }
-body.gcard2--compact .gcard2.gc-expanded .g2-evi-lbl{ display:block; font-size:.62rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
-body.gcard2--compact .gcard2.gc-expanded .g2-evi{ gap:4px; min-height:58px; }
-body.gcard2--compact .gcard2.gc-expanded .g2-steps-group .g2-steps{ display:inline-flex !important; }
-body.gcard2--compact .gcard2.gc-expanded .g2-head::after{ content:"✕"; color:#cdb8ff; }
+/* the ⓘ button is the "ver ficha" affordance in compact (and every density) */
+body.gcard2--compact .gcard2:hover .g2-info{ background:rgba(173,140,231,.26); color:#fff; }
 
 /* keep the global hunt board usable from compact too */
 body.gcard2--compact.gcard2--hunt .g2-hunt{ display:grid !important; }
@@ -905,11 +915,18 @@ body.gcard2--compact.gcard2--hunt .g2-hunt{ display:grid !important; }
 .gd-wiki-btn:hover{ color:#fff; background:linear-gradient(180deg,rgba(173,140,231,.32),rgba(173,140,231,.14)); }
 /* the cloned evidence/movement need their .gcard2-scoped bits + always show labels & all sounds */
 #gd_body .g2-evi-lbl{ display:block !important; font-size:.7rem !important; white-space:normal !important; }
-#gd_body .g2-steps{ display:inline-flex !important; width:26px; height:26px; flex:none; padding:0; cursor:pointer;
-  align-items:center; justify-content:center; border-radius:50%; border:1px solid rgba(95,182,230,.4);
-  background:rgba(95,182,230,.14); color:#9bd6ff; }
-#gd_body .g2-steps svg{ width:12px; height:12px; }
-#gd_body .g2-steps svg path{ fill:currentColor; stroke:none; }
+#gd_body .gd-move{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px; }
+#gd_body .g2-stat{ display:flex; align-items:center; gap:9px; padding:9px 11px; border-radius:11px; background:#222232; border:1px solid rgba(255,255,255,.06); }
+#gd_body .g2-stat-body{ display:flex; flex-direction:column; min-width:0; }
+#gd_body .g2-sounds{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:9px 11px; border-radius:11px; background:#222232; border:1px solid rgba(255,255,255,.06); }
+#gd_body .g2-sounds-lbl{ display:inline-flex; align-items:center; gap:5px; font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:#a9a7c4; }
+#gd_body .g2-sounds-lbl svg{ width:14px; height:14px; }
+#gd_body .g2-steps-group{ display:flex; flex-wrap:wrap; gap:6px; }
+#gd_body .g2-steps{ display:inline-flex !important; height:27px; flex:none; padding:0 11px 0 8px; cursor:pointer; gap:5px;
+  align-items:center; border-radius:14px; border:1px solid rgba(95,182,230,.42);
+  background:rgba(95,182,230,.14); color:#9bd6ff; font-size:.8rem; font-weight:700; }
+#gd_body .g2-steps svg{ width:11px; height:11px; }
+#gd_body .g2-steps-lbl::after{ content:" m/s"; opacity:.6; font-weight:600; font-size:.7rem; }
 #gd_body .g2-steps:hover{ background:rgba(95,182,230,.3); }
 #gd_body .g2-steps.active{ background:linear-gradient(180deg,#9bd6ff,#5fb6e6); color:#0c1118; }
 #gd_body .ghost_evidence_found, #gd_body .ghost_evidence_not{ opacity:1; filter:none; }
