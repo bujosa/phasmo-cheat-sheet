@@ -52,7 +52,7 @@
     <script src="scripts-v10/ghost_template-v2.js?v=fork27"></script>
     <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork10"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
-    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork36"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork38"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -913,11 +913,14 @@
     </button>
 
     <div id="speed_tracker">
+      <div class="st-page">
         <div class="st-head">
             <svg class="st-head-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg>
-            <span>Tracker de pasos</span>
-            <button class="st-x" type="button" onclick="toggleSpeedTracker()" aria-label="Cerrar">&times;</button>
+            <span class="st-head-title">Tracker de pasos</span>
+            <span class="st-head-sub">Escucha la velocidad de cada fantasma e identif&iacute;calo por sus pasos</span>
+            <button class="st-x" type="button" onclick="toggleSpeedTracker()" aria-label="Volver">&times;</button>
         </div>
+        <div class="st-top">
         <div class="st-section">
             <div class="st-label">1 &middot; Escucha la velocidad de referencia</div>
             <div class="st-refs">
@@ -935,10 +938,12 @@
                 <button class="st-apply" type="button" onclick="stApplyBand()">Filtrar por esta velocidad</button>
             </div>
         </div>
-        <div class="st-section">
+        </div>
+        <div class="st-section st-section-list">
             <div class="st-label">3 &middot; Todas las velocidades &mdash; escucha y compara</div>
             <div id="st-speed-list" class="st-speed-list"></div>
         </div>
+      </div>
     </div>
 
     <button id="hunt_board_btn" type="button"
@@ -1401,6 +1406,13 @@
                         <div class="label label-font-s">{{los_speed_up}}</div>
                     </button>
                 </div>
+
+                <button type="button" id="open_tracker_sidebar" onclick="toggleSpeedTracker()"
+                        title="Abre el Tracker de pasos: escucha la velocidad de cada fantasma e identif&iacute;calo por sus pasos">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg>
+                    <span>Tracker de pasos</span>
+                    <small>escuchar &amp; comparar</small>
+                </button>
 
                 <!-- [fork] Behavioral tells: gender + distinctive parabolic/spirit-box sounds -->
                 <div class="tells-section collapsed">
