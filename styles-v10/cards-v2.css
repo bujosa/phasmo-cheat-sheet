@@ -934,3 +934,23 @@ body.gcard2--compact.gcard2--hunt .g2-hunt{ display:grid !important; }
 #gd_body svg path, #gd_body svg circle{ fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
 #gd_body .g2-steps svg path{ fill:currentColor; stroke:none; }
 #gd_body .g2-stat-ic{ color:#a9a7c4; } #gd_body .g2-stat-sanity .g2-stat-ic{ color:#db4d48; }
+
+/* =====================================================================
+   [fork] EQUAL-SIZE CARDS — no card taller than its neighbours.
+   The cards row is flex-wrap; cards used align-self:flex-start (hug content →
+   uneven). align-self:stretch makes every card in a row grow to the tallest one,
+   and the ✓✗ row is pinned to the bottom so it lines up. Combined with single-line
+   content in compact, rows are near-identical too — uniform without the wasted
+   space a fixed min-height would add. (Grid w/ auto-rows:1fr was wrong here: the
+   .cards container has a fixed height + scroll, so 1fr collapsed every row.)
+   ===================================================================== */
+body:not(.gcard2--simple) .gcard2{ align-self:stretch; }
+body:not(.gcard2--simple) .g2-clear{ margin-top:auto; }
+
+/* COMPACT: single-line speed + pasos so each card's content is naturally the same
+   height (no wasted space). Pasos pills drop the " m/s" suffix (the Velocidad cell
+   already shows the unit); the pills still carry every speed + play button. */
+body.gcard2--compact .g2-stat-val{ font-size:.74rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+body.gcard2--compact .g2-steps-group{ flex-wrap:nowrap; overflow:hidden; }
+body.gcard2--compact .g2-steps{ height:22px; padding:0 7px 0 6px; font-size:.7rem; }
+body.gcard2--compact .g2-steps-lbl::after{ content:""; }
