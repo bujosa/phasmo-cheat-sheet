@@ -27,7 +27,37 @@ desktop-launcher installers were removed to keep it lean.
   4. Para mapas nuevos, baja sus imágenes a `imgs/maps/` (ver
      [`data-local/README.md`](data-local/README.md)).
 
-Run it locally with any static server, e.g.: `python3 -m http.server 8123`
+### ▶️ Cómo correrlo
+
+**Opción A — Python (rápido, local):**
+
+```bash
+make up        # http://localhost:8123  (make down para apagar)
+```
+
+o sin make: `python3 -m http.server 8123`
+
+**Opción B — Docker (para usarlo en otra PC sin instalar nada más):**
+
+```bash
+make docker-up      # construye la imagen y la levanta en http://localhost:8123
+make docker-down    # apaga el contenedor
+```
+
+o con Docker directo:
+
+```bash
+docker compose up -d --build          # → http://localhost:8123
+# o, sin compose:
+docker build -t phasmo-cheat-sheet .
+docker run --rm -p 8123:80 phasmo-cheat-sheet
+```
+
+Cambiar el puerto: `PORT=9000 make docker-up` (o `PORT=9000 docker compose up -d --build`).
+
+La imagen es **nginx:alpine** (~105 MB) con todo empaquetado: funciona **100% offline**,
+sin red ni cuentas. Para llevarlo a otra máquina basta clonar el repo y correr
+`make docker-up` (o exportar la imagen con `docker save phasmo-cheat-sheet | gzip > phasmo.tar.gz`).
 
 ---
 
