@@ -422,7 +422,7 @@
 }
 
 /* compact cards: name + small evidence icons only, many per row */
-body.gcard2--simple #cards{ gap:8px; align-content:flex-start; }
+body.gcard2--simple #cards{ gap:8px; align-content:flex-start; padding-top:50px; }
 body.gcard2--simple .gcard2{
   flex:0 1 auto; width:auto; max-width:none; min-width:0;
   flex-direction:row; align-items:center; gap:10px;
@@ -677,8 +677,10 @@ body.gcard2--simple .gcard2.faded{ opacity:.3; }
 body.gcard2--simple .gcard2.selected{ outline:2px solid #67e0a3; }
 body.gcard2--simple #cards::before{
   content:"Vista compacta · clic = descartar · doble clic = seleccionar";
-  display:block; width:100%; text-align:center; order:-1;
-  font-size:11px; color:#9bd6ff; opacity:.85; padding:2px 0 9px; letter-spacing:.3px;
+  order:-1; width:100%; flex:0 0 100%; text-align:center;
+  margin:0 0 4px; padding:5px 0;
+  font-size:11px; color:#9bd6ff; opacity:.8; letter-spacing:.3px;
+  border-bottom:1px dashed rgba(155,214,255,.18);
 }
 
 /* Counter prominence — clearer "X left", celebratory "¡Es X!", warning on 0 */
