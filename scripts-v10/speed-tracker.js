@@ -97,12 +97,53 @@
         if (cb && cb.classList.contains('neutral')) btn.click();
     }
 
+    // ---- "todas las velocidades" library: every distinct ghost speed → who has it ----
+    function fmtMs(ms) {
+        var n = Math.round(ms * 100) / 100;
+        return (n % 1 === 0 ? n.toFixed(1) : String(n)).replace('.', ',');
+    }
+    function buildSpeedList() {
+        var list = document.getElementById('st-speed-list');
+        if (!list) return;
+        var map = {};
+        var cards = document.getElementsByClassName('gcard2');
+        for (var i = 0; i < cards.length; i++) {
+            var c = cards[i];
+            var nameEl = c.getElementsByClassName('g2-name')[0] || c.getElementsByClassName('ghost_name')[0];
+            var name = nameEl ? nameEl.textContent.trim() : c.id;
+            var spdEl = c.getElementsByClassName('ghost_speed')[0];
+            var nums = (spdEl ? spdEl.textContent : '').match(/\d+[.,]?\d*/g) || [];
+            for (var j = 0; j < nums.length; j++) {
+                var ms = parseFloat(nums[j].replace(',', '.'));
+                if (!ms || ms <= 0) continue;
+                var key = ms.toFixed(2);
+                if (!map[key]) map[key] = { ms: ms, ghosts: [] };
+                if (map[key].ghosts.indexOf(name) === -1) map[key].ghosts.push(name);
+            }
+        }
+        var keys = Object.keys(map).sort(function (a, b) { return map[a].ms - map[b].ms; });
+        var html = '';
+        for (var k = 0; k < keys.length; k++) {
+            var e = map[keys[k]];
+            var band = bandOf(e.ms);
+            html += '<div class="st-srow">' +
+                '<button class="st-play" type="button" title="Escuchar pasos a ' + fmtMs(e.ms) + ' m/s" ' +
+                'onclick="stPlayRef(' + e.ms + ', this)"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>' +
+                '<span class="st-srow-ms">' + fmtMs(e.ms) + '<small>m/s</small></span>' +
+                '<span class="st-srow-band st-' + band.toLowerCase() + '">' + bandEs(band) + '</span>' +
+                '<span class="st-srow-ghosts">' + e.ghosts.join(', ') + '</span>' +
+                '</div>';
+        }
+        list.innerHTML = html || '<div class="st-empty">Sin datos de velocidad.</div>';
+    }
+
     function toggle() {
         var p = document.getElementById('speed_tracker');
         var b = document.getElementById('speed_tracker_btn');
         if (!p) return;
         var open = p.classList.toggle('st-open');
         if (b) b.classList.toggle('active', open);
+        if (open) buildSpeedList();
         if (!open) stopLoop();
     }
 
@@ -111,5 +152,6 @@
     window.stTap = tap;
     window.stResetTap = resetTap;
     window.stApplyBand = applyBand;
+    window.stBuildSpeedList = buildSpeedList;
     window.toggleSpeedTracker = toggle;
 })();
