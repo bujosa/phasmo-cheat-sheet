@@ -52,7 +52,7 @@
     <script src="scripts-v10/ghost_template-v2.js?v=fork27"></script>
     <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork10"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
-    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork30"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork31"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -890,6 +890,7 @@
     </div>
 
     <div id="topbar_controls">
+    <button id="help_btn" type="button" title="C&oacute;mo usar (ayuda)" onclick="openHelp()" aria-label="Ayuda">?</button>
     <div id="density_control" role="group" aria-label="Tama&ntilde;o de las cartas">
         <button type="button" data-density="full" class="active" title="Cartas completas: toda la informaci&oacute;n">
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
@@ -985,6 +986,49 @@
             card.classList.remove('faded');                   // cancel any stray fade
             if (typeof select === 'function') select(card);   // double = select
         });
+    })();
+    </script>
+
+    <!-- [fork] onboarding / help -->
+    <div id="help_overlay" onclick="if(event.target===this)closeHelp()">
+        <div id="help_modal" role="dialog" aria-label="C&oacute;mo usar">
+            <button class="help-x" type="button" onclick="closeHelp()" aria-label="Cerrar">&times;</button>
+            <h2 class="help-title">&#128123; C&oacute;mo identificar el fantasma</h2>
+            <ol class="help-steps">
+                <li><b>Marca la evidencia</b> que encuentres en la partida.<br>
+                    <span class="help-dim">Clic = <span class="help-g">la tiene</span> &middot; clic otra vez = <span class="help-r">NO la tiene</span> &middot; otra vez = sin marcar.</span></li>
+                <li><b>La lista se reduce sola.</b> Arriba ves <i>&ldquo;Quedan X fantasmas&rdquo;</i>.</li>
+                <li>Cuando quede <b>1</b> &rarr; aparece <span class="help-solved">&#9889; &iexcl;Es ese!</span></li>
+            </ol>
+            <div class="help-grid">
+                <div class="help-card"><b>&#127924; Pasos</b><span>El bot&oacute;n <b>&#9654;</b> en cada card reproduce la velocidad de ese fantasma. El <b>Tracker</b> (arriba) tiene referencias + tap.</span></div>
+                <div class="help-card"><b>&#9876; Modo Cacer&iacute;a</b><span>Muestra c&oacute;mo <b>sobrevivir</b> a cada fantasma (vista, o&iacute;do, luz y un consejo).</span></div>
+                <div class="help-card"><b>&#128203; Vistas</b><span>Arriba dcha: <b>Completa / Media / Simple</b>. En Simple, <i>clic</i> descarta y <i>doble clic</i> selecciona.</span></div>
+                <div class="help-card"><b>&#129514; Filtros avanzados</b><span>Velocidad, cordura, g&eacute;nero, sonido y <b>pruebas activas</b> (luz, sal, llamas&hellip;) que hiciste en la partida.</span></div>
+                <div class="help-card"><b>&#128269; Buscar</b><span>Por <b>nombre</b> (ES o EN), evidencia o comportamiento.</span></div>
+                <div class="help-card"><b>&#9728; Mapas y Gu&iacute;as</b><span>Pesta&ntilde;as a la izquierda: mapas de cada casa y los tests de confirmaci&oacute;n.</span></div>
+            </div>
+            <div class="help-foot">
+                <label class="help-chk"><input type="checkbox" id="help_dontshow"> No volver a mostrar al abrir</label>
+                <button class="help-ok" type="button" onclick="closeHelp(true)">Entendido</button>
+            </div>
+        </div>
+    </div>
+    <script>
+    /* [fork] help / onboarding */
+    function openHelp(){ var o=document.getElementById('help_overlay'); if(o){ o.classList.add('open'); var c=document.getElementById('help_dontshow'); if(c){ try{ c.checked = localStorage.getItem('phasmo_help_seen')==='1'; }catch(e){} } } }
+    function closeHelp(fromOk){
+        var o=document.getElementById('help_overlay'); if(o) o.classList.remove('open');
+        var c=document.getElementById('help_dontshow');
+        try{ if(fromOk && c){ localStorage.setItem('phasmo_help_seen', c.checked?'1':'0'); } }catch(e){}
+    }
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeHelp(); });
+    (function(){
+        var seen; try{ seen = localStorage.getItem('phasmo_help_seen'); }catch(e){ return; }
+        if (seen === '1') return;
+        function show(){ setTimeout(openHelp, 900); }
+        if (document.readyState === 'complete') show();
+        else window.addEventListener('load', show);
     })();
     </script>
 
