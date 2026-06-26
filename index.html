@@ -52,7 +52,7 @@
     <script src="scripts-v10/ghost_template-v2.js?v=fork27"></script>
     <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork10"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
-    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork38"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork40"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -1561,12 +1561,13 @@
                 <div class="map_size s">S</div>
                 6 Tanglewood Drive
             </button>
-            <button id="reset" class="yfont standard_reset" onclick="reset()" onmouseenter="checkResetButton()" onmouseleave="resetResetButton()" oncontextmenu="showResetMenu(event)">{{reset}}</button>
-            <button id="clear_filters" class="yfont standard_reset" onclick="resetFilters()"
-                    title="Quita evidencias, velocidad, cordura y pistas de comportamiento sin recargar la página"
-                    style="width:100%;justify-self:center;font-size:15px;color:#bbb;border:2px solid #6c6f8f;background:none;border-radius:5px;margin:0 5px 5px;cursor:pointer;z-index:100;padding:4px 0;">
-                &#10226; Limpiar filtros
+            <button id="clear_filters" class="sidebar-btn sidebar-btn-primary" onclick="resetFilters()"
+                    title="Quita evidencias, velocidad, cordura y pistas de comportamiento sin recargar la p&aacute;gina">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8m0-5v5h5"/></svg>
+                <span>Limpiar filtros</span>
             </button>
+            <button id="reset" class="sidebar-btn sidebar-btn-ghost" onclick="reset()" onmouseenter="checkResetButton()" onmouseleave="resetResetButton()" oncontextmenu="showResetMenu(event)"
+                    title="Reinicia toda la partida (recarga la p&aacute;gina)">{{reset}}</button>
         </div>
 
         <div id="cards" class="cards" onscroll="updateScaling()"><div class="dot-flashing"></div></div>
