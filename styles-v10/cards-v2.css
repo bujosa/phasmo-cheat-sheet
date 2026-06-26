@@ -834,14 +834,20 @@ body.gcard2--compact .g2-hunt,
 body.gcard2--compact .g2-hunt-toggle,
 body.gcard2--compact .g2-more{ display:none !important; }
 body.gcard2--compact .gcard2{
-  flex:1 1 340px; max-width:440px; align-self:flex-start;
-  gap:9px; padding:13px;
+  flex:1 1 320px; max-width:410px; align-self:flex-start;
+  gap:8px; padding:12px; min-height:178px; justify-content:flex-start;
 }
-body.gcard2--compact .g2-name{ font-size:1.12rem; }
-body.gcard2--compact .g2-evi{ min-height:60px; padding:9px 5px 8px; gap:5px; border-radius:11px; }
-body.gcard2--compact .g2-evi-ic{ width:24px; height:24px; }
-body.gcard2--compact .g2-evi-lbl{ font-size:.66rem; }
-body.gcard2--compact .g2-stat{ padding:8px 10px; }
-body.gcard2--compact .g2-clear{ padding-top:0; }
+body.gcard2--compact .g2-name{ font-size:1.08rem; }
+/* evidence: smaller icon, single-line label (no wrap → uniform tile height) */
+body.gcard2--compact .g2-evi{ min-height:50px; padding:7px 4px 6px; gap:3px; border-radius:10px; justify-content:center; }
+body.gcard2--compact .g2-evi-ic{ width:21px; height:21px; }
+body.gcard2--compact .g2-evi-lbl{ font-size:.58rem; line-height:1.05; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+/* movement: fixed-height cells so 1- and multi-speed cards line up; compact text */
+body.gcard2--compact .g2-stat{ padding:7px 9px; min-height:54px; }
+body.gcard2--compact .g2-stat-val{ font-size:.8rem; }
+/* sound: keep ONE clean play button (the characteristic/min speed); hide the extras */
+body.gcard2--compact .g2-steps-group .g2-steps:not(:first-child){ display:none; }
+body.gcard2--compact .g2-steps{ width:22px; height:22px; }
+body.gcard2--compact .g2-clear{ padding-top:0; margin-top:auto; }
 /* keep the global hunt board usable from compact too */
 body.gcard2--compact.gcard2--hunt .g2-hunt{ display:grid !important; }
