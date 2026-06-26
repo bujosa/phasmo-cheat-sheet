@@ -52,7 +52,7 @@
     <script src="scripts-v10/ghost_template-v2.js?v=fork48"></script>
     <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork10"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
-    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork48"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork50"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -1008,8 +1008,8 @@
             if (!document.body.classList.contains('gcard2--compact')) return;
             if (e.target.closest('.g2-steps, .g2-clear, .card_icon, .g2-more, button, a')) return;
             var card = e.target.closest('.gcard2');
-            if (!card) return;
-            card.classList.toggle('gc-expanded');
+            if (!card || !window.openGhostDetail) return;
+            openGhostDetail(card.id);
         });
     })();
     </script>
@@ -1045,6 +1045,15 @@
             <div class="help-credit">Basado en el Phasmo Cheat Sheet de <a href="https://github.com/tybayn/phasmo-cheat-sheet" target="_blank" rel="noopener">Zero-Network (Ty Bayn)</a> &middot; AGPLv3</div>
         </div>
     </div>
+
+    <!-- [fork] ghost detail "ficha" modal -->
+    <div id="ghost_detail" onclick="if(event.target===this)closeGhostDetail()">
+        <div id="gd_modal" role="dialog" aria-label="Ficha del fantasma">
+            <button class="gd-x" type="button" onclick="closeGhostDetail()" aria-label="Cerrar">&times;</button>
+            <div id="gd_body"></div>
+        </div>
+    </div>
+
     <script>
     /* [fork] help / onboarding */
     function openHelp(){ var o=document.getElementById('help_overlay'); if(o){ o.classList.add('open'); var c=document.getElementById('help_dontshow'); if(c){ try{ c.checked = localStorage.getItem('phasmo_help_seen')==='1'; }catch(e){} } } }
@@ -1054,6 +1063,42 @@
         try{ if(fromOk && c){ localStorage.setItem('phasmo_help_seen', c.checked?'1':'0'); } }catch(e){}
     }
     document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeHelp(); });
+
+    /* [fork] Ghost detail "ficha" — big modal with everything to identify & survive a ghost */
+    function closeGhostDetail(){ try{ if(typeof stStopRef==='function') stStopRef(); }catch(e){} var o=document.getElementById('ghost_detail'); if(o) o.classList.remove('open'); }
+    function openGhostDetail(id){
+        var card = document.getElementById(id);
+        var ov = document.getElementById('ghost_detail');
+        var body = document.getElementById('gd_body');
+        if(!card || !ov || !body) return;
+        var name = (card.getElementsByClassName('g2-name')[0]||{}).textContent || id;
+        var eviHtml = (card.getElementsByClassName('g2-evidence')[0]||{}).innerHTML || '';
+        var speedHtml = (card.getElementsByClassName('g2-move')[0]||{}).innerHTML || '';
+        var intel = (typeof GHOST_INTEL!=='undefined' && GHOST_INTEL[id]) || {};
+        var bh = (typeof GHOST_BEHAVIOR!=='undefined' && GHOST_BEHAVIOR[id]) || {};
+        var weak = intel.datamined ? 'Fantasma datamined (no confirmado en el juego en vivo).' : (intel.w || '—');
+        var strong = intel.datamined ? '—' : (intel.s || '—');
+        // tells / curiosidades from the off-screen behaviour carrier
+        var tellsEl = card.getElementsByClassName('ghost_behavior_item')[0];
+        var tells = tellsEl ? tellsEl.innerHTML : '';
+        function row(label, val, cls){ return '<div class="gd-cat '+(cls||'')+'"><span class="gd-cat-lbl">'+label+'</span><span class="gd-cat-val">'+(val||'Normal')+'</span></div>'; }
+        body.innerHTML =
+            '<h2 class="gd-name">'+name+'</h2>'+
+            '<div class="gd-sec"><div class="gd-h">Evidencia</div><div class="g2-evidence gd-evi">'+eviHtml+'</div></div>'+
+            '<div class="gd-sec"><div class="gd-h">Movimiento</div><div class="g2-move gd-move">'+speedHtml+'</div></div>'+
+            '<div class="gd-sec"><div class="gd-h">Inteligencia</div>'+
+                '<div class="gd-intel gd-weak"><b>▼ Debilidad — cómo vencerlo</b><span>'+weak+'</span></div>'+
+                '<div class="gd-intel gd-strong"><b>▲ Fuerza</b><span>'+strong+'</span></div></div>'+
+            '<div class="gd-sec"><div class="gd-h">Comportamiento</div>'+
+                row('👁 Vista', bh.sight)+row('👂 Oído', bh.hearing)+row('💡 Luz', bh.light)+row('🏃 Movimiento', bh.movement)+'</div>'+
+            '<div class="gd-sec gd-hunt-sec"><div class="gd-h">⚔ En la cacería · cómo detectarlo y sobrevivir</div>'+
+                '<div class="gd-cat"><span class="gd-cat-lbl">Caza</span><span class="gd-cat-val">'+(bh.hunt||'Caza al 50%')+'</span></div>'+
+                (bh.survivalTip ? '<div class="gd-tip"><b>Sobrevivir:</b> '+bh.survivalTip+'</div>' : '')+'</div>'+
+            (tells ? '<div class="gd-sec"><div class="gd-h">Detalles y tells</div><div class="gd-tells">'+tells+'</div></div>' : '')+
+            '<div class="gd-foot"><button type="button" class="gd-wiki-btn" onclick="closeGhostDetail(); openGhostInfo(\''+id+'\')">Ver tests de confirmación (Guías) →</button></div>';
+        ov.classList.add('open');
+    }
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGhostDetail(); });
     (function(){
         var seen; try{ seen = localStorage.getItem('phasmo_help_seen'); }catch(e){ return; }
         if (seen === '1') return;
