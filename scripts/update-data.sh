@@ -23,7 +23,10 @@ HDR=(
   -H "Sec-Fetch-Dest: empty"
 )
 BASE="https://zero-network.net/phasmophobia"
-LANGS=(en es fr de it jp ko pl pt-br ru tr zh-cn)
+# This fork ships Spanish only (with English as the translation fallback). The
+# other languages + their CJK fonts were removed to keep the repo small. If you
+# want them back, add their codes here AND restore lang-v10/<code>/ + the fonts.
+LANGS=(es en)
 
 echo "Downloading ghost data for ${#LANGS[@]} languages..."
 for L in "${LANGS[@]}"; do
