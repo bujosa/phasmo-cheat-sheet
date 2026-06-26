@@ -822,3 +822,26 @@ body.gcard2--simple #cards::before{
 .sidebar-btn-ghost:hover{ color:#fff !important; background:rgba(255,255,255,.05) !important; border-color:rgba(255,255,255,.25); }
 /* the "no ghost selected" pulse state (only fires when logged in) still works */
 #reset.reset_pulse{ color:#ff9c98; border-color:rgba(219,77,72,.5); }
+
+/* =====================================================================
+   [fork] COMPACT density — between Simple and Media:
+   evidence tiles + speed/caza (with footstep play), no prose. More per row.
+   ===================================================================== */
+body.gcard2--compact .g2-intel,
+body.gcard2--compact .g2-chips,
+body.gcard2--compact .g2-hunt-btn,
+body.gcard2--compact .g2-hunt,
+body.gcard2--compact .g2-hunt-toggle,
+body.gcard2--compact .g2-more{ display:none !important; }
+body.gcard2--compact .gcard2{
+  flex:1 1 340px; max-width:440px; align-self:flex-start;
+  gap:9px; padding:13px;
+}
+body.gcard2--compact .g2-name{ font-size:1.12rem; }
+body.gcard2--compact .g2-evi{ min-height:60px; padding:9px 5px 8px; gap:5px; border-radius:11px; }
+body.gcard2--compact .g2-evi-ic{ width:24px; height:24px; }
+body.gcard2--compact .g2-evi-lbl{ font-size:.66rem; }
+body.gcard2--compact .g2-stat{ padding:8px 10px; }
+body.gcard2--compact .g2-clear{ padding-top:0; }
+/* keep the global hunt board usable from compact too */
+body.gcard2--compact.gcard2--hunt .g2-hunt{ display:grid !important; }
