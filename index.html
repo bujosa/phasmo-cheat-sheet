@@ -49,10 +49,10 @@
     </script>
     <script src="scripts-v10/ghost-intel-v1.js?v=fork11"></script>
     <script src="scripts-v10/ghost-behavior-v1.js?v=fork8"></script>
-    <script src="scripts-v10/ghost_template-v2.js?v=fork27"></script>
+    <script src="scripts-v10/ghost_template-v2.js?v=fork48"></script>
     <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork10"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
-    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork46"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork48"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -999,6 +999,17 @@
             if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; }
             card.classList.remove('faded');                   // cancel any stray fade
             if (typeof select === 'function') select(card);   // double = select
+        });
+
+        /* [fork] Vista Compacta: click the card body = expand it inline (full info:
+           debilidad/fuerza, chips, y todos los sonidos por velocidad). Click again = collapse.
+           Clicks on the play buttons or the ✓/✗ marking icons are ignored. */
+        document.addEventListener('click', function(e){
+            if (!document.body.classList.contains('gcard2--compact')) return;
+            if (e.target.closest('.g2-steps, .g2-clear, .card_icon, .g2-more, button, a')) return;
+            var card = e.target.closest('.gcard2');
+            if (!card) return;
+            card.classList.toggle('gc-expanded');
         });
     })();
     </script>
