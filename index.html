@@ -49,10 +49,10 @@
     </script>
     <script src="scripts-v10/ghost-intel-v1.js?v=fork11"></script>
     <script src="scripts-v10/ghost-behavior-v1.js?v=fork8"></script>
-    <script src="scripts-v10/ghost_template-v2.js?v=fork48"></script>
+    <script src="scripts-v10/ghost_template-v2.js?v=fork51"></script>
     <link rel="stylesheet" href="styles-v10/style-v15.css?v=fork10"/>
     <link rel="stylesheet" href="styles-v10/style-mobile-v9.css?v=fork5"/>
-    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork50"/>
+    <link rel="stylesheet" href="styles-v10/cards-v2.css?v=fork51"/>
     <link rel="stylesheet" href="themes-v10/themes-v1.css"/>
     <link rel="stylesheet" href="login-v10/login-v1.css" >
     <link rel="stylesheet" href="wiki-v10/wiki-v2.css" >
@@ -1074,6 +1074,7 @@
         var name = (card.getElementsByClassName('g2-name')[0]||{}).textContent || id;
         var eviHtml = (card.getElementsByClassName('g2-evidence')[0]||{}).innerHTML || '';
         var speedHtml = (card.getElementsByClassName('g2-move')[0]||{}).innerHTML || '';
+        var soundsHtml = (card.getElementsByClassName('g2-sounds')[0]||{}).outerHTML || '';
         var intel = (typeof GHOST_INTEL!=='undefined' && GHOST_INTEL[id]) || {};
         var bh = (typeof GHOST_BEHAVIOR!=='undefined' && GHOST_BEHAVIOR[id]) || {};
         var weak = intel.datamined ? 'Fantasma datamined (no confirmado en el juego en vivo).' : (intel.w || '—');
@@ -1085,7 +1086,7 @@
         body.innerHTML =
             '<h2 class="gd-name">'+name+'</h2>'+
             '<div class="gd-sec"><div class="gd-h">Evidencia</div><div class="g2-evidence gd-evi">'+eviHtml+'</div></div>'+
-            '<div class="gd-sec"><div class="gd-h">Movimiento</div><div class="g2-move gd-move">'+speedHtml+'</div></div>'+
+            '<div class="gd-sec"><div class="gd-h">Movimiento y sonido</div><div class="g2-move gd-move">'+speedHtml+'</div>'+soundsHtml+'</div>'+
             '<div class="gd-sec"><div class="gd-h">Inteligencia</div>'+
                 '<div class="gd-intel gd-weak"><b>▼ Debilidad — cómo vencerlo</b><span>'+weak+'</span></div>'+
                 '<div class="gd-intel gd-strong"><b>▲ Fuerza</b><span>'+strong+'</span></div></div>'+

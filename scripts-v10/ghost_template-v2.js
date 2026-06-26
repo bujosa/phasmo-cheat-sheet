@@ -67,9 +67,11 @@ class Ghost {
             if (data.alt_speed != null && stepSpeeds.indexOf(+data.alt_speed) === -1) stepSpeeds.push(+data.alt_speed);
         }
         var stepsBtns = stepSpeeds.map(function (s) {
-            return '<button type="button" class="g2-steps" title="Oír los pasos a ' + s + ' m/s" ' +
+            var lbl = ('' + s).replace('.', ',');
+            return '<button type="button" class="g2-steps" title="Oír los pasos a ' + lbl + ' m/s" ' +
                 'onclick="event.stopPropagation(); stPlayRef(' + s + ', this)">' +
-                '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>';
+                '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>' +
+                '<span class="g2-steps-lbl">' + lbl + '</span></button>';
         }).join('');
 
         const intel = (typeof GHOST_INTEL !== 'undefined') ? GHOST_INTEL[data.ghost] : null;
@@ -100,6 +102,10 @@ class Ghost {
                     <span class="g2-more-txt">{{0_evidence_tests}}</span>
                     <svg class="g2-more-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                 </button>
+                <button class="g2-info" type="button" title="Ver ficha completa del fantasma" aria-label="Ver ficha completa"
+                    onclick="event.stopPropagation(); openGhostDetail(this.closest('.gcard2').id)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8.2v.2"/></svg>
+                </button>
             </header>
 
             <div class="ghost_evidence g2-evidence" onclick="toggleGhostExpand(this)">${eviTiles}
@@ -120,13 +126,13 @@ class Ghost {
                 <div class="g2-stat g2-stat-speed">
                     <span class="g2-stat-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h9m0 0l-3-3m3 3l-3 3M14 5l5 7-5 7"/></svg></span>
                     <span class="g2-stat-body"><span class="g2-stat-lbl">Velocidad</span><span class="ghost_speed g2-stat-val">${speedStr}</span></span>
-                    <span class="g2-steps-group" title="Escuchar los pasos">${stepsBtns}</span>
                 </div>
                 <div class="g2-stat g2-stat-sanity">
                     <span class="g2-stat-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3C9 7 6 9 6 13a6 6 0 0012 0c0-4-3-6-6-10z"/></svg></span>
                     <span class="g2-stat-body"><span class="g2-stat-lbl">Caza desde</span><span class="g2-stat-val">${sanityStr}</span></span>
                 </div>
             </div>
+            ${stepSpeeds.length ? `<div class="g2-sounds"><span class="g2-sounds-lbl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 010 7M19 5a9 9 0 010 14"/></svg>Pasos</span><span class="g2-steps-group" title="Escuchar los pasos a cada velocidad">${stepsBtns}</span></div>` : ''}
 
             <div class="g2-chips">
                 <span class="g2-chip g2-chip-sight" data-state="${st(sight)}" title="${sight.replace(/"/g,'&quot;')}"><svg class="g2-chip-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg><span class="g2-chip-txt">${sight}</span></span>
