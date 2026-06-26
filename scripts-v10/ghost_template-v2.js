@@ -44,7 +44,7 @@ class Ghost {
         const isMimic = data.ghost === 'The Mimic';
         const eviKeys = data.evidence.slice(0, 3).concat(isMimic ? ['Ghost Orbs'] : []);
         const eviTiles = eviKeys.map(k => `
-            <div class="ghost_evidence_item g2-evi" name="${k}" style="--evi:${(typeof evi_color !== 'undefined' && evi_color[k]) || '#888'}">
+            <div class="ghost_evidence_item g2-evi" name="${k}" title="${(evidence && evidence[k]) || k}" style="--evi:${(typeof evi_color !== 'undefined' && evi_color[k]) || '#888'}">
               <span class="g2-evi-ic"><img src="${(typeof evi_icons !== 'undefined' && evi_icons[k]) || ''}" alt=""></span>
               <span class="g2-evi-lbl">${(evidence && evidence[k]) || k}</span>
             </div>`).join('');
