@@ -690,3 +690,47 @@ body.gcard2--simple #cards::before{
 }
 #hunt_board_btn:not(.active):hover, #speed_tracker_btn:not(.active):hover{ color:#e3d4ff !important; }
 #hunt_board_btn:not(.active) .hb-dot{ background:#7d7b9a; }
+
+/* =====================================================================
+   [fork] Onboarding / help — "?" button + modal
+   ===================================================================== */
+#help_btn{
+  width:30px; height:30px; flex:none; border-radius:50%; cursor:pointer; padding:0;
+  display:inline-flex; align-items:center; justify-content:center;
+  font-family:'ZNSecondary', sans-serif; font-size:15px; font-weight:800;
+  color:#cdb8ff; background:rgba(28,29,46,0.92);
+  border:1px solid rgba(173,140,231,0.45);
+  box-shadow:0 4px 14px rgba(0,0,0,0.4); backdrop-filter:blur(4px);
+  transition:background .15s, color .15s;
+}
+#help_btn:hover{ background:linear-gradient(180deg,#cdb8ff,#a98ce0); color:#1c1c24; }
+
+#help_overlay{
+  position:fixed; inset:0; z-index:9000; display:none;
+  align-items:center; justify-content:center;
+  background:rgba(6,6,10,0.72); backdrop-filter:blur(3px); padding:20px;
+}
+#help_overlay.open{ display:flex; }
+#help_modal{
+  width:min(640px,94vw); max-height:90vh; overflow-y:auto; position:relative;
+  background:radial-gradient(120% 90% at 50% -10%, rgba(173,140,231,.12), transparent 60%), #1c1d2a;
+  border:1px solid rgba(173,140,231,.3); border-radius:16px; padding:24px 22px 18px;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.8); color:#eceaf6;
+}
+.help-x{ position:absolute; top:10px; right:14px; background:none; border:none; color:#a9a7c4; font-size:26px; line-height:1; cursor:pointer; }
+.help-x:hover{ color:#fff; }
+.help-title{ margin:0 0 14px; font-size:20px; font-weight:800; }
+.help-steps{ margin:0 0 16px; padding-left:22px; display:flex; flex-direction:column; gap:9px; font-size:14px; line-height:1.4; }
+.help-steps li::marker{ color:#cdb8ff; font-weight:800; }
+.help-dim{ color:#a9a7c4; font-size:12.5px; }
+.help-g{ color:#86eb84; } .help-r{ color:#ff9a96; }
+.help-solved{ background:linear-gradient(180deg,#86eb84,#49bf63); color:#0c1610; padding:1px 8px; border-radius:999px; font-weight:800; font-size:12px; white-space:nowrap; }
+.help-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+.help-card{ background:#222232; border:1px solid rgba(255,255,255,.06); border-radius:10px; padding:10px 12px; display:flex; flex-direction:column; gap:3px; }
+.help-card > b{ color:#cdb8ff; font-size:13px; }
+.help-card span{ color:#c9c7da; font-size:12px; line-height:1.35; }
+.help-foot{ display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid rgba(255,255,255,.08); padding-top:14px; flex-wrap:wrap; }
+.help-chk{ display:flex; align-items:center; gap:6px; color:#a9a7c4; font-size:12.5px; cursor:pointer; }
+.help-ok{ background:linear-gradient(180deg,#cdb8ff,#a98ce0); color:#1c1c24; border:none; border-radius:999px; padding:9px 22px; font-weight:800; font-size:13px; cursor:pointer; }
+.help-ok:hover{ filter:brightness(1.07); }
+@media (max-width:560px){ .help-grid{ grid-template-columns:1fr; } }
